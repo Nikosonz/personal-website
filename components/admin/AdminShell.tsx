@@ -2,13 +2,31 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { logoutAction } from "@/app/actions/auth";
-import { LogOut, FileText, PlusCircle, Inbox } from "lucide-react";
+import { LogOut, FileText, PlusCircle, Inbox, type LucideIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+function NavLink({ href, icon: Icon, children }: { href: string; icon: LucideIcon; children: React.ReactNode }) {
+  const pathname = usePathname();
+  return (
+    <Link
+      href={href}
+      className={cn(
+        "flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm transition-colors",
+        pathname === href
+          ? "bg-[var(--accent-subtle)] text-[var(--accent)]"
+          : "text-[var(--text-muted)] hover:bg-[var(--accent-subtle)] hover:text-[var(--accent)]"
+      )}
+    >
+      <Icon size={15} />
+      {children}
+    </Link>
+  );
+}
 
 export default function AdminShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isLogin = pathname === "/admin/login";
 
-  if (isLogin) return <>{children}</>;
+  if (pathname === "/admin/login") return <>{children}</>;
 
   return (
     <div className="flex min-h-dvh bg-[var(--background)]">
@@ -19,27 +37,9 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
           </span>
         </div>
         <nav className="flex flex-col gap-1 p-3 flex-1">
-          <Link
-            href="/admin/posts"
-            className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-[var(--text-muted)] hover:bg-[var(--accent-subtle)] hover:text-[var(--accent)] transition-colors"
-          >
-            <FileText size={15} />
-            Posts
-          </Link>
-          <Link
-            href="/admin/posts/new"
-            className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-[var(--text-muted)] hover:bg-[var(--accent-subtle)] hover:text-[var(--accent)] transition-colors"
-          >
-            <PlusCircle size={15} />
-            New Post
-          </Link>
-          <Link
-            href="/admin/messages"
-            className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-[var(--text-muted)] hover:bg-[var(--accent-subtle)] hover:text-[var(--accent)] transition-colors"
-          >
-            <Inbox size={15} />
-            Messages
-          </Link>
+          <NavLink href="/admin/posts" icon={FileText}>Posts</NavLink>
+          <NavLink href="/admin/posts/new" icon={PlusCircle}>New Post</NavLink>
+          <NavLink href="/admin/messages" icon={Inbox}>Messages</NavLink>
         </nav>
         <div className="p-3 border-t border-[var(--border)]">
           <form action={logoutAction}>

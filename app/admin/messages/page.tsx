@@ -1,24 +1,22 @@
 import { prisma } from "@/lib/db";
+import { formatDate } from "@/lib/utils";
 import MarkReadButton from "@/components/admin/MarkReadButton";
 
 export const dynamic = "force-dynamic";
 
 export default async function MessagesPage() {
-  const messages = await prisma.contactMessage.findMany({
-    orderBy: { createdAt: "desc" },
-  });
-
-  const unread = messages.filter((m) => !m.read).length;
+  const [messages, unread] = await Promise.all([
+    prisma.contactMessage.findMany({ orderBy: { createdAt: "desc" } }),
+    prisma.contactMessage.count({ where: { read: false } }),
+  ]);
 
   return (
     <div className="max-w-4xl">
-      <div className="mb-8 flex items-center justify-between">
-        <div>
-          <h1 className="font-heading text-2xl font-bold text-[var(--text-primary)]">Messages</h1>
-          <p className="mt-1 text-sm text-[var(--text-muted)]">
-            {messages.length} total · {unread} unread
-          </p>
-        </div>
+      <div className="mb-8">
+        <h1 className="font-heading text-2xl font-bold text-[var(--text-primary)]">Messages</h1>
+        <p className="mt-1 text-sm text-[var(--text-muted)]">
+          {messages.length} total · {unread} unread
+        </p>
       </div>
 
       {messages.length === 0 ? (
@@ -49,11 +47,7 @@ export default async function MessagesPage() {
                     {msg.service}
                   </span>
                   <time className="text-xs text-[var(--text-muted)]">
-                    {new Date(msg.createdAt).toLocaleDateString("en-GB", {
-                      day: "numeric",
-                      month: "short",
-                      year: "numeric",
-                    })}
+                    {formatDate(msg.createdAt)}
                   </time>
                   {!msg.read && <MarkReadButton id={msg.id} />}
                 </div>
