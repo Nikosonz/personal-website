@@ -1,0 +1,50 @@
+---
+title: "SaaS Analytics Dashboard Redesign"
+excerpt: "Redesigned the core analytics dashboard for a B2B SaaS platform, reducing time-to-insight by 60% and increasing user retention."
+category: "uiux"
+tags: ["UI/UX", "React", "TypeScript", "Figma"]
+year: 2025
+featured: true
+---
+
+## The Problem
+
+A B2B analytics SaaS was seeing high churn at the 30-day mark. Exit surveys pointed to the same pain point repeatedly: users couldn't find what they needed in the dashboard. The information architecture had grown organically over 4 years, and the UI hadn't kept up.
+
+Key issues discovered in user research:
+- Average time to find a specific metric: 4.2 minutes
+- 38% of users couldn't locate the "Export" function without help
+- Mobile usage was effectively 0% — the layout was desktop-only
+
+## The Solution
+
+I led a full redesign over 8 weeks, working alongside the product and engineering teams.
+
+**Discovery phase (weeks 1–2):** Conducted 12 user interviews, analyzed session recordings, and mapped the existing information architecture.
+
+**Design phase (weeks 3–5):** 
+
+- Restructured the IA around user jobs-to-be-done, not feature categories
+- Introduced a customizable widget system so users could surface the metrics they cared about
+- Rebuilt the navigation: global sidebar → contextual top nav, reducing navigation depth from 4 levels to 2
+- Designed a responsive layout that worked on tablets and larger phones
+
+**Implementation (weeks 6–8):**
+
+Built the new dashboard in React with TypeScript, using a component library I designed and documented in Figma. Worked directly with the engineering team to ensure the design was implementable within the existing data infrastructure.
+
+## The Outcome
+
+**60% reduction** in time-to-insight (from 4.2 min to 1.7 min average)
+
+**22% improvement** in 30-day retention in the cohort that received the new dashboard
+
+**Mobile sessions increased from 0% to 14%** of total sessions within 60 days of launch
+
+The redesign also surfaced a previously hidden upsell path — users who found the "Advanced Analytics" section (now more prominently placed) converted to higher plans at a 3x rate.
+
+## Tech Stack
+
+- **Design:** Figma, FigJam
+- **Frontend:** React, TypeScript, Recharts, TanStack Query
+- **Testing:** Playwright (E2E), Jest (unit)

@@ -1,0 +1,53 @@
+---
+title: "The Case for Slower Shipping"
+excerpt: "Counter-intuitive lessons from projects that moved fast and broke everything — and what deliberate pacing actually buys you."
+date: "2026-03-08"
+tags: ["Process", "Engineering", "Product"]
+---
+
+There is a version of "move fast" that looks productive from the outside and is silently catastrophic on the inside. I have lived in that version. I have also watched clients live in it. This is what I have learned.
+
+## Speed feels good; acceleration is the drug
+
+When a team ships quickly, there is a dopamine hit that is hard to distinguish from genuine progress. Stand-ups are energetic. The changelog is long. Management is pleased. The Notion board is all green.
+
+What is not visible: the growing list of things that were not quite right but were good enough to ship. The test that was skipped because the deadline moved. The design review that turned into a Slack reaction. The architecture decision that was made at 11 pm under pressure.
+
+Each of these is a small debt. Alone, none of them is serious. Together, compounded over six months, they become the reason your senior engineer quit and your on-call rotation is a horror show.
+
+## The three things speed costs that never show on a roadmap
+
+**1. Orientation.**
+
+Understanding a system — really understanding it — requires slow attention. When you are always building, you are never learning. You ship based on assumptions that made sense six months ago and have not been questioned since.
+
+**2. Design integrity.**
+
+Interfaces that were designed to be cohesive become incoherent when ten features are added by ten people over ten sprints without a unifying review. Users notice. They do not articulate it as "design drift" — they say the product feels buggy, or cheap, or confusing. They leave.
+
+**3. The ability to change direction.**
+
+Speed in the wrong direction is the most expensive kind. Fast teams are often the last to realise they are heading somewhere nobody wants to go, because they are too busy shipping to look up.
+
+## What deliberate pacing actually buys
+
+I am not arguing for slowness as an end in itself. I am arguing for the investment in the things that *enable* sustainable speed:
+
+- A shared mental model of how the system works and why.
+- Design reviews that happen before code, not after.
+- Automated test coverage on the paths that matter most.
+- A post-mortem culture where "we shipped too fast" is allowed to be the honest answer.
+
+These are not luxuries for teams that have earned them. They are the foundation for teams that want to move fast without destroying themselves.
+
+## The question I ask clients
+
+When someone tells me their team needs to go faster, I ask one question: *faster than what?*
+
+Faster than the competition? Probably not — the competition has the same debt you do.
+
+Faster than your users can absorb change? Definitely not — adoption is slower than shipping.
+
+Faster than you can learn? That is the one that kills companies.
+
+The goal is not to ship less. It is to ship things that stick, and to leave yourself the capacity to fix the things that do not.

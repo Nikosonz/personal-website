@@ -1,0 +1,62 @@
+---
+title: "Why Great Design is a Technical Skill"
+excerpt: "The best designers I know think like engineers. And the best engineers think like designers. Here's why that overlap is where the magic happens."
+date: "2026-05-20"
+tags: ["Design", "Engineering"]
+---
+
+I've worked with some incredible designers over the years. The ones who consistently produced work that actually shipped — work that didn't fall apart in QA, work that didn't spawn endless back-and-forths with the dev team — all shared one trait: they thought like engineers.
+
+And the best engineers I know? They think like designers.
+
+## The false divide
+
+We've built an industry mythology around the idea that design and engineering are fundamentally separate disciplines. Design school teaches you to think in terms of aesthetics, user journeys, and brand. Engineering school (or bootcamps, or Stack Overflow — be honest) teaches you to think in terms of systems, constraints, and correctness.
+
+The result: designers hand off mockups that ignore the physics of the web. Engineers implement them in ways that ignore the intent of the design. Both sides get frustrated. The product suffers.
+
+## What "thinking technically" actually means for designers
+
+It doesn't mean learning to code (though that helps). It means:
+
+**Understanding what's easy and what's expensive.** A drop shadow is cheap. A complex SVG animation on scroll might tank mobile performance. A designer who knows this makes better tradeoffs.
+
+**Designing for states, not just happy paths.** Every UI element has multiple states: empty, loading, error, success, partial, overflow. A design that only shows the happy path leaves the engineering team to invent the rest — often poorly.
+
+**Caring about the implementation.** The best designers I've worked with open the browser inspector. They notice when a font isn't loading right, or a hover state is janky. They care about the craft end-to-end.
+
+## What "thinking like a designer" means for engineers
+
+It means slowing down long enough to ask: *does this make sense to a human?*
+
+```typescript
+// An engineer's first instinct:
+const errorCode = response.status === 422 
+  ? "VALIDATION_ERROR" 
+  : "UNKNOWN_ERROR";
+
+// What a designer-engineer does:
+const errorMessage = response.status === 422
+  ? "Please check the highlighted fields and try again."
+  : "Something went wrong. Refresh the page or contact support.";
+```
+
+The second version costs about 30 seconds more to write. The user experience difference is enormous.
+
+It also means caring about visual hierarchy in your own output. Error messages. Console logs. Documentation. Pull request descriptions. These are all UX problems.
+
+## The leverage
+
+Here's the practical upshot: if you can think across the boundary, you become 10x more effective.
+
+You can spec your own work. You can catch problems before they become expensive. You can have conversations with the other discipline without needing a translator.
+
+In small teams, this is worth a lot. At a startup, the designer-engineer (or engineer-designer) is often the secret weapon.
+
+## Where to start
+
+If you're a designer: **learn enough CSS to build your own prototypes.** Not production code — prototypes. CodePen is your friend. You'll immediately start designing differently.
+
+If you're an engineer: **spend a week doing user research.** Talk to five users. Watch them use a product you built. The humility alone will make you better.
+
+The overlap isn't a threat to either discipline. It's where the best work lives.

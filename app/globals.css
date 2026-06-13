@@ -1,0 +1,160 @@
+/* ─── Fonts ─────────────────────────────────────────────── */
+@import url("https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Vazirmatn:wght@300;400;500;600;700;800&display=swap");
+
+@import "tailwindcss";
+
+/* ─── Design Tokens ─────────────────────────────────────── */
+@theme inline {
+  /* Colors */
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-text: var(--text-primary);
+  --color-muted: var(--text-muted);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-subtle: var(--accent-subtle);
+
+  /* Fonts */
+  --font-heading: "Archivo", sans-serif;
+  --font-body: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --font-farsi: "Vazirmatn", sans-serif;
+
+  /* Spacing / sizing */
+  --spacing-page: 1.5rem;
+  --radius-card: 0.75rem;
+  --radius-btn: 0.5rem;
+}
+
+/* ─── Light mode ─────────────────────────────────────────── */
+:root {
+  --background: #fafafa;
+  --surface: #ffffff;
+  --border: #e4e4e7;
+  --text-primary: #09090b;
+  --text-muted: #71717a;
+  --accent: #0f766e;
+  --accent-hover: #0d6b63;
+  --accent-subtle: #f0fdfa;
+
+  color-scheme: light;
+}
+
+/* ─── Dark mode ──────────────────────────────────────────── */
+.dark {
+  --background: #09090b;
+  --surface: #18181b;
+  --border: #27272a;
+  --text-primary: #fafafa;
+  --text-muted: #a1a1aa;
+  --accent: #14b8a6;
+  --accent-hover: #2dd4bf;
+  --accent-subtle: #042f2e;
+
+  color-scheme: dark;
+}
+
+/* ─── Base ───────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* RTL support for Persian locale */
+[dir="rtl"] body {
+  font-family: var(--font-farsi);
+}
+
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3,
+[dir="rtl"] h4,
+[dir="rtl"] h5,
+[dir="rtl"] h6 {
+  font-family: var(--font-farsi);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ─── Selection ──────────────────────────────────────────── */
+::selection {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ─── Focus ──────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ─── Reduced motion ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ─── Prose (blog MDX) ───────────────────────────────────── */
+.prose {
+  max-width: 70ch;
+  font-size: 1.0625rem;
+  line-height: 1.75;
+}
+
+.prose h1 { font-size: 2rem; margin-top: 2rem; margin-bottom: 0.75rem; }
+.prose h2 { font-size: 1.5rem; margin-top: 2rem; margin-bottom: 0.5rem; }
+.prose h3 { font-size: 1.25rem; margin-top: 1.5rem; margin-bottom: 0.5rem; }
+.prose p { margin-bottom: 1.25rem; }
+.prose a { color: var(--accent); text-decoration: underline; }
+.prose a:hover { color: var(--accent-hover); }
+.prose code { font-family: var(--font-mono); font-size: 0.875em; background: var(--border); padding: 0.125em 0.375em; border-radius: 4px; }
+.prose pre { background: var(--surface); border: 1px solid var(--border); border-radius: 0.75rem; padding: 1.25rem; overflow-x: auto; margin-bottom: 1.5rem; }
+.prose pre code { background: transparent; padding: 0; }
+.prose blockquote { border-left: 3px solid var(--accent); padding-left: 1rem; margin-left: 0; color: var(--text-muted); font-style: italic; }
+.prose ul, .prose ol { padding-left: 1.5rem; margin-bottom: 1.25rem; }
+.prose li { margin-bottom: 0.375rem; }
+.prose hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+.prose img { border-radius: 0.75rem; width: 100%; height: auto; }
+
+.prose-custom { max-width: none; }

@@ -1,0 +1,76 @@
+---
+title: "AI Document Processor"
+excerpt: "Built an intelligent document processing pipeline using GPT-4 and custom fine-tuning, automating 80% of manual data extraction tasks."
+category: "ai"
+tags: ["AI", "Python", "Next.js", "OpenAI"]
+year: 2025
+featured: true
+---
+
+## The Problem
+
+A legal-tech firm was spending 40+ hours per week manually extracting key clauses and metadata from contracts before they could be analyzed. The documents varied wildly in format and language — a rules-based system had already failed once.
+
+The backlog was growing, and the manual process introduced errors that occasionally had significant downstream consequences.
+
+## The Solution
+
+I designed and built an end-to-end document processing pipeline:
+
+**Stage 1 — Ingestion and preprocessing**
+
+A Python service handles document ingestion from multiple sources (email attachments, S3, manual upload). It normalizes PDFs using PyMuPDF, handles multi-column layouts, and detects document language.
+
+**Stage 2 — Extraction pipeline**
+
+Rather than a single large prompt, the extraction uses a multi-step pipeline:
+
+1. Document classification (what type of contract is this?)
+2. Structure detection (where are the key sections?)
+3. Clause extraction (targeted extraction within each section)
+4. Validation (cross-check extracted values for consistency)
+
+This structured approach dramatically reduced hallucination rates compared to a single end-to-end prompt.
+
+**Stage 3 — Human review interface**
+
+A Next.js interface lets reviewers verify extractions, flag errors, and approve documents for downstream processing. Reviewer corrections feed back into the fine-tuning dataset.
+
+```python
+# Simplified extraction pipeline
+def process_document(doc: Document) -> ExtractionResult:
+    doc_type = classify_document(doc)
+    sections = detect_sections(doc, doc_type)
+    
+    extractions = []
+    for section in sections:
+        clauses = extract_clauses(section, doc_type)
+        validated = validate_clauses(clauses, section)
+        extractions.extend(validated)
+    
+    return ExtractionResult(
+        document_id=doc.id,
+        doc_type=doc_type,
+        extractions=extractions,
+        confidence=calculate_confidence(extractions),
+    )
+```
+
+## The Outcome
+
+**80% of documents** now processed without human intervention
+
+**Processing time** reduced from 40+ hours/week to ~4 hours/week (for edge cases and review)
+
+**Extraction accuracy** of 96.3% on the validation set after fine-tuning
+
+**ROI achieved** within 3 months of deployment
+
+The system now processes over 500 documents per month and has been expanded to handle two additional document types beyond the original scope.
+
+## Tech Stack
+
+- **AI:** OpenAI GPT-4, fine-tuned GPT-3.5-turbo, LangChain
+- **Backend:** Python, FastAPI, Celery, Redis
+- **Frontend:** Next.js, TypeScript, Tailwind CSS
+- **Infrastructure:** AWS (Lambda, S3, RDS), Docker

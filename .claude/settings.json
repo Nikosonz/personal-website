@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Read(//c/Users/mart/.claude/skills/ui-ux-pro-max/**)",
+      "Edit(~/.claude/skills/ui-ux-pro-max/**)",
+      "PowerShell(python \"C:\\\\Users\\\\mart\\\\.claude\\\\commands\\\\ui-ux-pro-max\\\\scripts\\\\search.py\" \"tech consulting portfolio personal brand minimal\" --design-system -p \"Pouya Karimi\")",
+      "PowerShell(python \"C:\\\\Users\\\\mart\\\\.claude\\\\commands\\\\ui-ux-pro-max\\\\scripts\\\\search.py\" \"minimal portfolio consulting clean\" --stack nextjs)",
+      "PowerShell(python \"C:\\\\Users\\\\mart\\\\.claude\\\\commands\\\\ui-ux-pro-max\\\\scripts\\\\search.py\" \"portfolio consulting\" --stack html-tailwind)",
+      "PowerShell(python \"C:\\\\Users\\\\mart\\\\.claude\\\\commands\\\\ui-ux-pro-max\\\\scripts\\\\search.py\" \"accessibility animation layout\" --domain ux -n 5)",
+      "Read(//d/Claude Code/pouya-karimi/**)",
+      "Bash(node -e \"const p=require\\('./node_modules/next/package.json'\\); console.log\\(p.version\\)\")",
+      "Bash(node -e \"const p=require\\('./package.json'\\); const deps={...p.dependencies,...p.devDependencies}; ['next-mdx-remote','@mdx-js/react','@mdx-js/loader','gray-matter','reading-time','rehype-pretty-code','shiki','remark-gfm'].forEach\\(d => console.log\\(d+':', deps[d] || 'NOT INSTALLED'\\)\\)\")",
+      "Bash(node -e \"const p=require\\('./package.json'\\); const deps={...p.dependencies,...p.devDependencies}; ['zod','react-hook-form','@hookform/resolvers','framer-motion'].forEach\\(d => console.log\\(d+':', deps[d] || 'NOT INSTALLED'\\)\\)\")",
+      "Bash(npx next *)",
+      "Bash(node -e \"const icons = require\\('./node_modules/lucide-react'\\); const linked = Object.keys\\(icons\\).filter\\(k => k.toLowerCase\\(\\).includes\\('linked'\\)\\); console.log\\(linked\\)\")",
+      "Bash(node -e \"const icons = require\\('./node_modules/lucide-react'\\); console.log\\(Object.keys\\(icons\\).filter\\(k => k.match\\(/^L/\\)\\).slice\\(0, 30\\).join\\(', '\\)\\)\")",
+      "Bash(node -e \"const p=require\\('./node_modules/lucide-react/package.json'\\); console.log\\(p.version\\)\")"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\mart\\.claude\\commands\\pdf"
+    ]
+  }
+}

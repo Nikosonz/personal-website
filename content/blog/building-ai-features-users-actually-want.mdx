@@ -1,0 +1,75 @@
+---
+title: "Building AI Features Users Actually Want"
+excerpt: "Everyone wants to add AI to their product. Most teams are adding it wrong. A framework for thinking about where AI adds real value vs. where it's just hype."
+date: "2026-04-14"
+tags: ["AI", "Product"]
+---
+
+There's a pattern I see constantly in the projects that land on my desk: "We want to add AI to our product." 
+
+When I ask what they mean, I get one of a few answers: a chatbot, an AI-generated summary, or "something like what ChatGPT does but for our use case." 
+
+None of these are wrong, but they're solutions looking for problems. And that's exactly backwards.
+
+## The three questions
+
+Before you build any AI feature, answer these:
+
+**1. What's the job to be done?**
+Not "what could AI do for us?" — what is the specific task a user is trying to accomplish, and where are they getting stuck? AI is a capability. It's only valuable when it solves a real friction point.
+
+**2. What does failure look like?**
+AI systems fail differently than traditional software. They fail probabilistically. They hallucinate. They degrade at the edges of their training distribution. If a wrong answer in your context causes a user to lose money, trust a bad medical recommendation, or make an irreversible decision — the bar for reliability is much higher than you think.
+
+**3. What's the alternative?**
+If the alternative to your AI feature is "the user does it manually," you need to ask how often they do it, how long it takes, and how much they'd pay to not do it. If the alternative is "nothing" — the task just didn't exist before — you're probably building something users won't use.
+
+## Where AI actually works
+
+The sweet spots I've found in real products:
+
+**Tedious classification at scale.** If a human has to read something and put it in a bucket (support ticket → category, document → type, image → label), AI can do this at volume with acceptable error rates. The key: make the error cost low and the error visible.
+
+**First draft generation.** AI is excellent at producing a starting point that a human then refines. Email drafts, code skeletons, report summaries. The human stays in the loop, but the blank page problem disappears.
+
+**Search and retrieval across unstructured data.** RAG (Retrieval-Augmented Generation) pipelines let users ask questions over a corpus of documents in natural language. This is genuinely hard to replicate without AI.
+
+**Anomaly flagging.** "Here's a thing that looks unusual — you should look at it." Low stakes if the model is occasionally wrong, high value when it catches something a human would have missed.
+
+## The chatbot trap
+
+Chatbots are often the wrong answer. Not because they can't work — they can — but because they're high effort, high maintenance, and they shift the entire burden of formulating a good query onto the user.
+
+A well-designed UI with smart defaults and good filtering will beat a chatbot interface for most use cases, because the product has already done the thinking for the user.
+
+Chatbots make sense when the problem space is genuinely open-ended, when the user's needs are highly variable, and when you've already exhausted structured UI options.
+
+## The reliability gap
+
+Here's the thing nobody tells you when you start building AI features: **users' tolerance for AI errors is much lower than engineers expect.**
+
+If a search engine returns an irrelevant result, users try a different query. If an AI assistant gives them wrong information confidently, they feel betrayed.
+
+Design for the failure case explicitly. Show confidence levels. Add "verify this" prompts. Make it easy to report problems. Keep a human in the loop for high-stakes decisions.
+
+```typescript
+// Don't just display the AI output
+const Summary = ({ aiOutput, confidence }: Props) => (
+  <div>
+    <p>{aiOutput}</p>
+    {confidence < 0.8 && (
+      <p className="text-amber-600 text-sm">
+        ⚠ This summary may not be accurate. Please review the source document.
+      </p>
+    )}
+  </div>
+);
+```
+
+## The meta-lesson
+
+The teams that ship great AI features treat it like any other product problem: they start with the user, they define success concretely, and they design for the full range of outcomes — including failure.
+
+The teams that ship AI features nobody uses start with the technology and work backwards.
+
+The technology isn't the hard part. The product thinking is.

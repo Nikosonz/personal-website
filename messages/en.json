@@ -1,0 +1,228 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "portfolio": "Portfolio",
+    "blog": "Blog",
+    "contact": "Contact",
+    "hire": "Hire Me"
+  },
+  "hero": {
+    "available": "Available for projects",
+    "headline": "I build products that <accent>work</accent> — and look like it.",
+    "subheadline": "Full-stack developer, UI/UX designer, and AI consultant helping ambitious teams ship exceptional digital products.",
+    "cta_primary": "See my work",
+    "cta_secondary": "Let's talk"
+  },
+  "services": {
+    "label": "What I do",
+    "title": "Full-service digital expertise",
+    "subtitle": "From design to deployment — everything you need to ship products your users love.",
+    "items": [
+      {
+        "title": "Web Development",
+        "description": "Performant, scalable web apps built with modern stacks — React, Next.js, Node.js, and beyond."
+      },
+      {
+        "title": "UI/UX Design",
+        "description": "Interfaces that are both beautiful and intuitive. Research, wireframes, prototypes, design systems."
+      },
+      {
+        "title": "AI & Automation",
+        "description": "LLM integrations, AI agents, and intelligent workflows that save your team hours every week."
+      },
+      {
+        "title": "Technical Consulting",
+        "description": "Architecture reviews, team mentorship, and technical strategy for growing companies."
+      }
+    ],
+    "view_all": "Explore all services"
+  },
+  "portfolio": {
+    "label": "Selected work",
+    "title": "Projects that speak for themselves",
+    "subtitle": "A curated selection showing range across industries and disciplines.",
+    "view_all": "View all projects",
+    "view_case": "View case study",
+    "filter": {
+      "all": "All",
+      "web": "Web Dev",
+      "uiux": "UI/UX",
+      "ai": "AI & Automation",
+      "consulting": "Consulting"
+    },
+    "problem": "The Problem",
+    "solution": "The Solution",
+    "outcome": "The Outcome",
+    "tech": "Tech Stack",
+    "back": "Back to portfolio"
+  },
+  "blog": {
+    "label": "The blog",
+    "title": "Thinking out loud",
+    "subtitle": "Thoughts on design, engineering, and building things that matter.",
+    "view_all": "Read all posts",
+    "read_more": "Read post",
+    "search": "Search posts…",
+    "min_read": "min read",
+    "back": "Back to blog",
+    "tags": "Tags",
+    "share": "Share this post"
+  },
+  "cta_section": {
+    "title": "Ready to build something great?",
+    "subtitle": "I'm currently accepting new projects. Let's talk about what you're building and how I can help.",
+    "primary": "Start a conversation",
+    "secondary": "See my work"
+  },
+  "about": {
+    "title": "About me",
+    "tagline": "Builder. Designer. Thinker.",
+    "bio": "I'm Pouya Karimi — a freelance developer and consultant based in Iran, working with clients worldwide. I bridge the gap between design and engineering, helping teams ship products they're proud of.",
+    "story_title": "My story",
+    "story": "I started coding at 16 and never stopped. Over the years I've worked across every layer of the stack — from pixel-perfect UIs to database design and cloud infrastructure. I thrive at the intersection of product, design, and engineering.",
+    "skills_title": "Tools & technologies",
+    "values_title": "How I work",
+    "values": [
+      {
+        "title": "Craft over speed",
+        "description": "Quality compounds. Thoughtful, well-written work creates fewer bugs, happier users, and lower maintenance costs."
+      },
+      {
+        "title": "Clarity in communication",
+        "description": "Good work requires good communication. I keep clients informed, ask the right questions, and document my decisions."
+      },
+      {
+        "title": "Full ownership",
+        "description": "I treat your project like mine. I think about the bigger picture, flag risks early, and care about outcomes — not just deliverables."
+      },
+      {
+        "title": "Always learning",
+        "description": "The best developers are perpetually curious. I invest in staying sharp across design, engineering, and product."
+      }
+    ],
+    "cta": "Work with me",
+    "skills": [
+      "React", "Next.js", "TypeScript", "Node.js", "Python",
+      "PostgreSQL", "Tailwind CSS", "Figma", "OpenAI API",
+      "LangChain", "Docker", "Vercel", "AWS", "Git"
+    ]
+  },
+  "services_page": {
+    "title": "Services",
+    "tagline": "What I offer",
+    "subtitle": "I work with startups, scale-ups, and established companies — adapting to your team's size, rhythm, and goals.",
+    "items": [
+      {
+        "title": "Web Development",
+        "description": "Performant, scalable web applications built with modern stacks.",
+        "includes": ["React / Next.js frontends", "REST & GraphQL APIs", "Database design & optimization", "Performance tuning & caching", "CI/CD pipeline setup"],
+        "for": "Startups and teams that need to move fast without breaking things."
+      },
+      {
+        "title": "UI/UX Design",
+        "description": "Interfaces that convert — because good design is good business.",
+        "includes": ["User research & personas", "Wireframes & prototypes", "High-fidelity mockups", "Design systems & component libraries", "Usability testing"],
+        "for": "Companies that want a design edge over their competition."
+      },
+      {
+        "title": "AI & Automation",
+        "description": "Integrate AI into your product or workflows intelligently.",
+        "includes": ["LLM integration (OpenAI, Anthropic, etc.)", "AI agents & RAG pipelines", "Workflow automation", "Custom fine-tuning", "AI product strategy"],
+        "for": "Teams ready to leverage AI beyond basic chatbot features."
+      },
+      {
+        "title": "Technical Consulting",
+        "description": "Strategic technical guidance for leadership and growing teams.",
+        "includes": ["Architecture reviews", "Tech stack decisions", "Code quality audits", "Team mentoring", "Fractional CTO engagements"],
+        "for": "Founders and CTOs who need a trusted technical partner."
+      }
+    ],
+    "process_title": "How I work",
+    "process": [
+      {
+        "title": "Discover",
+        "description": "We start with a deep-dive into your goals, constraints, and users. I ask a lot of questions — that's where the good work begins."
+      },
+      {
+        "title": "Design",
+        "description": "From wireframes to polished mockups, I design with real content and real constraints — no lorem ipsum, no generic templates."
+      },
+      {
+        "title": "Build",
+        "description": "Clean, maintainable code with weekly check-ins. You see progress every step of the way — no black-box development."
+      },
+      {
+        "title": "Launch & support",
+        "description": "I help with deployment, QA, and post-launch polish. Available for ongoing support and retainers."
+      }
+    ],
+    "faq_title": "Frequently asked questions",
+    "faq": [
+      {
+        "q": "How long do projects typically take?",
+        "a": "It depends on scope. A focused landing page: 1–2 weeks. A full SaaS MVP: 6–12 weeks. I provide detailed estimates after an initial call."
+      },
+      {
+        "q": "Do you work remotely?",
+        "a": "Yes — I work fully remote and collaborate with clients across Europe, the Middle East, and North America. Time zones have never been a barrier."
+      },
+      {
+        "q": "How do you charge?",
+        "a": "I work on a project-based or hourly basis, depending on what fits your needs. I'll propose the right model after understanding your project."
+      },
+      {
+        "q": "Do you sign NDAs?",
+        "a": "Absolutely. I sign NDAs as a matter of course. Your ideas and data stay confidential."
+      }
+    ],
+    "cta": "Start a project"
+  },
+  "contact": {
+    "title": "Let's work together",
+    "tagline": "Get in touch",
+    "subtitle": "Have a project in mind? I'd love to hear about it. Fill out the form and I'll get back to you within 24 hours.",
+    "available": "Currently accepting new projects",
+    "form": {
+      "name": "Your name",
+      "email": "Email address",
+      "service": "Service you're interested in",
+      "service_placeholder": "Select a service",
+      "message": "Tell me about your project",
+      "message_placeholder": "What are you building? What's the timeline? Any relevant context...",
+      "submit": "Send message",
+      "sending": "Sending…",
+      "success": "Message sent! I'll reply within 24 hours.",
+      "error": "Something went wrong. Please try again or email me directly.",
+      "services": {
+        "web": "Web Development",
+        "uiux": "UI/UX Design",
+        "ai": "AI & Automation",
+        "consulting": "Technical Consulting",
+        "other": "Other / Not sure yet"
+      }
+    },
+    "direct": "Or reach me directly",
+    "response": "Typical response: same day"
+  },
+  "footer": {
+    "tagline": "Building things that work.",
+    "copyright": "Pouya Karimi. All rights reserved.",
+    "links": {
+      "home": "Home",
+      "about": "About",
+      "services": "Services",
+      "portfolio": "Portfolio",
+      "blog": "Blog",
+      "contact": "Contact"
+    }
+  },
+  "common": {
+    "loading": "Loading…",
+    "not_found": "Page not found",
+    "back_home": "Go back home",
+    "lang_en": "English",
+    "lang_fa": "فارسی"
+  }
+}

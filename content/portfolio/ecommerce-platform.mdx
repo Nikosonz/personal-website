@@ -1,0 +1,52 @@
+---
+title: "E-Commerce Platform Redesign"
+excerpt: "End-to-end redesign and rebuild of a multi-vendor e-commerce platform — cutting checkout drop-off by 34% and boosting mobile conversion by 2.1×."
+category: "uiux"
+tags: ["E-Commerce", "UI/UX", "Next.js", "Stripe", "Figma"]
+year: 2024
+featured: true
+---
+
+## Overview
+
+A regional marketplace with 400+ vendors needed a complete overhaul. The original platform had a 68% cart abandonment rate on mobile, a checkout flow spread across 7 steps, and zero design consistency across vendor storefronts.
+
+The goal: reduce friction, unify the visual language, and ship a mobile-first experience that vendors could customise without breaking the brand.
+
+## Problem
+
+User research surfaced three critical failure points:
+
+1. **Trust gap** — product pages lacked social proof and had inconsistent image quality across vendors.
+2. **Checkout friction** — 7-step checkout with no guest option and no saved payment methods.
+3. **Performance** — LCP of 8.4s on 4G; images were unoptimised and served without a CDN.
+
+## Process
+
+### Discovery & Research
+- Moderated usability tests with 12 participants across mobile and desktop
+- Heatmap and session recording analysis (2 weeks, 40,000 sessions)
+- Competitor benchmark: Shopify, Zalando, Amazon checkout flows
+
+### Design
+- Component library in Figma: 80+ components, 4 spacing scales, 3 brand tiers
+- Streamlined checkout: 3 steps → single-page accordion with inline validation
+- Vendor storefront system: locked brand chrome, customisable hero + accent colour
+
+### Engineering
+- Migrated from a PHP monolith to Next.js App Router + tRPC API
+- Stripe Payment Element replaced the custom card form — PCI scope reduced to SAQ-A
+- Cloudinary CDN + automatic WebP/AVIF conversion; images lazy-loaded with blur placeholders
+
+## Results
+
+| Metric | Before | After | Change |
+|---|---|---|---|
+| Mobile conversion rate | 1.4% | 2.9% | **+107%** |
+| Cart abandonment (mobile) | 68% | 45% | **−34%** |
+| LCP (4G median) | 8.4s | 1.9s | **−77%** |
+| Checkout completion time | 4m 12s | 1m 48s | **−57%** |
+
+## Tech Stack
+
+Next.js 15 · TypeScript · Tailwind CSS · Stripe · tRPC · Prisma · PostgreSQL · Cloudinary · Figma
