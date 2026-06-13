@@ -2,11 +2,9 @@
 
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { GithubIcon, LinkedinIcon, TelegramIcon } from "@/components/ui/SocialIcons";
-import { LiquidButton } from "@/components/ui/liquid-glass-button";
 import { cn } from "@/lib/utils";
 
 const ease = [0.21, 0.47, 0.32, 0.98] as const;
@@ -21,7 +19,6 @@ type Props = { locale: string };
 
 export default function Hero({ locale }: Props) {
   const t = useTranslations("hero");
-  const router = useRouter();
   const lp = (href: string) => `/${locale}${href}`;
 
   return (
@@ -114,13 +111,12 @@ export default function Hero({ locale }: Props) {
             {t("cta_primary")}
             <ArrowRight size={16} />
           </Link>
-          <LiquidButton
-            size="lg"
-            onClick={() => router.push(lp("/contact"))}
-            className="text-sm font-semibold text-[var(--text-primary)]"
+          <Link
+            href={lp("/contact")}
+            className="inline-flex items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-6 py-3 text-sm font-semibold text-[var(--text-primary)] hover:border-[var(--accent)]/50 hover:bg-[var(--accent-subtle)] transition-all duration-200"
           >
             {t("cta_secondary")}
-          </LiquidButton>
+          </Link>
         </motion.div>
 
         {/* Social links */}
