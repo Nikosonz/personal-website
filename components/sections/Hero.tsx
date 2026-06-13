@@ -4,16 +4,9 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { GithubIcon, LinkedinIcon, TelegramIcon } from "@/components/ui/SocialIcons";
 import { cn } from "@/lib/utils";
 
 const ease = [0.21, 0.47, 0.32, 0.98] as const;
-
-const socials = [
-  { label: "GitHub", href: "https://github.com/Nikosonz", icon: GithubIcon },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/pouya-karimi", icon: LinkedinIcon },
-  { label: "Telegram", href: "https://t.me/pouyakarimi7", icon: TelegramIcon },
-];
 
 type Props = { locale: string };
 
@@ -119,41 +112,6 @@ export default function Hero({ locale }: Props) {
           </Link>
         </motion.div>
 
-        {/* Social links */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.45, ease }}
-          className="flex items-center gap-2"
-        >
-          {socials.map(({ label, href, icon: Icon }) => (
-            <a
-              key={label}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={label}
-              className="flex h-9 w-9 items-center justify-center rounded-lg text-[var(--text-muted)] hover:text-[var(--accent)] hover:bg-[var(--accent-subtle)] transition-all duration-200"
-            >
-              <Icon size={17} />
-            </a>
-          ))}
-        </motion.div>
-
-        {/* Scroll hint */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.9 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5"
-        >
-          <span className="text-[10px] uppercase tracking-widest text-[var(--text-muted)]">scroll</span>
-          <motion.div
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-            className="h-5 w-px rounded-full bg-[var(--border)]"
-          />
-        </motion.div>
       </div>
     </section>
   );
