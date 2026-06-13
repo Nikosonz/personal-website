@@ -17,7 +17,7 @@ export default async function ContactPage({ params }: Props) {
   const socials = [
     { label: "GitHub", href: "https://github.com/pouyakarimi", icon: GithubIcon, handle: "@pouyakarimi" },
     { label: "LinkedIn", href: "https://linkedin.com/in/pouyakarimi", icon: LinkedinIcon, handle: "Pouya Karimi" },
-    { label: "Telegram", href: "https://t.me/pouyakarimi", icon: TelegramIcon, handle: "@pouyakarimi" },
+    { label: "Telegram", href: "https://t.me/pouyakarimi7", icon: TelegramIcon, handle: "@pouyakarimi7" },
   ];
 
   return (

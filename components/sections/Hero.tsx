@@ -12,7 +12,7 @@ const ease = [0.21, 0.47, 0.32, 0.98] as const;
 const socials = [
   { label: "GitHub", href: "https://github.com/pouyakarimi", icon: GithubIcon },
   { label: "LinkedIn", href: "https://linkedin.com/in/pouyakarimi", icon: LinkedinIcon },
-  { label: "Telegram", href: "https://t.me/pouyakarimi", icon: TelegramIcon },
+  { label: "Telegram", href: "https://t.me/pouyakarimi7", icon: TelegramIcon },
 ];
 
 type Props = { locale: string };

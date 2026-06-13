@@ -17,7 +17,7 @@ const socials = [
   },
   {
     label: "Telegram",
-    href: "https://t.me/pouyakarimi",
+    href: "https://t.me/pouyakarimi7",
     icon: TelegramIcon,
   },
 ];
