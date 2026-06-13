@@ -12,7 +12,7 @@ const socials = [
   },
   {
     label: "LinkedIn",
-    href: "https://linkedin.com/in/pouyakarimi",
+    href: "https://www.linkedin.com/in/pouya-karimi",
     icon: LinkedinIcon,
   },
   {
