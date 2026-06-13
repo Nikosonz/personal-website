@@ -1,12 +1,15 @@
 import { MetadataRoute } from "next";
-import { getAllPosts, getAllProjects } from "@/lib/mdx";
+import { getAllProjects } from "@/lib/mdx";
+import { getAllPublishedPosts } from "@/lib/server/posts";
+
+export const dynamic = "force-dynamic";
 
 const BASE_URL = "https://pouyakarimi.dev";
 const locales = ["en", "fa"];
 const staticPages = ["/", "/about", "/services", "/portfolio", "/blog", "/contact"];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const posts = getAllPosts();
+  const posts = await getAllPublishedPosts().catch(() => []);
   const projects = getAllProjects();
 
   const staticEntries = staticPages.flatMap((path) =>
@@ -21,7 +24,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const blogEntries = posts.flatMap((post) =>
     locales.map((locale) => ({
       url: `${BASE_URL}/${locale}/blog/${post.slug}`,
-      lastModified: new Date(post.date),
+      lastModified: post.publishedAt ?? new Date(),
       changeFrequency: "yearly" as const,
       priority: 0.6,
     }))

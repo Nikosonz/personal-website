@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { FadeIn } from "@/components/ui/FadeIn";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 import { GithubIcon, LinkedinIcon, TelegramIcon } from "@/components/ui/SocialIcons";
 import ContactForm from "@/components/contact/ContactForm";
 
@@ -15,7 +16,7 @@ export default async function ContactPage({ params }: Props) {
   const t = await getTranslations({ locale, namespace: "contact" });
 
   const socials = [
-    { label: "GitHub", href: "https://github.com/pouyakarimi", icon: GithubIcon, handle: "@pouyakarimi" },
+    { label: "GitHub", href: "https://github.com/Nikosonz", icon: GithubIcon, handle: "@Nikosonz" },
     { label: "LinkedIn", href: "https://www.linkedin.com/in/pouya-karimi", icon: LinkedinIcon, handle: "Pouya Karimi" },
     { label: "Telegram", href: "https://t.me/pouyakarimi7", icon: TelegramIcon, handle: "@pouyakarimi7" },
   ];
@@ -23,6 +24,7 @@ export default async function ContactPage({ params }: Props) {
   return (
     <div className="pt-32 pb-24 px-5">
       <div className="mx-auto max-w-5xl">
+        <Breadcrumb items={[{ label: "Home", href: `/${locale}` }, { label: "Contact" }]} />
         {/* Header */}
         <FadeIn className="mb-16 flex flex-col gap-4">
           <p className="text-xs font-semibold uppercase tracking-widest text-[var(--accent)]">

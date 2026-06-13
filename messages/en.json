@@ -60,8 +60,10 @@
   },
   "blog": {
     "label": "The blog",
+    "tagline": "The blog",
     "title": "Thinking out loud",
     "subtitle": "Thoughts on design, engineering, and building things that matter.",
+    "empty": "No posts yet — check back soon.",
     "view_all": "Read all posts",
     "read_more": "Read post",
     "search": "Search posts…",

@@ -2,15 +2,17 @@
 
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { GithubIcon, LinkedinIcon, TelegramIcon } from "@/components/ui/SocialIcons";
+import { LiquidButton } from "@/components/ui/liquid-glass-button";
 import { cn } from "@/lib/utils";
 
 const ease = [0.21, 0.47, 0.32, 0.98] as const;
 
 const socials = [
-  { label: "GitHub", href: "https://github.com/pouyakarimi", icon: GithubIcon },
+  { label: "GitHub", href: "https://github.com/Nikosonz", icon: GithubIcon },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/pouya-karimi", icon: LinkedinIcon },
   { label: "Telegram", href: "https://t.me/pouyakarimi7", icon: TelegramIcon },
 ];
@@ -19,6 +21,7 @@ type Props = { locale: string };
 
 export default function Hero({ locale }: Props) {
   const t = useTranslations("hero");
+  const router = useRouter();
   const lp = (href: string) => `/${locale}${href}`;
 
   return (
@@ -111,12 +114,13 @@ export default function Hero({ locale }: Props) {
             {t("cta_primary")}
             <ArrowRight size={16} />
           </Link>
-          <Link
-            href={lp("/contact")}
-            className="inline-flex items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-6 py-3 text-sm font-semibold text-[var(--text-primary)] hover:border-[var(--accent)]/50 hover:bg-[var(--accent-subtle)] transition-all duration-200"
+          <LiquidButton
+            size="lg"
+            onClick={() => router.push(lp("/contact"))}
+            className="text-sm font-semibold text-[var(--text-primary)]"
           >
             {t("cta_secondary")}
-          </Link>
+          </LiquidButton>
         </motion.div>
 
         {/* Social links */}

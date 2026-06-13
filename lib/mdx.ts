@@ -41,27 +41,6 @@ function parseFile<T>(dir: string, slug: string): { meta: T; content: string } {
   return { meta: data as T, content };
 }
 
-// ─── Blog ─────────────────────────────────────────────────
-
-export function getAllPosts(): PostMeta[] {
-  return getFiles("blog")
-    .map((file) => {
-      const slug = file.replace(".mdx", "");
-      const { meta, content } = parseFile<Omit<PostMeta, "slug" | "readingTime">>("blog", slug);
-      return {
-        ...meta,
-        slug,
-        readingTime: readingTime(content).text,
-      };
-    })
-    .filter((p) => !p.draft)
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-}
-
-export function getPost(slug: string) {
-  return parseFile<Omit<PostMeta, "slug" | "readingTime">>("blog", slug);
-}
-
 // ─── Portfolio ────────────────────────────────────────────
 
 export function getAllProjects(): ProjectMeta[] {

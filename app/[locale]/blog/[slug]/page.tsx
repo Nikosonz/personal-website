@@ -1,161 +1,91 @@
-import { hasLocale } from "next-intl";
-import { getTranslations } from "next-intl/server";
+﻿import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
-import { routing } from "@/i18n/routing";
-import { getPost, getAllPosts } from "@/lib/mdx";
-import { MDXRemote } from "next-mdx-remote/rsc";
-import { FadeIn } from "@/components/ui/FadeIn";
-import { Badge } from "@/components/ui/Badge";
-import TableOfContents from "@/components/blog/TableOfContents";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Clock } from "lucide-react";
-import { formatDate, extractHeadings } from "@/lib/utils";
-import readingTime from "reading-time";
-import remarkGfm from "remark-gfm";
-import rehypePrettyCode from "rehype-pretty-code";
-import rehypeSlug from "rehype-slug";
-import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import sanitizeHtml from "sanitize-html";
+import { routing } from "@/i18n/routing";
+import { getPostBySlug } from "@/lib/server/posts";
+import Breadcrumb from "@/components/ui/Breadcrumb";
+import { ArrowLeft } from "lucide-react";
+
+export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
-export async function generateStaticParams() {
-  const posts = getAllPosts();
-  return routing.locales.flatMap((locale) =>
-    posts.map((post) => ({ locale, slug: post.slug }))
-  );
+export async function generateMetadata({ params }: Props) {
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
+  if (!post) return {};
+  return { title: post.title, description: post.excerpt };
 }
 
 export default async function BlogPostPage({ params }: Props) {
   const { locale, slug } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
 
-  const t = await getTranslations({ locale, namespace: "blog" });
-  const lp = (href: string) => `/${locale}${href}`;
-
-  let postData: ReturnType<typeof getPost> | null = null;
-  try {
-    postData = getPost(slug);
-  } catch {
-    notFound();
-  }
-
-  const { content, meta } = postData!;
-  const rt = readingTime(content);
-  const typedMeta = meta as {
-    title: string;
-    excerpt: string;
-    date: string;
-    tags: string[];
-  };
-
-  const toc = extractHeadings(content);
-
-  // Prev / next
-  const allPosts = getAllPosts();
-  const currentIndex = allPosts.findIndex((p) => p.slug === slug);
-  const prevPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null;
-  const nextPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
+  const post = await getPostBySlug(slug);
+  if (!post) notFound();
 
   return (
     <div className="pt-32 pb-24 px-5">
-      <div className="mx-auto max-w-6xl">
-        <FadeIn className="mb-10">
-          <Link
-            href={lp("/blog")}
-            className="inline-flex items-center gap-2 text-sm text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors duration-200"
-          >
-            <ArrowLeft size={15} />
-            {t("back")}
-          </Link>
-        </FadeIn>
+      <div className="mx-auto max-w-3xl">
+        <Breadcrumb
+          items={[
+            { label: "Home", href: `/${locale}` },
+            { label: "Blog", href: `/${locale}/blog` },
+            { label: post.title },
+          ]}
+        />
+        <Link
+          href={`/${locale}/blog`}
+          className="inline-flex items-center gap-2 text-sm text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors mb-10"
+        >
+          <ArrowLeft size={14} />
+          All posts
+        </Link>
 
-        <div className="lg:grid lg:grid-cols-[1fr_220px] lg:gap-16">
-          {/* Article */}
-          <article>
-            <FadeIn delay={0.05} className="mb-10 flex flex-col gap-4">
-              <div className="flex items-center gap-3 text-sm text-[var(--text-muted)]">
-                <time dateTime={typedMeta.date}>{formatDate(typedMeta.date, locale)}</time>
-                <span>·</span>
-                <span className="flex items-center gap-1.5">
-                  <Clock size={13} />
-                  {rt.text}
+        {post.coverImageUrl && (
+          <div className="mb-10 rounded-2xl overflow-hidden h-64 sm:h-80">
+            <img src={post.coverImageUrl} alt={post.title} className="h-full w-full object-cover" />
+          </div>
+        )}
+
+        <header className="mb-10">
+          {post.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mb-4">
+              {post.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full border border-[var(--accent)]/25 bg-[var(--accent-subtle)] px-2.5 py-0.5 text-xs font-medium text-[var(--accent)]"
+                >
+                  {tag}
                 </span>
-              </div>
-              <h1 className="font-heading text-3xl font-extrabold text-[var(--text-primary)] sm:text-4xl leading-tight">
-                {typedMeta.title}
-              </h1>
-              <p className="text-lg text-[var(--text-muted)]">{typedMeta.excerpt}</p>
-              <div className="flex flex-wrap gap-1.5">
-                {typedMeta.tags?.map((tag) => (
-                  <Badge key={tag} variant="accent">
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-            </FadeIn>
-
-            <div className="mb-10 h-px bg-[var(--border)]" />
-
-            <FadeIn delay={0.1} className="prose prose-custom max-w-none">
-              <MDXRemote
-                source={content}
-                options={{
-                  mdxOptions: {
-                    remarkPlugins: [remarkGfm],
-                    rehypePlugins: [
-                      rehypeSlug,
-                      [rehypeAutolinkHeadings, { behavior: "wrap" }],
-                      [rehypePrettyCode, { theme: "github-dark" }],
-                    ],
-                  },
-                }}
-              />
-            </FadeIn>
-
-            {/* Prev / Next */}
-            {(prevPost || nextPost) && (
-              <div className="mt-16 pt-8 border-t border-[var(--border)] grid grid-cols-2 gap-4">
-                {prevPost ? (
-                  <Link
-                    href={lp(`/blog/${prevPost.slug}`)}
-                    className="group flex flex-col gap-1 p-4 rounded-xl border border-[var(--border)] hover:border-[var(--accent)]/40 transition-all duration-200"
-                  >
-                    <span className="text-xs text-[var(--text-muted)] flex items-center gap-1">
-                      <ArrowLeft size={12} /> Previous
-                    </span>
-                    <span className="text-sm font-medium text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors line-clamp-2">
-                      {prevPost.title}
-                    </span>
-                  </Link>
-                ) : (
-                  <div />
-                )}
-                {nextPost && (
-                  <Link
-                    href={lp(`/blog/${nextPost.slug}`)}
-                    className="group flex flex-col gap-1 p-4 rounded-xl border border-[var(--border)] hover:border-[var(--accent)]/40 transition-all duration-200 text-right ml-auto w-full"
-                  >
-                    <span className="text-xs text-[var(--text-muted)] flex items-center gap-1 justify-end">
-                      Next <ArrowRight size={12} />
-                    </span>
-                    <span className="text-sm font-medium text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors line-clamp-2">
-                      {nextPost.title}
-                    </span>
-                  </Link>
-                )}
-              </div>
-            )}
-          </article>
-
-          {/* Sticky ToC sidebar (desktop only) */}
-          {toc.length > 0 && (
-            <aside className="hidden lg:block">
-              <div className="sticky top-28">
-                <TableOfContents items={toc} />
-              </div>
-            </aside>
+              ))}
+            </div>
           )}
-        </div>
+          <h1 className="font-heading text-3xl font-extrabold text-[var(--text-primary)] sm:text-4xl leading-tight mb-4">
+            {post.title}
+          </h1>
+          {post.publishedAt && (
+            <time className="text-sm text-[var(--text-muted)]">
+              {new Date(post.publishedAt).toLocaleDateString("en-US", { dateStyle: "long" })}
+            </time>
+          )}
+        </header>
+
+        <div
+          className="prose prose-neutral dark:prose-invert max-w-none text-[var(--text-primary)] [&_a]:text-[var(--accent)] [&_a:hover]:underline [&_code]:text-[var(--accent)] [&_code]:bg-[var(--accent-subtle)] [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_blockquote]:border-s-4 [&_blockquote]:border-[var(--accent)] [&_blockquote]:ps-4 [&_blockquote]:text-[var(--text-muted)] [&_pre]:bg-[var(--surface)] [&_pre]:border [&_pre]:border-[var(--border)] [&_pre]:rounded-xl [&_h2]:text-[var(--text-primary)] [&_h3]:text-[var(--text-primary)]"
+          dangerouslySetInnerHTML={{
+            __html: sanitizeHtml(post.content, {
+              allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "figure", "figcaption"]),
+              allowedAttributes: {
+                ...sanitizeHtml.defaults.allowedAttributes,
+                img: ["src", "alt", "width", "height", "class"],
+                "*": ["class"],
+              },
+              allowedSchemes: ["http", "https", "mailto"],
+            }),
+          }}
+        />
       </div>
     </div>
   );

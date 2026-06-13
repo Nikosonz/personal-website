@@ -7,7 +7,7 @@ type Props = { locale: string };
 const socials = [
   {
     label: "GitHub",
-    href: "https://github.com/pouyakarimi",
+    href: "https://github.com/Nikosonz",
     icon: GithubIcon,
   },
   {
