@@ -6,6 +6,7 @@ import { routing } from "@/i18n/routing";
 import { ThemeProvider } from "@/components/ui/ThemeProvider";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import BackToTop from "@/components/ui/BackToTop";
 
 type Props = {
   children: React.ReactNode;
@@ -52,6 +53,7 @@ export default async function LocaleLayout({ children, params }: Props) {
             <Navbar locale={locale} />
             <main className="flex-1">{children}</main>
             <Footer locale={locale} />
+            <BackToTop />
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>
