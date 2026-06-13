@@ -5,6 +5,7 @@ import { routing } from "@/i18n/routing";
 import { FadeIn } from "@/components/ui/FadeIn";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { GithubIcon, LinkedinIcon, TelegramIcon } from "@/components/ui/SocialIcons";
+import { Mail } from "lucide-react";
 import ContactForm from "@/components/contact/ContactForm";
 
 type Props = { params: Promise<{ locale: string }> };
@@ -16,6 +17,7 @@ export default async function ContactPage({ params }: Props) {
   const t = await getTranslations({ locale, namespace: "contact" });
 
   const socials = [
+    { label: "Email", href: "mailto:pouyakarimibirgani@gmail.com", icon: Mail, handle: "pouyakarimibirgani@gmail.com" },
     { label: "GitHub", href: "https://github.com/Nikosonz", icon: GithubIcon, handle: "@Nikosonz" },
     { label: "LinkedIn", href: "https://www.linkedin.com/in/pouya-karimi", icon: LinkedinIcon, handle: "Pouya Karimi" },
     { label: "Telegram", href: "https://t.me/pouyakarimi7", icon: TelegramIcon, handle: "@pouyakarimi7" },

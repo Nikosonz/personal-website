@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { prisma } from "@/lib/db";
 
 const schema = z.object({
   name: z.string().min(2),
@@ -13,22 +14,30 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const data = schema.parse(body);
 
-    // Log the contact form submission (replace with email sending in production)
-    console.log("[Contact Form]", {
-      name: data.name,
-      email: data.email,
-      service: data.service,
-      message: data.message.slice(0, 100),
+    await prisma.contactMessage.create({
+      data: {
+        name: data.name,
+        email: data.email,
+        service: data.service,
+        message: data.message,
+      },
     });
 
-    // TODO: Integrate with email service (Resend, SendGrid, nodemailer, etc.)
-    // Example with Resend:
-    // await resend.emails.send({
-    //   from: "contact@pouyakarimi.dev",
-    //   to: "pouya@yourdomain.com",
-    //   subject: `New inquiry from ${data.name}`,
-    //   html: `<p><b>Service:</b> ${data.service}</p><p><b>Email:</b> ${data.email}</p><p>${data.message}</p>`,
-    // });
+    if (process.env.RESEND_API_KEY) {
+      const { Resend } = await import("resend");
+      const resend = new Resend(process.env.RESEND_API_KEY);
+      await resend.emails.send({
+        from: "Contact Form <onboarding@resend.dev>",
+        to: "pouyakarimibirgani@gmail.com",
+        subject: `New inquiry from ${data.name} — ${data.service}`,
+        html: `<h2>New contact form submission</h2>
+<p><b>Name:</b> ${data.name}</p>
+<p><b>Email:</b> <a href="mailto:${data.email}">${data.email}</a></p>
+<p><b>Service:</b> ${data.service}</p>
+<p><b>Message:</b></p>
+<p>${data.message.replace(/\n/g, "<br>")}</p>`,
+      });
+    }
 
     return NextResponse.json({ ok: true }, { status: 200 });
   } catch (err) {

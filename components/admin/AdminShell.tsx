@@ -2,7 +2,7 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { logoutAction } from "@/app/actions/auth";
-import { LogOut, FileText, PlusCircle } from "lucide-react";
+import { LogOut, FileText, PlusCircle, Inbox } from "lucide-react";
 
 export default function AdminShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -32,6 +32,13 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
           >
             <PlusCircle size={15} />
             New Post
+          </Link>
+          <Link
+            href="/admin/messages"
+            className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-[var(--text-muted)] hover:bg-[var(--accent-subtle)] hover:text-[var(--accent)] transition-colors"
+          >
+            <Inbox size={15} />
+            Messages
           </Link>
         </nav>
         <div className="p-3 border-t border-[var(--border)]">
