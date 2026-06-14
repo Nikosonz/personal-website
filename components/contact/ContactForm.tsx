@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -24,6 +24,7 @@ export default function ContactForm({ locale: _locale }: { locale: string }) {
   const t = useTranslations("contact.form");
   const [submitted, setSubmitted] = useState(false);
   const [serverError, setServerError] = useState(false);
+  const honeypotRef = useRef<HTMLInputElement>(null);
 
   const {
     register,
@@ -37,7 +38,7 @@ export default function ContactForm({ locale: _locale }: { locale: string }) {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, company: honeypotRef.current?.value ?? "" }),
       });
       if (!res.ok) throw new Error();
       setSubmitted(true);
@@ -57,6 +58,17 @@ export default function ContactForm({ locale: _locale }: { locale: string }) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+      {/* Honeypot — hidden from humans; bots that fill it are silently rejected */}
+      <input
+        ref={honeypotRef}
+        type="text"
+        name="company"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="absolute -left-[9999px] h-0 w-0 opacity-0"
+      />
+
       {/* Name */}
       <div className="flex flex-col gap-1.5">
         <label className="text-sm font-medium text-[var(--text-primary)]">{t("name")}</label>

@@ -102,7 +102,8 @@ The build script (`package.json`) runs `prisma generate && next build`, so Verce
 - Cookie named `session`, httpOnly, 7-day JWT (HS256), signed with `SESSION_SECRET` env var
 - `lib/session.ts` exports: `encrypt`, `decrypt`, `createSession`, `deleteSession`, `verifySession`
 - **There is no `getSession` export** — don't try to import it
-- **Admin pages do NOT call `verifySession` themselves** — auth is enforced by the admin layout + `AdminShell`. Follow the pattern in `app/admin/posts/page.tsx` (no auth check)
+- **Admin route protection lives in `middleware.ts`** (repo root). It cryptographically verifies the `session` cookie for every `/admin/:path*` route except `/admin/login`, redirecting to login otherwise. This is the real server-side gate. **`AdminShell` is a `"use client"` component and provides NO auth** — it only hides the sidebar on the login route. Admin pages therefore don't repeat the check; the middleware covers them. New admin pages are protected automatically by the matcher.
+- API routes under `/api/admin/*` independently call `verifySession()` for defense in depth.
 - Login: `POST /admin/login` → `loginAction` → `createSession` → redirect `/admin/posts`
 - Logout: `logoutAction` → `deleteSession` → redirect `/admin/login`
 
@@ -110,7 +111,7 @@ The build script (`package.json`) runs `prisma generate && next build`, so Verce
 
 ## Admin Panel Conventions
 
-- `AdminShell` (`components/admin/AdminShell.tsx`) is a `"use client"` component wrapping the entire admin area. It renders the sidebar nav with `NavLink` (active state via `usePathname`) and logout button.
+- `AdminShell` (`components/admin/AdminShell.tsx`) is a `"use client"` component wrapping the entire admin area. It renders the sidebar nav with `NavLink` (active state via `usePathname`) and logout button. **It is UI only — it does not enforce auth; `middleware.ts` does (see Authentication).**
 - Add new admin nav links inside `AdminShell` using the `NavLink` component — don't hardcode className strings.
 - All admin data pages need `export const dynamic = "force-dynamic"` at the top.
 - Interactive admin elements (delete buttons, mark-read, etc.) follow the thin `"use client"` wrapper pattern — see `DeletePostButton`, `MarkReadButton`.
