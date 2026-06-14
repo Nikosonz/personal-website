@@ -15,11 +15,13 @@ export async function POST(req: NextRequest) {
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json();
-  const { title, slug, excerpt, content, tags, coverImageUrl, draft } = body;
+  const { title, slug, excerpt, content, tags, coverImageUrl, draft, dir } = body;
 
   if (!title || !slug || !excerpt || !content) {
     return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
   }
+
+  const direction = dir === "rtl" ? "rtl" : "ltr";
 
   const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
   if (!SLUG_RE.test(slug)) {
@@ -35,6 +37,7 @@ export async function POST(req: NextRequest) {
       slug,
       excerpt,
       content,
+      dir: direction,
       tags: tags ?? [],
       coverImageUrl: coverImageUrl ?? null,
       draft: draft ?? true,

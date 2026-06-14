@@ -4,6 +4,7 @@ import Link from "next/link";
 import sanitizeHtml from "sanitize-html";
 import { routing } from "@/i18n/routing";
 import { getPostBySlug } from "@/lib/server/posts";
+import { cn } from "@/lib/utils";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { ArrowLeft } from "lucide-react";
 
@@ -64,7 +65,7 @@ export default async function BlogPostPage({ params }: Props) {
           </div>
         )}
 
-        <header className="mb-10">
+        <header dir={post.dir} className={cn("mb-10", post.dir === "rtl" && "font-farsi")}>
           {post.tags.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mb-4">
               {post.tags.map((tag) => (
@@ -88,14 +89,18 @@ export default async function BlogPostPage({ params }: Props) {
         </header>
 
         <div
-          className="prose prose-neutral dark:prose-invert max-w-none text-[var(--text-primary)] [&_a]:text-[var(--accent)] [&_a:hover]:underline [&_code]:text-[var(--accent)] [&_code]:bg-[var(--accent-subtle)] [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_blockquote]:border-s-4 [&_blockquote]:border-[var(--accent)] [&_blockquote]:ps-4 [&_blockquote]:text-[var(--text-muted)] [&_pre]:bg-[var(--surface)] [&_pre]:border [&_pre]:border-[var(--border)] [&_pre]:rounded-xl [&_h2]:text-[var(--text-primary)] [&_h3]:text-[var(--text-primary)]"
+          dir={post.dir}
+          className={cn(
+            "prose prose-neutral dark:prose-invert max-w-none text-[var(--text-primary)] [&_a]:text-[var(--accent)] [&_a:hover]:underline [&_code]:text-[var(--accent)] [&_code]:bg-[var(--accent-subtle)] [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_blockquote]:border-s-4 [&_blockquote]:border-[var(--accent)] [&_blockquote]:ps-4 [&_blockquote]:text-[var(--text-muted)] [&_pre]:bg-[var(--surface)] [&_pre]:border [&_pre]:border-[var(--border)] [&_pre]:rounded-xl [&_h2]:text-[var(--text-primary)] [&_h3]:text-[var(--text-primary)]",
+            post.dir === "rtl" && "font-farsi"
+          )}
           dangerouslySetInnerHTML={{
             __html: sanitizeHtml(post.content, {
               allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "figure", "figcaption"]),
               allowedAttributes: {
                 ...sanitizeHtml.defaults.allowedAttributes,
                 img: ["src", "alt", "width", "height", "class"],
-                "*": ["class"],
+                "*": ["class", "dir"],
               },
               allowedSchemes: ["http", "https", "mailto"],
             }),

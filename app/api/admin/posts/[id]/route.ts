@@ -19,7 +19,8 @@ export async function PUT(req: NextRequest, ctx: RouteContext<"/api/admin/posts/
 
   const { id } = await ctx.params;
   const body = await req.json();
-  const { title, slug, excerpt, content, tags, coverImageUrl, draft } = body;
+  const { title, slug, excerpt, content, tags, coverImageUrl, draft, dir } = body;
+  const direction = dir === "rtl" ? "rtl" : "ltr";
 
   const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
   if (slug && !SLUG_RE.test(slug)) {
@@ -39,6 +40,7 @@ export async function PUT(req: NextRequest, ctx: RouteContext<"/api/admin/posts/
       slug,
       excerpt,
       content,
+      dir: direction,
       tags: tags ?? [],
       coverImageUrl: coverImageUrl ?? null,
       draft: draft ?? true,

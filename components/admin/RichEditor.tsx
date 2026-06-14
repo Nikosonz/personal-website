@@ -8,11 +8,17 @@ import Placeholder from "@tiptap/extension-placeholder";
 import {
   Bold, Italic, Underline as UnderlineIcon, Heading2, Heading3,
   List, ListOrdered, Quote, Code, Link as LinkIcon, ImageIcon, Minus,
+  AlignLeft, AlignRight,
 } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+type Dir = "ltr" | "rtl";
 
 interface Props {
   value: string;
   onChange: (html: string) => void;
+  dir: Dir;
+  onDirChange: (dir: Dir) => void;
 }
 
 function ToolbarBtn({
@@ -36,7 +42,7 @@ function ToolbarBtn({
   );
 }
 
-export default function RichEditor({ value, onChange }: Props) {
+export default function RichEditor({ value, onChange, dir, onDirChange }: Props) {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -138,8 +144,17 @@ export default function RichEditor({ value, onChange }: Props) {
         <ToolbarBtn title="Image" onClick={insertImage}>
           <ImageIcon size={13} />
         </ToolbarBtn>
+        <div className="w-px h-5 self-center bg-[var(--border)] mx-1" />
+        <ToolbarBtn title="Left-to-right" active={dir === "ltr"} onClick={() => onDirChange("ltr")}>
+          <AlignLeft size={13} />
+        </ToolbarBtn>
+        <ToolbarBtn title="Right-to-left (Persian)" active={dir === "rtl"} onClick={() => onDirChange("rtl")}>
+          <AlignRight size={13} />
+        </ToolbarBtn>
       </div>
-      <EditorContent editor={editor} />
+      <div dir={dir} className={cn(dir === "rtl" && "font-farsi")}>
+        <EditorContent editor={editor} />
+      </div>
     </div>
   );
 }

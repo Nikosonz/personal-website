@@ -8,6 +8,7 @@ export interface Post {
   content: string;
   coverImageUrl: string | null;
   tags: string[];
+  dir: string;
   draft: boolean;
   publishedAt: Date | null;
   createdAt: Date;

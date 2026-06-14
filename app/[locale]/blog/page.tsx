@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { routing } from "@/i18n/routing";
 import { getAllPublishedPosts } from "@/lib/server/posts";
+import { cn } from "@/lib/utils";
 import { FadeIn } from "@/components/ui/FadeIn";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { ArrowRight } from "lucide-react";
@@ -65,10 +66,24 @@ export default async function BlogPage({ params }: Props) {
                         ))}
                       </div>
                     )}
-                    <h2 className="font-heading text-lg font-bold text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors leading-snug">
+                    <h2
+                      dir={post.dir}
+                      className={cn(
+                        "font-heading text-lg font-bold text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors leading-snug",
+                        post.dir === "rtl" && "font-farsi"
+                      )}
+                    >
                       {post.title}
                     </h2>
-                    <p className="text-sm text-[var(--text-muted)] line-clamp-3 flex-1">{post.excerpt}</p>
+                    <p
+                      dir={post.dir}
+                      className={cn(
+                        "text-sm text-[var(--text-muted)] line-clamp-3 flex-1",
+                        post.dir === "rtl" && "font-farsi"
+                      )}
+                    >
+                      {post.excerpt}
+                    </p>
                     <div className="flex items-center justify-between mt-auto pt-3 border-t border-[var(--border)]">
                       <span className="text-xs text-[var(--text-muted)]">
                         {post.publishedAt

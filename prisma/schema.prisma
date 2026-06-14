@@ -22,6 +22,7 @@ model Post {
   content       String    @db.Text
   coverImageUrl String?
   tags          String[]  @default([])
+  dir           String    @default("ltr") // "ltr" | "rtl" — text direction for RTL (Persian) posts
   draft         Boolean   @default(true)
   publishedAt   DateTime?
   createdAt     DateTime  @default(now())
