@@ -1,10 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 const ease = [0.21, 0.47, 0.32, 0.98] as const;
 
@@ -15,7 +15,7 @@ export default function Hero({ locale }: Props) {
   const lp = (href: string) => `/${locale}${href}`;
 
   return (
-    <section className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-5 pt-24 pb-20 text-center">
+    <section className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-5 pt-24 pb-20">
       {/* Subtle grid background */}
       <div
         aria-hidden
@@ -34,84 +34,106 @@ export default function Hero({ locale }: Props) {
         style={{ background: "radial-gradient(circle, var(--accent) 0%, transparent 70%)" }}
       />
 
-      <div className="relative z-10 mx-auto max-w-4xl flex flex-col items-center gap-8">
-        {/* Status badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease }}
-        >
-          <span className="inline-flex items-center gap-2 rounded-full border border-[var(--accent)]/25 bg-[var(--accent-subtle)] px-3.5 py-1.5 text-xs font-medium text-[var(--accent)]">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--accent)] opacity-50" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--accent)]" />
-            </span>
-            {t("available")}
-          </span>
-        </motion.div>
-
-        {/* Headline */}
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1, ease }}
-          className="font-heading text-4xl font-extrabold leading-[1.1] tracking-tight text-[var(--text-primary)] sm:text-5xl md:text-6xl lg:text-7xl"
-        >
-          {t.rich("headline", {
-            accent: (chunks) => (
-              <span className="relative inline-block text-[var(--accent)]">
-                {chunks}
-                <svg
-                  aria-hidden
-                  className="absolute -bottom-1 left-0 w-full"
-                  viewBox="0 0 300 8"
-                  preserveAspectRatio="none"
-                  fill="none"
-                >
-                  <path
-                    d="M0 6 Q75 2 150 5 Q225 8 300 4"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                  />
-                </svg>
+      <div className="relative z-10 mx-auto max-w-6xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        {/* Left: Text content */}
+        <div className="flex flex-col items-center lg:items-start text-center lg:text-left gap-8">
+          {/* Status badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease }}
+          >
+            <span className="inline-flex items-center gap-2 rounded-full border border-[var(--accent)]/25 bg-[var(--accent-subtle)] px-3.5 py-1.5 text-xs font-medium text-[var(--accent)]">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--accent)] opacity-50" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--accent)]" />
               </span>
-            ),
-          })}
-        </motion.h1>
+              {t("available")}
+            </span>
+          </motion.div>
 
-        {/* Subheading */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2, ease }}
-          className="max-w-2xl text-lg leading-relaxed text-[var(--text-muted)] sm:text-xl"
-        >
-          {t("subheadline")}
-        </motion.p>
+          {/* Headline */}
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1, ease }}
+            className="font-heading text-4xl font-extrabold leading-[1.1] tracking-tight text-[var(--text-primary)] sm:text-5xl md:text-6xl"
+          >
+            {t.rich("headline", {
+              accent: (chunks) => (
+                <span className="relative inline-block text-[var(--accent)]">
+                  {chunks}
+                  <svg
+                    aria-hidden
+                    className="absolute -bottom-1 left-0 w-full"
+                    viewBox="0 0 300 8"
+                    preserveAspectRatio="none"
+                    fill="none"
+                  >
+                    <path
+                      d="M0 6 Q75 2 150 5 Q225 8 300 4"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </span>
+              ),
+            })}
+          </motion.h1>
 
-        {/* CTAs */}
+          {/* Subheading */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2, ease }}
+            className="max-w-xl text-lg leading-relaxed text-[var(--text-muted)] sm:text-xl"
+          >
+            {t("subheadline")}
+          </motion.p>
+
+          {/* CTAs */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3, ease }}
+            className="flex flex-wrap items-center justify-center lg:justify-start gap-3"
+          >
+            <Link
+              href={lp("/portfolio")}
+              className="inline-flex items-center gap-2 rounded-xl bg-[var(--accent)] px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-[var(--accent-hover)] transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
+            >
+              {t("cta_primary")}
+              <ArrowRight size={16} />
+            </Link>
+            <Link
+              href={lp("/contact")}
+              className="inline-flex items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-6 py-3 text-sm font-semibold text-[var(--text-primary)] hover:border-[var(--accent)]/50 hover:bg-[var(--accent-subtle)] transition-all duration-200"
+            >
+              {t("cta_secondary")}
+            </Link>
+          </motion.div>
+        </div>
+
+        {/* Right: Photo */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3, ease }}
-          className="flex flex-wrap items-center justify-center gap-3"
+          initial={{ opacity: 0, x: 30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.7, delay: 0.15, ease }}
+          className="flex justify-center lg:justify-end"
         >
-          <Link
-            href={lp("/portfolio")}
-            className="inline-flex items-center gap-2 rounded-xl bg-[var(--accent)] px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-[var(--accent-hover)] transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
-          >
-            {t("cta_primary")}
-            <ArrowRight size={16} />
-          </Link>
-          <Link
-            href={lp("/contact")}
-            className="inline-flex items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-6 py-3 text-sm font-semibold text-[var(--text-primary)] hover:border-[var(--accent)]/50 hover:bg-[var(--accent-subtle)] transition-all duration-200"
-          >
-            {t("cta_secondary")}
-          </Link>
+          <div className="relative">
+            <div className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-[var(--accent)]/30 via-[var(--accent)]/10 to-transparent blur-sm" />
+            <Image
+              src="/PK.jpg"
+              alt="Pouya Karimi"
+              width={420}
+              height={520}
+              className="relative rounded-2xl object-cover object-top shadow-2xl"
+              priority
+            />
+          </div>
         </motion.div>
-
       </div>
     </section>
   );

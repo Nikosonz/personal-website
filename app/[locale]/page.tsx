@@ -14,8 +14,8 @@ const personSchema = {
   "@type": "Person",
   name: "Pouya Karimi",
   url: "https://pouyakarimi.ir",
-  jobTitle: "Freelance Developer & UI Designer",
-  description: "Freelance developer, UI/UX designer, and AI consultant helping teams build exceptional digital products.",
+  jobTitle: "Freelance Developer & MBA Specialist",
+  description: "Freelance developer, AI consultant helping teams build exceptional digital products, business consultant",
   email: "pouyakarimibirgani@gmail.com",
   address: { "@type": "PostalAddress", addressCountry: "IR" },
   sameAs: [
