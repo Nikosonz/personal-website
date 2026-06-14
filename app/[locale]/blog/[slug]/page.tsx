@@ -13,10 +13,32 @@ export const dynamic = "force-dynamic";
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
 export async function generateMetadata({ params }: Props) {
-  const { slug } = await params;
+  const { locale, slug } = await params;
   const post = await getPostBySlug(slug);
   if (!post) return {};
-  return { title: post.title, description: post.excerpt };
+
+  const description = post.metaDescription ?? post.excerpt;
+  const images = [post.ogImage ?? post.coverImageUrl].filter(Boolean) as string[];
+  const socialTitle = post.ogTitle ?? post.title;
+  const socialDescription = post.ogDescription ?? description;
+
+  return {
+    title: post.title,
+    description,
+    openGraph: {
+      type: "article",
+      title: socialTitle,
+      description: socialDescription,
+      url: `https://pouyakarimi.ir/${locale}/blog/${post.slug}`,
+      ...(images.length && { images }),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: socialTitle,
+      description: socialDescription,
+      ...(images.length && { images }),
+    },
+  };
 }
 
 export default async function BlogPostPage({ params }: Props) {
@@ -39,9 +61,19 @@ export default async function BlogPostPage({ params }: Props) {
     publisher: { "@type": "Person", name: "Pouya Karimi", url: "https://pouyakarimi.ir" },
   };
 
+  // Owner-authored custom JSON-LD — only render if it parses as valid JSON
+  let hasValidJsonLd = false;
+  if (post.jsonLd?.trim()) {
+    try { JSON.parse(post.jsonLd); hasValidJsonLd = true; } catch { hasValidJsonLd = false; }
+  }
+
   return (
     <>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingSchema) }} />
+    {hasValidJsonLd && (
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: post.jsonLd! }} />
+    )}
+    {post.headHtml && <div dangerouslySetInnerHTML={{ __html: post.headHtml }} />}
     <div className="pt-32 pb-24 px-5">
       <div className="mx-auto max-w-3xl">
         <Breadcrumb
@@ -96,11 +128,13 @@ export default async function BlogPostPage({ params }: Props) {
           )}
           dangerouslySetInnerHTML={{
             __html: sanitizeHtml(post.content, {
-              allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "figure", "figcaption"]),
+              allowedTags: sanitizeHtml.defaults.allowedTags.concat([
+                "img", "figure", "figcaption", "section", "article",
+              ]),
               allowedAttributes: {
                 ...sanitizeHtml.defaults.allowedAttributes,
                 img: ["src", "alt", "width", "height", "class"],
-                "*": ["class", "dir"],
+                "*": ["class", "dir", "id"],
               },
               allowedSchemes: ["http", "https", "mailto"],
             }),

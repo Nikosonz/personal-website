@@ -27,6 +27,14 @@ model Post {
   publishedAt   DateTime?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+
+  // Per-post SEO controls (all optional; owner-authored, see PostForm "SEO & Social")
+  metaDescription String?
+  ogTitle         String?
+  ogDescription   String?
+  ogImage         String?
+  jsonLd          String?  @db.Text
+  headHtml        String?  @db.Text
 }
 
 model ContactMessage {

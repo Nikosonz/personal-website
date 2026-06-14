@@ -13,6 +13,12 @@ export interface Post {
   publishedAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
+  metaDescription: string | null;
+  ogTitle: string | null;
+  ogDescription: string | null;
+  ogImage: string | null;
+  jsonLd: string | null;
+  headHtml: string | null;
 }
 
 export async function getAllPublishedPosts(): Promise<Post[]> {

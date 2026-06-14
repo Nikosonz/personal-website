@@ -15,7 +15,10 @@ export async function POST(req: NextRequest) {
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json();
-  const { title, slug, excerpt, content, tags, coverImageUrl, draft, dir } = body;
+  const {
+    title, slug, excerpt, content, tags, coverImageUrl, draft, dir,
+    metaDescription, ogTitle, ogDescription, ogImage, jsonLd, headHtml,
+  } = body;
 
   if (!title || !slug || !excerpt || !content) {
     return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
@@ -40,6 +43,13 @@ export async function POST(req: NextRequest) {
       dir: direction,
       tags: tags ?? [],
       coverImageUrl: coverImageUrl ?? null,
+      // Owner-authored SEO fields — stored verbatim (admin is auth-gated)
+      metaDescription: metaDescription ?? null,
+      ogTitle: ogTitle ?? null,
+      ogDescription: ogDescription ?? null,
+      ogImage: ogImage ?? null,
+      jsonLd: jsonLd ?? null,
+      headHtml: headHtml ?? null,
       draft: draft ?? true,
       publishedAt: draft ? null : new Date(),
     },

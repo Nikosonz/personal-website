@@ -19,7 +19,10 @@ export async function PUT(req: NextRequest, ctx: RouteContext<"/api/admin/posts/
 
   const { id } = await ctx.params;
   const body = await req.json();
-  const { title, slug, excerpt, content, tags, coverImageUrl, draft, dir } = body;
+  const {
+    title, slug, excerpt, content, tags, coverImageUrl, draft, dir,
+    metaDescription, ogTitle, ogDescription, ogImage, jsonLd, headHtml,
+  } = body;
   const direction = dir === "rtl" ? "rtl" : "ltr";
 
   const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -43,6 +46,13 @@ export async function PUT(req: NextRequest, ctx: RouteContext<"/api/admin/posts/
       dir: direction,
       tags: tags ?? [],
       coverImageUrl: coverImageUrl ?? null,
+      // Owner-authored SEO fields — stored verbatim (admin is auth-gated)
+      metaDescription: metaDescription ?? null,
+      ogTitle: ogTitle ?? null,
+      ogDescription: ogDescription ?? null,
+      ogImage: ogImage ?? null,
+      jsonLd: jsonLd ?? null,
+      headHtml: headHtml ?? null,
       draft: draft ?? true,
       publishedAt: draft ? existing.publishedAt : (existing.publishedAt ?? new Date()),
     },

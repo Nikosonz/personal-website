@@ -33,17 +33,30 @@ export default function PostForm({ post }: Props) {
   const [dir, setDir] = useState<Dir>((post?.dir as Dir) ?? "ltr");
   const [draft, setDraft] = useState(post?.draft ?? true);
   const [coverUrl, setCoverUrl] = useState(post?.coverImageUrl ?? "");
+  const [metaDescription, setMetaDescription] = useState(post?.metaDescription ?? "");
+  const [ogTitle, setOgTitle] = useState(post?.ogTitle ?? "");
+  const [ogDescription, setOgDescription] = useState(post?.ogDescription ?? "");
+  const [ogImage, setOgImage] = useState(post?.ogImage ?? "");
+  const [jsonLd, setJsonLd] = useState(post?.jsonLd ?? "");
+  const [headHtml, setHeadHtml] = useState(post?.headHtml ?? "");
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const coverRef = useRef<HTMLInputElement>(null);
+  const ogImageRef = useRef<HTMLInputElement>(null);
+
+  // Non-blocking validity hint for the JSON-LD field
+  let jsonLdInvalid = false;
+  if (jsonLd.trim()) {
+    try { JSON.parse(jsonLd); } catch { jsonLdInvalid = true; }
+  }
 
   function handleTitleChange(v: string) {
     setTitle(v);
     if (!post) setSlug(slugify(v));
   }
 
-  async function uploadCover(file: File) {
+  async function uploadImage(file: File, setUrl: (url: string) => void) {
     setUploading(true);
     setError("");
     const fd = new FormData();
@@ -51,9 +64,9 @@ export default function PostForm({ post }: Props) {
     const res = await fetch("/api/admin/upload", { method: "POST", body: fd });
     const data = await res.json().catch(() => ({}));
     if (!res.ok) {
-      setError(data.error ?? "Cover upload failed.");
+      setError(data.error ?? "Image upload failed.");
     } else {
-      setCoverUrl(data.url);
+      setUrl(data.url);
     }
     setUploading(false);
   }
@@ -71,6 +84,12 @@ export default function PostForm({ post }: Props) {
       dir,
       tags: tags.split(",").map((t) => t.trim()).filter(Boolean),
       coverImageUrl: coverUrl || null,
+      metaDescription: metaDescription || null,
+      ogTitle: ogTitle || null,
+      ogDescription: ogDescription || null,
+      ogImage: ogImage || null,
+      jsonLd: jsonLd || null,
+      headHtml: headHtml || null,
       draft,
     };
 
@@ -172,7 +191,7 @@ export default function PostForm({ post }: Props) {
           type="file"
           accept="image/*"
           className="hidden"
-          onChange={(e) => e.target.files?.[0] && uploadCover(e.target.files[0])}
+          onChange={(e) => e.target.files?.[0] && uploadImage(e.target.files[0], setCoverUrl)}
         />
       </div>
 
@@ -192,6 +211,127 @@ export default function PostForm({ post }: Props) {
         <label className="text-sm font-medium text-[var(--text-primary)]">Content</label>
         <RichEditor value={content} onChange={setContent} dir={dir} onDirChange={setDir} />
       </div>
+
+      {/* SEO & Social panel */}
+      <details className="rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3">
+        <summary className="cursor-pointer text-sm font-semibold text-[var(--text-primary)] select-none">
+          SEO &amp; Social <span className="font-normal text-[var(--text-muted)]">— optional, advanced</span>
+        </summary>
+
+        <div className="mt-5 flex flex-col gap-6">
+          {/* Meta description */}
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-[var(--text-primary)]">Meta description</label>
+            <textarea
+              value={metaDescription}
+              onChange={(e) => setMetaDescription(e.target.value)}
+              rows={2}
+              dir={dir}
+              className={cn(
+                "rounded-xl border border-[var(--border)] bg-[var(--background)] px-3.5 py-2.5 text-sm text-[var(--text-primary)] outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20 transition-colors resize-none",
+                dir === "rtl" && "font-farsi"
+              )}
+              placeholder="Search-result snippet. Falls back to the excerpt if left blank."
+            />
+          </div>
+
+          {/* Custom head HTML */}
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-[var(--text-primary)]">Custom head HTML</label>
+            <textarea
+              value={headHtml}
+              onChange={(e) => setHeadHtml(e.target.value)}
+              rows={4}
+              spellCheck={false}
+              dir="ltr"
+              className="rounded-xl border border-[var(--border)] bg-[var(--background)] px-3.5 py-2.5 text-xs font-mono text-[var(--text-primary)] outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20 transition-colors resize-y"
+              placeholder={'<meta name="..." content="...">\n<link rel="...">\n<script>…</script>'}
+            />
+            <p className="text-xs text-[var(--text-muted)]">Injected verbatim on the post page. Best for verification or analytics tags.</p>
+          </div>
+
+          {/* Structured data (JSON-LD) */}
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-[var(--text-primary)]">Structured data (JSON-LD)</label>
+            <textarea
+              value={jsonLd}
+              onChange={(e) => setJsonLd(e.target.value)}
+              rows={5}
+              spellCheck={false}
+              dir="ltr"
+              className={cn(
+                "rounded-xl border bg-[var(--background)] px-3.5 py-2.5 text-xs font-mono text-[var(--text-primary)] outline-none focus:ring-2 transition-colors resize-y",
+                jsonLdInvalid
+                  ? "border-red-500/60 focus:border-red-500 focus:ring-red-500/20"
+                  : "border-[var(--border)] focus:border-[var(--accent)] focus:ring-[var(--accent)]/20"
+              )}
+              placeholder={'{\n  "@context": "https://schema.org",\n  "@type": "FAQPage",\n  …\n}'}
+            />
+            {jsonLdInvalid && <p className="text-xs text-red-500">Not valid JSON — it won&apos;t be rendered on the page until fixed.</p>}
+          </div>
+
+          {/* OG title */}
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-[var(--text-primary)]">Social title (OG)</label>
+            <input
+              value={ogTitle}
+              onChange={(e) => setOgTitle(e.target.value)}
+              dir={dir}
+              className={cn(
+                "rounded-xl border border-[var(--border)] bg-[var(--background)] px-3.5 py-2.5 text-sm text-[var(--text-primary)] outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20 transition-colors",
+                dir === "rtl" && "font-farsi"
+              )}
+              placeholder="Falls back to the post title."
+            />
+          </div>
+
+          {/* OG description */}
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-[var(--text-primary)]">Social description (OG)</label>
+            <textarea
+              value={ogDescription}
+              onChange={(e) => setOgDescription(e.target.value)}
+              rows={2}
+              dir={dir}
+              className={cn(
+                "rounded-xl border border-[var(--border)] bg-[var(--background)] px-3.5 py-2.5 text-sm text-[var(--text-primary)] outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20 transition-colors resize-none",
+                dir === "rtl" && "font-farsi"
+              )}
+              placeholder="Falls back to the meta description / excerpt."
+            />
+          </div>
+
+          {/* OG image */}
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-[var(--text-primary)]">Social image (OG)</label>
+            <div className="flex items-center gap-2">
+              <input
+                value={ogImage}
+                onChange={(e) => setOgImage(e.target.value)}
+                dir="ltr"
+                className="flex-1 rounded-xl border border-[var(--border)] bg-[var(--background)] px-3.5 py-2.5 text-sm text-[var(--text-primary)] outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20 transition-colors"
+                placeholder="Image URL — falls back to the cover image."
+              />
+              <button
+                type="button"
+                onClick={() => ogImageRef.current?.click()}
+                disabled={uploading}
+                className="shrink-0 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3.5 py-2.5 text-sm font-medium text-[var(--text-muted)] hover:text-[var(--accent)] hover:border-[var(--accent)]/50 transition-colors cursor-pointer disabled:opacity-60"
+              >
+                {uploading ? "Uploading…" : "Upload"}
+              </button>
+              <input
+                ref={ogImageRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => e.target.files?.[0] && uploadImage(e.target.files[0], setOgImage)}
+              />
+            </div>
+            {ogImage && <img src={ogImage} alt="OG preview" className="mt-1 h-28 w-fit rounded-lg object-cover border border-[var(--border)]" />}
+          </div>
+        </div>
+      </details>
 
       {/* Draft toggle */}
       <label className="flex items-center gap-3 cursor-pointer w-fit">

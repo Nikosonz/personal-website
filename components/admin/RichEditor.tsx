@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
@@ -8,7 +9,7 @@ import Placeholder from "@tiptap/extension-placeholder";
 import {
   Bold, Italic, Underline as UnderlineIcon, Heading2, Heading3,
   List, ListOrdered, Quote, Code, Link as LinkIcon, ImageIcon, Minus,
-  AlignLeft, AlignRight,
+  AlignLeft, AlignRight, Code2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -43,6 +44,7 @@ function ToolbarBtn({
 }
 
 export default function RichEditor({ value, onChange, dir, onDirChange }: Props) {
+  const [sourceMode, setSourceMode] = useState(false);
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -151,10 +153,32 @@ export default function RichEditor({ value, onChange, dir, onDirChange }: Props)
         <ToolbarBtn title="Right-to-left (Persian)" active={dir === "rtl"} onClick={() => onDirChange("rtl")}>
           <AlignRight size={13} />
         </ToolbarBtn>
+        <div className="w-px h-5 self-center bg-[var(--border)] mx-1" />
+        <ToolbarBtn
+          title="Edit raw HTML"
+          active={sourceMode}
+          onClick={() => {
+            // Leaving source mode: push the edited HTML back into the editor
+            if (sourceMode) editor!.commands.setContent(value || "");
+            setSourceMode((s) => !s);
+          }}
+        >
+          <Code2 size={13} />
+        </ToolbarBtn>
       </div>
-      <div dir={dir} className={cn(dir === "rtl" && "font-farsi")}>
-        <EditorContent editor={editor} />
-      </div>
+      {sourceMode ? (
+        <textarea
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          spellCheck={false}
+          className="w-full min-h-[400px] px-4 py-3 font-mono text-xs text-[var(--text-primary)] bg-[var(--surface)] outline-none resize-y"
+          placeholder="<p>Edit the post's raw HTML…</p>"
+        />
+      ) : (
+        <div dir={dir} className={cn(dir === "rtl" && "font-farsi")}>
+          <EditorContent editor={editor} />
+        </div>
+      )}
     </div>
   );
 }
