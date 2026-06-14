@@ -41,6 +41,10 @@ export async function generateMetadata({ params }: Props) {
   };
 }
 
+// Escape `<` so a `</script>` sequence inside any JSON string value can't break
+// out of the <script> tag. `<` is a valid JSON escape and decodes back to `<`.
+const ldJson = (s: string) => s.replace(/</g, "\\u003c");
+
 export default async function BlogPostPage({ params }: Props) {
   const { locale, slug } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
@@ -69,9 +73,9 @@ export default async function BlogPostPage({ params }: Props) {
 
   return (
     <>
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingSchema) }} />
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldJson(JSON.stringify(blogPostingSchema)) }} />
     {hasValidJsonLd && (
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: post.jsonLd! }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldJson(post.jsonLd!) }} />
     )}
     {post.headHtml && <div dangerouslySetInnerHTML={{ __html: post.headHtml }} />}
     <div className="pt-32 pb-24 px-5">
