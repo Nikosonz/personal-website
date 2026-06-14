@@ -125,7 +125,7 @@ export default function Hero({ locale }: Props) {
           <div className="relative">
             <div className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-[var(--accent)]/30 via-[var(--accent)]/10 to-transparent blur-sm" />
             <Image
-              src="/PK.jpg"
+              src="/Pouya%20photo%20Red.jpg"
               alt="Pouya Karimi"
               width={420}
               height={520}
