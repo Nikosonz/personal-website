@@ -23,7 +23,17 @@ export default async function ContactPage({ params }: Props) {
     { label: "Telegram", href: "https://t.me/pouyakarimi7", icon: TelegramIcon, handle: "@pouyakarimi7" },
   ];
 
+  const contactPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    name: "Contact Pouya Karimi",
+    url: `https://pouyakarimi.ir/${locale}/contact`,
+    description: "Get in touch with Pouya Karimi for freelance development, UI design, and AI consulting projects.",
+  };
+
   return (
+    <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(contactPageSchema) }} />
     <div className="pt-32 pb-24 px-5">
       <div className="mx-auto max-w-5xl">
         <Breadcrumb items={[{ label: "Home", href: `/${locale}` }, { label: "Contact" }]} />
@@ -79,5 +89,6 @@ export default async function ContactPage({ params }: Props) {
         </div>
       </div>
     </div>
+    </>
   );
 }

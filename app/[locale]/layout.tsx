@@ -26,10 +26,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       ? "توسعه‌دهنده فریلنسر، طراح UI/UX و مشاور هوش مصنوعی."
       : "Freelance developer, UI/UX designer, and AI consultant helping teams build exceptional digital products.",
     alternates: {
-      canonical: `https://pouyakarimi.dev/${locale}`,
+      canonical: `https://pouyakarimi.ir/${locale}`,
       languages: {
-        en: "https://pouyakarimi.dev/en",
-        fa: "https://pouyakarimi.dev/fa",
+        en: "https://pouyakarimi.ir/en",
+        fa: "https://pouyakarimi.ir/fa",
       },
     },
   };

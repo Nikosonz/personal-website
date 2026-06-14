@@ -4,7 +4,7 @@ import { getAllPublishedPosts } from "@/lib/server/posts";
 
 export const dynamic = "force-dynamic";
 
-const BASE_URL = "https://pouyakarimi.dev";
+const BASE_URL = "https://pouyakarimi.ir";
 const locales = ["en", "fa"];
 const staticPages = ["/", "/about", "/services", "/portfolio", "/blog", "/contact"];
 
@@ -16,8 +16,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     locales.map((locale) => ({
       url: `${BASE_URL}/${locale}${path === "/" ? "" : path}`,
       lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: path === "/" ? 1.0 : 0.8,
     }))
   );
 
@@ -25,8 +23,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     locales.map((locale) => ({
       url: `${BASE_URL}/${locale}/blog/${post.slug}`,
       lastModified: post.publishedAt ?? new Date(),
-      changeFrequency: "yearly" as const,
-      priority: 0.6,
     }))
   );
 
@@ -34,8 +30,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     locales.map((locale) => ({
       url: `${BASE_URL}/${locale}/portfolio/${project.slug}`,
       lastModified: new Date(),
-      changeFrequency: "yearly" as const,
-      priority: 0.7,
     }))
   );
 

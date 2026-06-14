@@ -25,7 +25,22 @@ export default async function BlogPostPage({ params }: Props) {
   const post = await getPostBySlug(slug);
   if (!post) notFound();
 
+  const blogPostingSchema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.excerpt,
+    url: `https://pouyakarimi.ir/${locale}/blog/${post.slug}`,
+    datePublished: post.publishedAt?.toISOString(),
+    dateModified: (post.updatedAt ?? post.publishedAt)?.toISOString(),
+    ...(post.coverImageUrl && { image: post.coverImageUrl }),
+    author: { "@type": "Person", name: "Pouya Karimi", url: "https://pouyakarimi.ir" },
+    publisher: { "@type": "Person", name: "Pouya Karimi", url: "https://pouyakarimi.ir" },
+  };
+
   return (
+    <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingSchema) }} />
     <div className="pt-32 pb-24 px-5">
       <div className="mx-auto max-w-3xl">
         <Breadcrumb
@@ -88,5 +103,6 @@ export default async function BlogPostPage({ params }: Props) {
         />
       </div>
     </div>
+    </>
   );
 }
