@@ -1,0 +1,41 @@
+---
+title: "Cognitive Edge"
+excerpt: "An AI-powered Telegram channel that gathers, credits, categorizes, and translates daily news across psychology, MBA, and tech — one curated post per topic, every day, fully automated."
+category: "ai"
+tags: ["AI", "Automation", "Python", "n8n", "Telegram"]
+year: 2026
+featured: true
+---
+
+## The Problem
+
+Staying current across three fast-moving fields — psychology, business/MBA, and tech — means scanning dozens of sources every day, then summarizing, translating, and crediting each one. Done by hand it's hours of work, easy to fall behind on, and impossible to keep consistent.
+
+## The Solution
+
+**Cognitive Edge** is an end-to-end content pipeline that runs the whole thing on autopilot and publishes to a Telegram channel:
+
+- **Gather** — pulls fresh articles across the three topics from multiple sources.
+- **Credit** — keeps and attributes the original source for every item, so nothing is published uncredited.
+- **Categorize** — classifies each item by topic (Psychology · MBA · Tech).
+- **Translate & summarize** — Claude rewrites each piece into a clean, translated summary.
+- **Publish** — a Telegraf bot posts to the channel through the Telegram Bot API: one curated message per topic, per day.
+
+n8n orchestrates the workflow on a daily schedule, and a database tracks what's already been seen so the same story never goes out twice.
+
+## The Outcome
+
+**Fully automated** — one curated, credited, translated post per topic, every day, with zero manual work.
+
+**Hours saved each week** that used to go into reading, summarizing, and translating by hand.
+
+**Consistent publishing** — the channel never misses a day and never repeats itself.
+
+Live on Telegram: [t.me/cognitivedgebyp](https://t.me/cognitivedgebyp)
+
+## Tech Stack
+
+- **AI:** Claude (summarization, categorization, translation)
+- **Automation:** n8n (scheduling + orchestration), Python
+- **Delivery:** Telegram Bot API via Telegraf
+- **Data:** database for de-duplication & source tracking

@@ -21,6 +21,7 @@ export default async function ContactPage({ params }: Props) {
     { label: "GitHub", href: "https://github.com/Nikosonz", icon: GithubIcon, handle: "@Nikosonz" },
     { label: "LinkedIn", href: "https://www.linkedin.com/in/pouya-karimi", icon: LinkedinIcon, handle: "Pouya Karimi" },
     { label: "Telegram", href: "https://t.me/pouyakarimi7", icon: TelegramIcon, handle: "@pouyakarimi7" },
+    { label: "Cognitive Edge", href: "https://t.me/cognitivedgebyp", icon: TelegramIcon, handle: "t.me/cognitivedgebyp" },
   ];
 
   const contactPageSchema = {
@@ -28,7 +29,7 @@ export default async function ContactPage({ params }: Props) {
     "@type": "ContactPage",
     name: "Contact Pouya Karimi",
     url: `https://pouyakarimi.ir/${locale}/contact`,
-    description: "Get in touch with Pouya Karimi for freelance development, UI design, and AI consulting projects.",
+    description: "Get in touch with Pouya Karimi for freelance development, SEO, and AI consulting projects.",
   };
 
   return (

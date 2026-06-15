@@ -15,11 +15,11 @@ const placeholderProjects = [
     gradient: "from-teal-500/10 to-emerald-500/10",
   },
   {
-    slug: "ai-document-processor",
-    title: "AI Document Processor",
+    slug: "cognitive-edge",
+    title: "Cognitive Edge",
     description:
-      "Built an intelligent document processing pipeline using GPT-4 and custom fine-tuning, automating 80% of manual data extraction tasks.",
-    tags: ["AI", "Python", "Next.js"],
+      "An AI Telegram channel that gathers, credits, categorizes, and translates daily news on psychology, MBA, and tech — one automated post per topic, every day.",
+    tags: ["AI", "Automation", "Telegram"],
     category: "ai",
     gradient: "from-violet-500/10 to-pink-500/10",
   },

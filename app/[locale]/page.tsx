@@ -22,6 +22,7 @@ const personSchema = {
     "https://github.com/Nikosonz",
     "https://www.linkedin.com/in/pouya-karimi",
     "https://t.me/pouyakarimi7",
+    "https://t.me/cognitivedgebyp",
   ],
 };
 

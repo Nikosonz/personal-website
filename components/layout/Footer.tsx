@@ -20,6 +20,11 @@ const socials = [
     href: "https://t.me/pouyakarimi7",
     icon: TelegramIcon,
   },
+  {
+    label: "Cognitive Edge channel",
+    href: "https://t.me/cognitivedgebyp",
+    icon: TelegramIcon,
+  },
 ];
 
 const footerLinks = [
