@@ -213,6 +213,23 @@ vercel --prod                 # Deploy to pouyakarimi.ir
 
 ---
 
+## Dev Journal
+
+Daily dev logs live in a **separate repo** — never commit them to this website repo.
+
+- **Local clone**: `D:\Journal`
+- **Remote**: `https://github.com/Nikosonz/journal` (branch `main`, private)
+- **Filename**: `YYYY-MM-DD.md` at the repo root (flat — no subfolders)
+- **Format**: `# YYYY-MM-DD — Dev Log` → `## Project:` line → `## Tasks` (numbered `### N. ...`) → `## What I learned` → `## Next steps` (checkboxes). Match the previous day's entry.
+- **Workflow**:
+  ```bash
+  cd "D:\Journal"
+  # write YYYY-MM-DD.md
+  git add . && git commit -m "YYYY-MM-DD log" && git push
+  ```
+
+---
+
 ## Content
 
 **Blog posts**: MDX files in `content/blog/`. Gray-matter frontmatter. Syntax highlighting via rehype-pretty-code + shiki.
