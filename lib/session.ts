@@ -2,7 +2,9 @@ import "server-only";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 
-const key = new TextEncoder().encode(process.env.SESSION_SECRET);
+const secret = process.env.SESSION_SECRET;
+if (!secret) throw new Error("SESSION_SECRET is not set");
+const key = new TextEncoder().encode(secret);
 
 export interface SessionPayload {
   userId: number;
