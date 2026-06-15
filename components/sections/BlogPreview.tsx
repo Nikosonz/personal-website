@@ -7,13 +7,13 @@ import { formatDate } from "@/lib/utils";
 
 const placeholderPosts = [
   {
-    slug: "why-great-design-is-a-technical-skill",
-    title: "Why Great Design is a Technical Skill",
+    slug: "why-seo-belongs-in-your-codebase",
+    title: "Why SEO Belongs in Your Codebase",
     excerpt:
-      "The best designers I know think like engineers. And the best engineers think like designers. Here's why that overlap is where the magic happens.",
+      "The best SEO isn't bolted on after launch — it's baked into how you render, route, and structure your app. Here's why technical SEO is an engineering discipline.",
     date: "2026-05-20",
     readTime: 6,
-    tags: ["Design", "Engineering"],
+    tags: ["SEO", "Engineering"],
   },
   {
     slug: "building-ai-features-users-actually-want",

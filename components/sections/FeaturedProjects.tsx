@@ -7,12 +7,12 @@ import { Badge } from "@/components/ui/Badge";
 const placeholderProjects = [
   {
     slug: "saas-dashboard",
-    title: "SaaS Analytics Dashboard",
+    title: "B2B SaaS Organic Growth",
     description:
-      "Redesigned the core analytics dashboard for a B2B SaaS platform, reducing time-to-insight by 60% and increasing user retention.",
-    tags: ["UI/UX", "React", "TypeScript"],
-    category: "uiux",
-    gradient: "from-teal-500/10 to-blue-500/10",
+      "Rebuilt a B2B SaaS site's technical SEO and content architecture, growing organic traffic 3.4× and cutting its reliance on paid ads.",
+    tags: ["SEO", "Technical SEO", "Next.js"],
+    category: "seo",
+    gradient: "from-teal-500/10 to-emerald-500/10",
   },
   {
     slug: "ai-document-processor",

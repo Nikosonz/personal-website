@@ -48,7 +48,7 @@
     "filter": {
       "all": "All",
       "web": "Web Dev",
-      "uiux": "UI/UX",
+      "seo": "SEO",
       "ai": "AI & Automation",
       "consulting": "Consulting"
     },
@@ -62,7 +62,7 @@
     "label": "The blog",
     "tagline": "The blog",
     "title": "Thinking out loud",
-    "subtitle": "Thoughts on design, engineering, and building things that matter.",
+    "subtitle": "Thoughts on engineering, SEO, and building things that matter.",
     "empty": "No posts yet — check back soon.",
     "view_all": "Read all posts",
     "read_more": "Read post",
@@ -80,10 +80,10 @@
   },
   "about": {
     "title": "About me",
-    "tagline": "Builder. Designer. Thinker.",
-    "bio": "I'm Pouya Karimi — a freelance developer and consultant based in Iran, working with clients worldwide. I bridge the gap between design and engineering, helping teams ship products they're proud of.",
+    "tagline": "Builder. Optimizer. Strategist.",
+    "bio": "I'm Pouya Karimi — a freelance developer and SEO specialist based in Iran, working with clients worldwide. I bridge the gap between clean engineering and search visibility, helping teams ship products that are fast, discoverable, and built to rank.",
     "story_title": "My story",
-    "story": "I started coding at 16 and never stopped. Over the years I've worked across every layer of the stack — from pixel-perfect UIs to database design and cloud infrastructure. I thrive at the intersection of product, design, and engineering.",
+    "story": "I started coding at 16 and never stopped. Over the years I've worked across every layer of the stack — from front-end performance to database design and cloud infrastructure — and learned that the best-built products still fail if no one can find them. I thrive at the intersection of product, engineering, and search.",
     "skills_title": "Tools & technologies",
     "values_title": "How I work",
     "values": [
@@ -101,14 +101,14 @@
       },
       {
         "title": "Always learning",
-        "description": "The best developers are perpetually curious. I invest in staying sharp across design, engineering, and product."
+        "description": "The best developers are perpetually curious. I invest in staying sharp across engineering, SEO, and product."
       }
     ],
     "cta": "Work with me",
     "skills": [
       "React", "Next.js", "TypeScript", "Node.js", "Python",
-      "PostgreSQL", "Tailwind CSS", "Figma", "OpenAI API",
-      "LangChain", "Docker", "Vercel", "AWS", "Git"
+      "PostgreSQL", "Tailwind CSS", "Technical SEO", "Ahrefs",
+      "Search Console", "OpenAI API", "Docker", "Vercel", "Git"
     ]
   },
   "services_page": {
@@ -148,8 +148,8 @@
         "description": "We start with a deep-dive into your goals, constraints, and users. I ask a lot of questions — that's where the good work begins."
       },
       {
-        "title": "Design",
-        "description": "From wireframes to polished mockups, I design with real content and real constraints — no lorem ipsum, no generic templates."
+        "title": "Plan",
+        "description": "I map the architecture, content structure, and SEO foundations up front — so what we build is fast, discoverable, and built to last."
       },
       {
         "title": "Build",

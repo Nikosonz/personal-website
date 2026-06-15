@@ -7,11 +7,11 @@ import { Badge } from "@/components/ui/Badge";
 import { StaggerChildren, StaggerItem } from "@/components/ui/FadeIn";
 import type { ProjectMeta } from "@/lib/mdx";
 
-type Category = "all" | "web" | "uiux" | "ai" | "consulting";
+type Category = "all" | "web" | "seo" | "ai" | "consulting";
 
 const gradients: Record<string, string> = {
   web: "from-blue-500/10 to-cyan-500/10",
-  uiux: "from-teal-500/10 to-emerald-500/10",
+  seo: "from-teal-500/10 to-emerald-500/10",
   ai: "from-violet-500/10 to-purple-500/10",
   consulting: "from-amber-500/10 to-orange-500/10",
 };
@@ -19,7 +19,7 @@ const gradients: Record<string, string> = {
 const FILTERS: { key: Category; label: string }[] = [
   { key: "all", label: "All" },
   { key: "web", label: "Web Dev" },
-  { key: "uiux", label: "UI/UX" },
+  { key: "seo", label: "SEO" },
   { key: "ai", label: "AI & Automation" },
   { key: "consulting", label: "Consulting" },
 ];

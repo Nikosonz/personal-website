@@ -20,7 +20,7 @@ export interface ProjectMeta {
   slug: string;
   title: string;
   excerpt: string;
-  category: "web" | "uiux" | "ai" | "consulting";
+  category: "web" | "seo" | "ai" | "consulting";
   tags: string[];
   coverImage?: string;
   year: number;
