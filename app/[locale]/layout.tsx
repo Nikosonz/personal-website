@@ -19,12 +19,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
   return {
     title: {
-      default: isPersian ? "پویا کریمی — توسعه‌دهنده و طراح" : "Pouya Karimi — Developer & Designer",
+      default: isPersian ? "پویا کریمی — توسعه‌دهنده و متخصص سئو" : "Pouya Karimi — Developer & SEO Specialist",
       template: isPersian ? "%s | پویا کریمی" : "%s | Pouya Karimi",
     },
     description: isPersian
-      ? "توسعه‌دهنده فریلنسر، طراح UI/UX و مشاور هوش مصنوعی."
-      : "Freelance developer, UI/UX designer, and AI consultant helping teams build exceptional digital products.",
+      ? "توسعه‌دهنده فریلنسر و متخصص سئو — به تیم‌ها کمک می‌کنم محصولاتی سریع و بهینه بسازند که در نتایج جست‌وجو دیده شوند و تبدیل کنند."
+      : "Freelance developer and SEO specialist helping teams build fast, search-friendly products that rank and convert.",
     alternates: {
       canonical: `https://pouyakarimi.ir/${locale}`,
       languages: {
