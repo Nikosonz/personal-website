@@ -272,3 +272,24 @@ SEO analysis plugin — 25 sub-skills, 18 specialist agents running in parallel.
 | `/seo hreflang <url>` | International SEO / hreflang audit |
 
 **Notes**: Playwright browsers not installed (optional) — page fetching uses WebFetch fallback. Install with `python -m playwright install chromium` for visual/SPA analysis. Source: `https://github.com/AgriciDaniel/claude-seo`
+
+### jeffallan/claude-skills (curated subset)
+
+12 of the 66 skills from `https://github.com/Jeffallan/claude-skills` — the ones relevant to this stack. Installed **manually** (copied folders into `~/.claude/skills/`) because `/plugin` is unavailable here.
+
+| Skill | Purpose |
+|---|---|
+| `nextjs-developer` | App Router, server actions, `generateMetadata` |
+| `react-expert` | React 19, Server Components, Suspense |
+| `typescript-pro` | Advanced types, generics, tRPC |
+| `javascript-pro` | Modern JS / Node patterns |
+| `postgres-pro` | EXPLAIN analysis, JSONB, tuning (Neon DB) |
+| `sql-pro` | Query optimization, schema design |
+| `fullstack-guardian` | Security-focused full-stack features |
+| `security-reviewer` | Vulnerability audits with severity ratings |
+| `code-reviewer` | Broad PR / code-quality review |
+| `test-master` | Test generation, coverage, strategy |
+| `playwright-expert` | E2E browser tests |
+| `api-designer` | REST / GraphQL API design |
+
+**Update/remove**: re-run `git clone --depth 1 https://github.com/Jeffallan/claude-skills.git` + copy the folders to refresh; delete a folder from `~/.claude/skills/` to remove. The other 54 skills (Salesforce, Flutter, embedded, etc.) were skipped as out-of-scope.
