@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { Code2, Palette, BrainCircuit, MessageSquare, ArrowRight } from "lucide-react";
+import { Code2, Search, BrainCircuit, MessageSquare, ArrowRight } from "lucide-react";
 import { FadeIn, StaggerChildren, StaggerItem } from "@/components/ui/FadeIn";
 
-const icons = [Code2, Palette, BrainCircuit, MessageSquare];
+const icons = [Code2, Search, BrainCircuit, MessageSquare];
 
 type Props = { locale: string };
 

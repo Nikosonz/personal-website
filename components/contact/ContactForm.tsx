@@ -103,7 +103,7 @@ export default function ContactForm({ locale: _locale }: { locale: string }) {
           <option value="" disabled>
             {t("service_placeholder")}
           </option>
-          {(["web", "uiux", "ai", "consulting", "other"] as const).map((key) => (
+          {(["web", "seo", "ai", "consulting", "other"] as const).map((key) => (
             <option key={key} value={key}>
               {t(`services.${key}`)}
             </option>

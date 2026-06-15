@@ -4,9 +4,9 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { FadeIn, StaggerChildren, StaggerItem } from "@/components/ui/FadeIn";
 import Link from "next/link";
-import { ArrowRight, Check, Code2, Palette, BrainCircuit, MessageSquare, ChevronDown } from "lucide-react";
+import { ArrowRight, Check, Code2, Search, BrainCircuit, MessageSquare, ChevronDown } from "lucide-react";
 
-const serviceIcons = [Code2, Palette, BrainCircuit, MessageSquare];
+const serviceIcons = [Code2, Search, BrainCircuit, MessageSquare];
 
 type Props = { params: Promise<{ locale: string }> };
 

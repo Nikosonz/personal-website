@@ -10,8 +10,8 @@
   },
   "hero": {
     "available": "Accepting clients",
-    "headline": "I build products that <accent>work</accent> — and look like it.",
-    "subheadline": "Full-stack developer, UI/UX designer, and AI consultant helping ambitious teams ship exceptional digital products.",
+    "headline": "Where engineering meets <accent>business sense</accent>.",
+    "subheadline": "Full-stack developer and business consultant (MBA) helping teams design, build, and scale products people love.",
     "cta_primary": "See my work",
     "cta_secondary": "Let's talk"
   },
@@ -25,8 +25,8 @@
         "description": "Performant, scalable web apps built with modern stacks — React, Next.js, Node.js, and beyond."
       },
       {
-        "title": "UI/UX Design",
-        "description": "Interfaces that are both beautiful and intuitive. Research, wireframes, prototypes, design systems."
+        "title": "SEO",
+        "description": "Technical audits, structured data, and Core Web Vitals tuning that get your pages found, ranked, and clicked."
       },
       {
         "title": "AI & Automation",
@@ -123,10 +123,10 @@
         "for": "Startups and teams that need to move fast without breaking things."
       },
       {
-        "title": "UI/UX Design",
-        "description": "Interfaces that convert — because good design is good business.",
-        "includes": ["User research & personas", "Wireframes & prototypes", "High-fidelity mockups", "Design systems & component libraries", "Usability testing"],
-        "for": "Companies that want a design edge over their competition."
+        "title": "SEO",
+        "description": "Get found by the people already searching for what you do — with SEO built in, not bolted on.",
+        "includes": ["Technical SEO audits & fixes", "On-page & content optimization", "Structured data / schema markup", "Core Web Vitals & page speed", "Keyword research & content strategy", "Local SEO & Google Business Profile", "AI search & GEO (AI Overviews, ChatGPT, Perplexity)"],
+        "for": "Businesses that want compounding organic traffic, not just paid ads."
       },
       {
         "title": "AI & Automation",
@@ -199,7 +199,7 @@
       "error": "Something went wrong. Please try again or email me directly.",
       "services": {
         "web": "Web Development",
-        "uiux": "UI/UX Design",
+        "seo": "SEO",
         "ai": "AI & Automation",
         "consulting": "Technical Consulting",
         "other": "Other / Not sure yet"
