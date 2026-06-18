@@ -8,6 +8,7 @@ import { getProject } from "@/lib/mdx";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { Badge } from "@/components/ui/Badge";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import remarkGfm from "remark-gfm";
@@ -45,9 +46,32 @@ export default async function ProjectPage({ params }: Props) {
 
   const { meta, content } = project!;
 
+  const projectSchema = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: meta.title,
+    description: meta.excerpt,
+    url: `https://pouyakarimi.ir/${locale}/portfolio/${slug}`,
+    ...(meta.tags?.length ? { keywords: meta.tags.join(", ") } : {}),
+    author: { "@type": "Person", name: "Pouya Karimi", url: "https://pouyakarimi.ir" },
+    creator: { "@type": "Person", name: "Pouya Karimi", url: "https://pouyakarimi.ir" },
+  };
+
   return (
+    <>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(projectSchema).replace(/</g, "\\u003c") }}
+    />
     <div className="pt-32 pb-24 px-5">
       <div className="mx-auto max-w-3xl">
+        <Breadcrumb
+          items={[
+            { label: "Home", href: `/${locale}` },
+            { label: "Portfolio", href: `/${locale}/portfolio` },
+            { label: meta.title },
+          ]}
+        />
         {/* Back */}
         <FadeIn className="mb-10">
           <Link
@@ -90,5 +114,6 @@ export default async function ProjectPage({ params }: Props) {
         </FadeIn>
       </div>
     </div>
+    </>
   );
 }

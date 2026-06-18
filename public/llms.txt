@@ -1,0 +1,26 @@
+# Pouya Karimi
+
+> Freelance developer and SEO specialist (MBA) based in Iran, working with clients worldwide. Helps teams build fast, search-friendly products that rank and convert. Bilingual site: English and Persian (fa).
+
+## Services
+- Web Development — performant, scalable apps (React, Next.js, Node.js)
+- SEO — technical audits, structured data, Core Web Vitals, content strategy, local SEO, AI search/GEO
+- AI & Automation — LLM integrations, AI agents, workflow automation
+- Technical Consulting — architecture reviews, tech strategy, fractional CTO
+
+## Key pages
+- Home: https://pouyakarimi.ir/en
+- Services: https://pouyakarimi.ir/en/services
+- Portfolio: https://pouyakarimi.ir/en/portfolio
+- Blog: https://pouyakarimi.ir/en/blog
+- Contact: https://pouyakarimi.ir/en/contact
+
+## Selected work
+- Cognitive Edge — AI Telegram automation (Claude + Python + n8n) that gathers, credits, categorizes, and translates daily psychology/MBA/tech news: https://pouyakarimi.ir/en/portfolio/cognitive-edge
+
+## Contact
+- Email: pouyakarimibirgani@gmail.com
+- Telegram: https://t.me/pouyakarimi7
+- Cognitive Edge channel: https://t.me/cognitivedgebyp
+- GitHub: https://github.com/Nikosonz
+- LinkedIn: https://www.linkedin.com/in/pouya-karimi

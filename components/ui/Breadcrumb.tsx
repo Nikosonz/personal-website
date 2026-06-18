@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
+import { SITE_URL } from "@/lib/seo";
 
 interface BreadcrumbItem {
   label: string;
@@ -10,9 +11,27 @@ interface BreadcrumbProps {
   items: BreadcrumbItem[];
 }
 
+// Escape `<` so a `</script>` in any label can't break out of the JSON-LD tag.
+const ldJson = (s: string) => s.replace(/</g, "\\u003c");
+
 export default function Breadcrumb({ items }: BreadcrumbProps) {
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.label,
+      ...(item.href && { item: `${SITE_URL}${item.href}` }),
+    })),
+  };
+
   return (
     <nav aria-label="Breadcrumb" className="mb-8 flex items-center gap-1.5 text-xs text-[var(--text-muted)]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: ldJson(JSON.stringify(breadcrumbSchema)) }}
+      />
       {items.map((item, index) => {
         const isLast = index === items.length - 1;
         return (
