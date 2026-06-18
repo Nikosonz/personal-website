@@ -125,8 +125,8 @@ export default function Hero({ locale }: Props) {
           <div className="relative">
             <div className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-[var(--accent)]/30 via-[var(--accent)]/10 to-transparent blur-sm" />
             <Image
-              src="/mypr.jpg"
-              alt="Pouya Karimi"
+              src="/pouya-karimi.jpg"
+              alt="Pouya Karimi — freelance developer and SEO specialist"
               width={420}
               height={520}
               className="relative rounded-2xl object-cover object-top shadow-2xl"
