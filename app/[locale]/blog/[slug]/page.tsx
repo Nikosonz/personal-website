@@ -152,6 +152,7 @@ export default async function BlogPostPage({ params }: Props) {
             __html: sanitizeHtml(post.content, {
               allowedTags: sanitizeHtml.defaults.allowedTags.concat([
                 "img", "figure", "figcaption", "section", "article",
+                "bdi", "bdo", // isolate mixed-direction (Farsi + Latin) runs
               ]),
               allowedAttributes: {
                 ...sanitizeHtml.defaults.allowedAttributes,
