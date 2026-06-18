@@ -20,12 +20,22 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "File exceeds 5 MB limit." }, { status: 413 });
   }
 
+  // Fail loudly if the Blob store isn't wired up, instead of a generic 500.
+  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+    console.error("[upload] BLOB_READ_WRITE_TOKEN is missing from this deployment.");
+    return NextResponse.json(
+      { error: "Image storage not configured (BLOB_READ_WRITE_TOKEN missing). Connect a Vercel Blob store and redeploy." },
+      { status: 500 }
+    );
+  }
+
   const ext = file.type.split("/")[1];
   try {
     const blob = await put(`blog/${Date.now()}.${ext}`, file, { access: "public" });
     return NextResponse.json({ url: blob.url });
   } catch (err) {
-    console.error("[upload] Vercel Blob error:", err);
-    return NextResponse.json({ error: "Upload failed." }, { status: 500 });
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("[upload] Vercel Blob error:", message);
+    return NextResponse.json({ error: `Upload failed: ${message}` }, { status: 500 });
   }
 }
