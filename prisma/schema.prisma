@@ -16,7 +16,8 @@ model User {
 
 model Post {
   id            Int       @id @default(autoincrement())
-  slug          String    @unique
+  slug          String
+  locale        String    @default("en") // "en" | "fa" — which localized blog a post belongs to
   title         String
   excerpt       String
   content       String    @db.Text
@@ -27,6 +28,10 @@ model Post {
   publishedAt   DateTime?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+
+  // A slug is unique within a locale, so en & fa can share the same slug
+  // (e.g. /en/blog/x and /fa/blog/x are the two translations of one post).
+  @@unique([slug, locale])
 
   // Per-post SEO controls (all optional; owner-authored, see PostForm "SEO & Social")
   metaDescription String?

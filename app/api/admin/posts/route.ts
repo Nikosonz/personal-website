@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
 
   const body = await req.json();
   const {
-    title, slug, excerpt, content, tags, coverImageUrl, draft, dir,
+    title, slug, excerpt, content, tags, coverImageUrl, draft, dir, locale,
     metaDescription, ogTitle, ogDescription, ogImage, jsonLd, headHtml,
   } = body;
 
@@ -25,6 +25,7 @@ export async function POST(req: NextRequest) {
   }
 
   const direction = dir === "rtl" ? "rtl" : "ltr";
+  const loc = locale === "fa" ? "fa" : "en";
 
   const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
   if (!SLUG_RE.test(slug)) {
@@ -38,6 +39,7 @@ export async function POST(req: NextRequest) {
     data: {
       title,
       slug,
+      locale: loc,
       excerpt,
       content,
       dir: direction,

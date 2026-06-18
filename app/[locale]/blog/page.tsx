@@ -30,7 +30,7 @@ export default async function BlogPage({ params }: Props) {
   if (!hasLocale(routing.locales, locale)) notFound();
 
   const t = await getTranslations({ locale, namespace: "blog" });
-  const posts = await getAllPublishedPosts();
+  const posts = await getAllPublishedPosts(locale);
 
   return (
     <div className="pt-32 pb-24 px-5">

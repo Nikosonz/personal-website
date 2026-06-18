@@ -31,10 +31,11 @@ export async function PUT(req: NextRequest, ctx: RouteContext<"/api/admin/posts/
 
   const body = await req.json();
   const {
-    title, slug, excerpt, content, tags, coverImageUrl, draft, dir,
+    title, slug, excerpt, content, tags, coverImageUrl, draft, dir, locale,
     metaDescription, ogTitle, ogDescription, ogImage, jsonLd, headHtml,
   } = body;
   const direction = dir === "rtl" ? "rtl" : "ltr";
+  const loc = locale === "fa" ? "fa" : "en";
 
   const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
   if (slug && !SLUG_RE.test(slug)) {
@@ -52,6 +53,7 @@ export async function PUT(req: NextRequest, ctx: RouteContext<"/api/admin/posts/
     data: {
       title,
       slug,
+      locale: loc,
       excerpt,
       content,
       dir: direction,

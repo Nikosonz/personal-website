@@ -11,7 +11,7 @@ type Props = { locale: string };
 export default async function BlogPreview({ locale }: Props) {
   const t = await getTranslations({ locale, namespace: "blog" });
   // Pull the 3 latest real posts so these cards never link to dead slugs.
-  const posts = (await getAllPublishedPosts().catch(() => [])).slice(0, 3);
+  const posts = (await getAllPublishedPosts(locale).catch(() => [])).slice(0, 3);
   if (posts.length === 0) return null;
 
   const lp = (href: string) => `/${locale}${href}`;

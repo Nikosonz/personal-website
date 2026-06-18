@@ -37,36 +37,45 @@ async function main() {
   const files = fs.readdirSync(POSTS_DIR).filter((f) => f.endsWith(".mdx"));
 
   for (const file of files) {
-    const slug = file.replace(".mdx", "");
     const raw = fs.readFileSync(path.join(POSTS_DIR, file), "utf-8");
     const { data, content } = matter(raw);
+
+    // A "-fa" filename (or rtl frontmatter) marks the Farsi translation. Strip the
+    // suffix so en & fa share one slug, distinguished by locale.
+    const isFa = /-fa\.mdx$/.test(file) || data.dir === "rtl";
+    const locale = isFa ? "fa" : "en";
+    const dir = isFa ? "rtl" : "ltr";
+    const slug = file.replace(/-fa\.mdx$/, "").replace(/\.mdx$/, "");
 
     const html = await marked.parse(content);
 
     const publishedAt = data.date ? new Date(data.date) : new Date();
 
     await prisma.post.upsert({
-      where: { slug },
+      where: { slug_locale: { slug, locale } },
       update: {
         title: data.title ?? slug,
         excerpt: data.excerpt ?? "",
         content: html,
         tags: data.tags ?? [],
+        dir,
         draft: false,
         publishedAt,
       },
       create: {
         slug,
+        locale,
         title: data.title ?? slug,
         excerpt: data.excerpt ?? "",
         content: html,
         tags: data.tags ?? [],
+        dir,
         draft: false,
         publishedAt,
       },
     });
 
-    console.log(`✓ Post seeded: ${slug}`);
+    console.log(`✓ Post seeded: ${slug} (${locale})`);
   }
 }
 

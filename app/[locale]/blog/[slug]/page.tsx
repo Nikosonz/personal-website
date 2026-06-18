@@ -16,7 +16,12 @@ type Props = { params: Promise<{ locale: string; slug: string }> };
 
 export async function generateMetadata({ params }: Props) {
   const { locale, slug } = await params;
-  const post = await getPostBySlug(slug);
+  // Match the page body: in Draft Mode resolve unpublished posts too, so the
+  // preview tab's <title>/description/OG aren't empty for a never-published draft.
+  const { isEnabled: isDraft } = await draftMode();
+  const post = isDraft
+    ? await getPostBySlugPreview(slug, locale)
+    : await getPostBySlug(slug, locale);
   if (!post) return {};
 
   const description = post.metaDescription ?? post.excerpt;
@@ -54,7 +59,9 @@ export default async function BlogPostPage({ params }: Props) {
 
   // In Draft Mode (admin-only, via /api/draft) show unpublished drafts too.
   const { isEnabled: isDraft } = await draftMode();
-  const post = isDraft ? await getPostBySlugPreview(slug) : await getPostBySlug(slug);
+  const post = isDraft
+    ? await getPostBySlugPreview(slug, locale)
+    : await getPostBySlug(slug, locale);
   if (!post) notFound();
 
   const blogPostingSchema = {

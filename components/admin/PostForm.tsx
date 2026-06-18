@@ -31,6 +31,7 @@ export default function PostForm({ post }: Props) {
   const [tags, setTags] = useState(post?.tags?.join(", ") ?? "");
   const [content, setContent] = useState(post?.content ?? "");
   const [dir, setDir] = useState<Dir>((post?.dir as Dir) ?? "ltr");
+  const [locale, setLocale] = useState<"en" | "fa">((post?.locale as "en" | "fa") ?? "en");
   const [draft, setDraft] = useState(post?.draft ?? true);
   const [coverUrl, setCoverUrl] = useState(post?.coverImageUrl ?? "");
   const [metaDescription, setMetaDescription] = useState(post?.metaDescription ?? "");
@@ -62,6 +63,13 @@ export default function PostForm({ post }: Props) {
     if (!savedId) setSlug(slugify(v));
   }
 
+  // Picking a language defaults the text direction (Farsi → RTL); the editor's
+  // dir toggle can still override it per post.
+  function handleLocaleChange(v: "en" | "fa") {
+    setLocale(v);
+    setDir(v === "fa" ? "rtl" : "ltr");
+  }
+
   async function uploadImage(file: File, setUrl: (url: string) => void) {
     setUploading(true);
     setError("");
@@ -83,6 +91,7 @@ export default function PostForm({ post }: Props) {
     const body = {
       title,
       slug,
+      locale,
       excerpt,
       content,
       dir,
@@ -136,9 +145,8 @@ export default function PostForm({ post }: Props) {
     const saved = await save();
     setSaving(false);
     if (!saved) return;
-    const previewLocale = dir === "rtl" ? "fa" : "en";
     window.open(
-      `/api/draft?slug=${encodeURIComponent(saved.slug)}&locale=${previewLocale}`,
+      `/api/draft?slug=${encodeURIComponent(saved.slug)}&locale=${locale}`,
       "_blank"
     );
   }
@@ -172,6 +180,22 @@ export default function PostForm({ post }: Props) {
           className="rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3.5 py-2.5 text-sm font-mono text-[var(--text-primary)] outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20 transition-colors"
           placeholder="post-slug (Latin letters, e.g. ai-consulting)"
         />
+      </div>
+
+      {/* Language */}
+      <div className="flex flex-col gap-1.5">
+        <label className="text-sm font-medium text-[var(--text-primary)]">Language</label>
+        <select
+          value={locale}
+          onChange={(e) => handleLocaleChange(e.target.value as "en" | "fa")}
+          className="w-fit rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3.5 py-2.5 text-sm text-[var(--text-primary)] outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20 transition-colors cursor-pointer"
+        >
+          <option value="en">English (/en/blog/…)</option>
+          <option value="fa">فارسی (/fa/blog/…)</option>
+        </select>
+        <p className="text-xs text-[var(--text-muted)]">
+          Which localized blog this post belongs to. The same slug can exist once per language, so the English and Farsi versions of a post share one slug.
+        </p>
       </div>
 
       {/* Excerpt */}
