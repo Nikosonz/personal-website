@@ -96,7 +96,18 @@ export default function RichEditor({ value, onChange, dir, onDirChange }: Props)
       alert(data.error ?? "Image upload failed.");
       return;
     }
-    editor!.chain().focus().setImage({ src: data.url }).run();
+    // Prompt for alt text on insert (SEO + accessibility). Empty is allowed
+    // for decorative images.
+    const alt = window.prompt("Alt text (describe the image for SEO & screen readers)", "") ?? "";
+    editor!.chain().focus().setImage({ src: data.url, alt }).run();
+  }
+
+  // Edit the alt text of the currently-selected image.
+  function editImageAlt() {
+    const current = (editor!.getAttributes("image").alt as string) ?? "";
+    const alt = window.prompt("Alt text", current);
+    if (alt === null) return; // cancelled
+    editor!.chain().focus().updateAttributes("image", { alt }).run();
   }
 
   function pickFile(): Promise<File | null> {
@@ -208,6 +219,22 @@ export default function RichEditor({ value, onChange, dir, onDirChange }: Props)
             </ToolbarBtn>
             <ToolbarBtn title="Remove link" onClick={() => t.chain().focus().extendMarkRange("link").unsetLink().run()}>
               <Unlink size={13} />
+            </ToolbarBtn>
+          </BubbleMenu>
+          {/* Popup shown when an image is selected — view/edit its alt text */}
+          <BubbleMenu
+            editor={editor}
+            shouldShow={({ editor }) => editor.isActive("image")}
+            className="flex items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-2 py-1 shadow-lg"
+          >
+            <span className="max-w-[200px] truncate text-xs text-[var(--text-muted)]" dir="auto">
+              {t.getAttributes("image").alt
+                ? `alt: ${t.getAttributes("image").alt}`
+                : "no alt text — bad for SEO"}
+            </span>
+            <span className="w-px h-4 bg-[var(--border)]" />
+            <ToolbarBtn title="Edit alt text" onClick={editImageAlt}>
+              <Pencil size={13} />
             </ToolbarBtn>
           </BubbleMenu>
         </div>
