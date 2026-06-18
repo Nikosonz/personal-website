@@ -1,0 +1,51 @@
+---
+title: "How to Show Up in AI Search"
+excerpt: "Practical GEO: what actually gets you cited in AI Overviews, ChatGPT, and Perplexity — not just ranked in classic Google."
+date: "2026-06-14"
+tags: ["SEO", "GEO", "AI Search"]
+metaDescription: "A practical guide to GEO: how to get cited by AI Overviews, ChatGPT, and Perplexity — answer-first content, structure, and crawler access."
+---
+
+Search is splitting in two. There's the blue-links Google you know, and there's the answer-engine layer — AI Overviews, ChatGPT, Perplexity, Copilot — that increasingly reads your page and *summarizes* it instead of linking to it. Getting cited there is a different game with different rules. It's called GEO: generative engine optimization.
+
+The good news: most of GEO is just good SEO done with a little more discipline. Here's what actually moves the needle.
+
+## Let the AI crawlers in
+
+You can't be cited by a model that can't read you. Check your `robots.txt` — if you're blocking `GPTBot`, `PerplexityBot`, `Google-Extended`, or similar, you've opted out of the answer layer. Decide deliberately. For most businesses that want visibility, you allow them.
+
+Then make sure your content is in the server-rendered HTML. Many AI fetchers don't run JavaScript. If your key text only appears after hydration, the model sees a blank page.
+
+## Answer the question in the first two sentences
+
+Classic SEO rewards a slow build-up. GEO punishes it. Answer engines lift *passages* — a self-contained chunk that answers a question. So lead with the answer, then elaborate.
+
+Instead of "In this article we'll explore the many factors that…", write "The fastest way to X is Y, because Z." That sentence is quotable. A model can lift it cleanly and attribute it to you.
+
+## Structure for extraction
+
+- Clear headings phrased as the questions people actually ask.
+- Short paragraphs and lists — easy to lift, easy to cite.
+- One idea per section, with the conclusion at the top of it.
+- Concrete numbers, dates, and named methods. Specificity reads as authority.
+
+## Build entity clarity with structured data
+
+AI search engines resolve *entities* — who you are, what you do, how things relate. `Person`, `Organization`, `Article`, and `BreadcrumbList` schema (in your server-rendered HTML, not injected late by JS) help a model connect your name to your expertise with confidence. This is the difference between being mentioned and being *cited*.
+
+## Authority still wins
+
+None of this replaces being genuinely good. Models, like Google, lean on signals of trust: real expertise, a consistent identity across the web, being referenced by others. GEO gets you readable and quotable; authority gets you chosen.
+
+## The GEO checklist
+
+- [ ] AI crawlers allowed in `robots.txt`
+- [ ] Key content server-rendered (no JS-only text)
+- [ ] Each page answers its core question in the first 2 sentences
+- [ ] Headings match real questions; short, liftable passages
+- [ ] `Person`/`Article` structured data present
+- [ ] A clear, consistent identity across your site and profiles
+
+---
+
+This is exactly how I approach [SEO and GEO for clients](/en/services). If you're weighing classic SEO against AI search, the underlying technical work overlaps heavily — see [Technical SEO for Founders](/en/blog/technical-seo-for-founders), or [let's talk](/en/contact) about your site.

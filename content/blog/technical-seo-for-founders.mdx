@@ -1,0 +1,44 @@
+---
+title: "Technical SEO for Founders"
+excerpt: "The handful of technical fixes that actually move rankings — and the busywork you can safely ignore."
+date: "2026-06-16"
+tags: ["SEO", "Technical SEO", "Founders"]
+metaDescription: "A founder's guide to technical SEO: the few fixes that move rankings (indexing, canonicals, speed, structure) and the busywork to skip."
+---
+
+Most founders I work with have been sold a version of SEO that is 90% busywork. They are tracking keyword densities and rewriting meta keywords — a tag Google stopped using in 2009 — while the actual problem is that half their pages aren't indexed. Technical SEO is not mystical. A small number of things matter a lot, and most of the rest is noise.
+
+## First, confirm Google can even see you
+
+Before anything else, check what Google has indexed. Search `site:yourdomain.com`. If pages are missing, no amount of content or keywords will help — you have a visibility problem, not a ranking problem.
+
+The usual culprits: a stray `noindex`, a `robots.txt` block, or pages that all canonicalize to the homepage (a single misconfigured tag can quietly tell Google every page is a duplicate). Fix indexing first. Everything else is downstream of it.
+
+## The fixes that actually move rankings
+
+**1. One canonical per page.** Each page should point its canonical at *itself*, not a shared URL. Get this wrong and Google collapses your whole site into one indexable page.
+
+**2. Unique titles and descriptions.** Every page needs its own. If your services page, contact page, and blog posts all share the homepage title, you have given Google nothing to differentiate them.
+
+**3. Speed — but only the parts users feel.** Core Web Vitals (largest contentful paint, interaction latency, layout shift) are real ranking inputs and, more importantly, real conversion inputs. The single biggest mistake I see: hero text that's invisible until JavaScript loads. Render your above-the-fold content server-side.
+
+**4. A clean, logical URL structure.** `example.com/seo/search-console-guide` tells a human and a crawler what the page is. `example.com/post?id=8393` tells them nothing.
+
+**5. Structured data.** Mark up who you are and what each page is (Person, Article, BreadcrumbList). It won't levitate you to position one, but it helps both Google and AI search engines understand and cite you.
+
+**6. Internal links.** Google discovers and weighs pages largely through the links between them. Link your pages to each other with descriptive anchor text — not "click here."
+
+## What you can safely ignore
+
+- **Meta keywords.** Dead. Google ignores them entirely.
+- **Keyword stuffing.** Actively harmful. Write for the reader.
+- **Domain extension.** `.com` vs `.ir` vs `.org` gives you no ranking advantage. Pick what fits your brand.
+- **Volume for its own sake.** Five genuinely useful pages beat twenty thin ones. Every time.
+
+## The order that matters
+
+Indexing → canonicals → unique titles → speed → structure → links. Do them in that order. A beautifully written article on a page Google can't index is a tree falling in an empty forest.
+
+---
+
+This is the work behind my [SEO services](/en/services). For a real example of these fixes compounding, see the [B2B SaaS organic-growth case study](/en/portfolio/saas-dashboard) — 3.4× organic traffic from exactly this checklist. Questions about your own site? [Get in touch](/en/contact).
