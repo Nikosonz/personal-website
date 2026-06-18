@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { Sun, Moon, Menu, X, Globe } from "lucide-react";
@@ -34,9 +35,12 @@ export default function Navbar({ locale }: Props) {
     return () => window.removeEventListener("scroll", handler);
   }, []);
 
+  const pathname = usePathname();
   const otherLocale = locale === "en" ? "fa" : "en";
   const localePath = (href: string) => `/${locale}${href}`;
-  const otherLocalePath = (href: string) => `/${otherLocale}${href}`;
+  // Keep the current page when switching language — swap only the locale prefix.
+  const pathWithoutLocale = pathname.replace(/^\/(en|fa)(?=\/|$)/, "");
+  const switchLocaleHref = `/${otherLocale}${pathWithoutLocale}`;
 
   return (
     <>
@@ -74,7 +78,7 @@ export default function Navbar({ locale }: Props) {
           <div className="flex items-center gap-2">
             {/* Language switcher */}
             <Link
-              href={otherLocalePath("/")}
+              href={switchLocaleHref}
               className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--border)] transition-all duration-200 cursor-pointer"
               title={locale === "en" ? tc("lang_fa") : tc("lang_en")}
             >

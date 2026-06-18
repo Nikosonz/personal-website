@@ -36,6 +36,12 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
   return prisma.post.findFirst({ where: { slug, draft: false } });
 }
 
+// Draft-mode preview: returns the post regardless of draft status. Only reached
+// when Next.js Draft Mode is enabled (admin-only, via /api/draft).
+export async function getPostBySlugPreview(slug: string): Promise<Post | null> {
+  return prisma.post.findFirst({ where: { slug } });
+}
+
 export async function getPostById(id: number): Promise<Post | null> {
   return prisma.post.findUnique({ where: { id } });
 }

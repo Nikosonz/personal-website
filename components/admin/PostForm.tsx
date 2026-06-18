@@ -71,11 +71,9 @@ export default function PostForm({ post }: Props) {
     setUploading(false);
   }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  // Persist the post (create or update). Returns the saved id+slug, or null on error.
+  async function save(): Promise<{ id: number; slug: string } | null> {
     setError("");
-    setSaving(true);
-
     const body = {
       title,
       slug,
@@ -105,12 +103,35 @@ export default function PostForm({ post }: Props) {
     if (!res.ok) {
       const data = await res.json().catch(() => ({}));
       setError(data.error ?? "Failed to save post.");
-      setSaving(false);
-      return;
+      return null;
     }
+    const saved = await res.json().catch(() => ({}));
+    return { id: saved.id ?? post?.id, slug: saved.slug ?? slug };
+  }
 
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setSaving(true);
+    const saved = await save();
+    setSaving(false);
+    if (!saved) return;
     router.push("/admin/posts");
     router.refresh();
+  }
+
+  // Save first (so the preview matches the form), then open the real blog page
+  // in Draft Mode in a new tab.
+  async function handlePreview() {
+    if (!slug) { setError("Add a slug before previewing."); return; }
+    setSaving(true);
+    const saved = await save();
+    setSaving(false);
+    if (!saved) return;
+    const previewLocale = dir === "rtl" ? "fa" : "en";
+    window.open(
+      `/api/draft?slug=${encodeURIComponent(saved.slug)}&locale=${previewLocale}`,
+      "_blank"
+    );
   }
 
   return (
@@ -353,6 +374,15 @@ export default function PostForm({ post }: Props) {
           className="rounded-xl bg-[var(--accent)] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[var(--accent-hover)] transition-colors disabled:opacity-60 cursor-pointer"
         >
           {saving ? "Saving…" : post ? "Update post" : "Create post"}
+        </button>
+        <button
+          type="button"
+          onClick={handlePreview}
+          disabled={saving}
+          title="Saves, then opens the live page in a new tab (Draft Mode)"
+          className="rounded-xl border border-[var(--accent)]/40 bg-[var(--accent-subtle)] px-5 py-2.5 text-sm font-semibold text-[var(--accent)] hover:border-[var(--accent)] transition-colors disabled:opacity-60 cursor-pointer"
+        >
+          Save &amp; Preview
         </button>
         <button
           type="button"

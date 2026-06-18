@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
+import { BubbleMenu } from "@tiptap/react/menus";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
@@ -9,7 +10,7 @@ import Placeholder from "@tiptap/extension-placeholder";
 import {
   Bold, Italic, Underline as UnderlineIcon, Heading2, Heading3,
   List, ListOrdered, Quote, Code, Link as LinkIcon, ImageIcon, Minus,
-  AlignLeft, AlignRight, Code2,
+  AlignLeft, AlignRight, Code2, ExternalLink, Pencil, Unlink,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -67,15 +68,21 @@ export default function RichEditor({ value, onChange, dir, onDirChange }: Props)
 
   if (!editor) return null;
 
-  function insertLink() {
-    const url = window.prompt("URL");
-    if (!url) return;
+  // Add or edit a link. Pre-fills the prompt with the current href when editing;
+  // empty input removes the link.
+  function applyLink(initial = "") {
+    const url = window.prompt("Link URL", initial);
+    if (url === null) return; // cancelled
+    if (url.trim() === "") {
+      editor!.chain().focus().extendMarkRange("link").unsetLink().run();
+      return;
+    }
     const allowed = /^(https?:\/\/|mailto:|\/)/i;
     if (!allowed.test(url)) {
       alert("Only http, https, mailto, and relative URLs are allowed.");
       return;
     }
-    editor!.chain().focus().setLink({ href: url }).run();
+    editor!.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
   }
 
   async function insertImage() {
@@ -140,7 +147,7 @@ export default function RichEditor({ value, onChange, dir, onDirChange }: Props)
           <Minus size={13} />
         </ToolbarBtn>
         <div className="w-px h-5 self-center bg-[var(--border)] mx-1" />
-        <ToolbarBtn title="Link" active={t.isActive("link")} onClick={insertLink}>
+        <ToolbarBtn title="Link" active={t.isActive("link")} onClick={() => applyLink(t.getAttributes("link").href ?? "")}>
           <LinkIcon size={13} />
         </ToolbarBtn>
         <ToolbarBtn title="Image" onClick={insertImage}>
@@ -177,6 +184,32 @@ export default function RichEditor({ value, onChange, dir, onDirChange }: Props)
       ) : (
         <div dir={dir} className={cn(dir === "rtl" && "font-farsi")}>
           <EditorContent editor={editor} />
+          {/* Popup shown when the caret is inside a link */}
+          <BubbleMenu
+            editor={editor}
+            shouldShow={({ editor }) => editor.isActive("link")}
+            className="flex items-center gap-1 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-2 py-1 shadow-lg"
+          >
+            <a
+              href={t.getAttributes("link").href}
+              target="_blank"
+              rel="noopener noreferrer"
+              dir="ltr"
+              className="max-w-[180px] truncate text-xs text-[var(--accent)] underline"
+            >
+              {t.getAttributes("link").href}
+            </a>
+            <span className="w-px h-4 bg-[var(--border)]" />
+            <ToolbarBtn title="Open in new tab" onClick={() => window.open(t.getAttributes("link").href, "_blank", "noopener")}>
+              <ExternalLink size={13} />
+            </ToolbarBtn>
+            <ToolbarBtn title="Edit link" onClick={() => applyLink(t.getAttributes("link").href ?? "")}>
+              <Pencil size={13} />
+            </ToolbarBtn>
+            <ToolbarBtn title="Remove link" onClick={() => t.chain().focus().extendMarkRange("link").unsetLink().run()}>
+              <Unlink size={13} />
+            </ToolbarBtn>
+          </BubbleMenu>
         </div>
       )}
     </div>

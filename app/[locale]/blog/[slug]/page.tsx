@@ -1,10 +1,11 @@
 ﻿import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
+import { draftMode } from "next/headers";
 import Link from "next/link";
 import sanitizeHtml from "sanitize-html";
 import { routing } from "@/i18n/routing";
 import { seoAlternates } from "@/lib/seo";
-import { getPostBySlug } from "@/lib/server/posts";
+import { getPostBySlug, getPostBySlugPreview } from "@/lib/server/posts";
 import { cn } from "@/lib/utils";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { ArrowLeft } from "lucide-react";
@@ -51,7 +52,9 @@ export default async function BlogPostPage({ params }: Props) {
   const { locale, slug } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
 
-  const post = await getPostBySlug(slug);
+  // In Draft Mode (admin-only, via /api/draft) show unpublished drafts too.
+  const { isEnabled: isDraft } = await draftMode();
+  const post = isDraft ? await getPostBySlugPreview(slug) : await getPostBySlug(slug);
   if (!post) notFound();
 
   const blogPostingSchema = {
@@ -75,6 +78,19 @@ export default async function BlogPostPage({ params }: Props) {
 
   return (
     <>
+    {isDraft && (
+      <div className="fixed bottom-4 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3 rounded-full border border-[var(--accent)]/40 bg-[var(--surface)] px-4 py-2 text-xs shadow-lg">
+        <span className="font-medium text-[var(--accent)]">
+          Draft preview{post.draft ? "" : " (published)"}
+        </span>
+        <a
+          href={`/api/draft/disable?to=/${locale}/blog/${post.slug}`}
+          className="text-[var(--text-muted)] underline hover:text-[var(--text-primary)]"
+        >
+          Exit
+        </a>
+      </div>
+    )}
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldJson(JSON.stringify(blogPostingSchema)) }} />
     {hasValidJsonLd && (
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldJson(post.jsonLd!) }} />
