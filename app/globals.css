@@ -88,6 +88,14 @@ body {
   font-family: var(--font-farsi);
 }
 
+/* Mixed Farsi + Latin (brand names, acronyms like AI/GEO/ChatGPT): let each
+   block resolve its own base direction from its content and isolate it, so the
+   neutral punctuation around Latin runs (—, ،, parentheses) sits on the correct
+   side instead of jumping. Applies to article body + the CMS editor (.prose). */
+[dir="rtl"] .prose :is(p, li, blockquote, figcaption, h1, h2, h3, h4, h5, h6, td, th) {
+  unicode-bidi: plaintext;
+}
+
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
   font-weight: 700;
