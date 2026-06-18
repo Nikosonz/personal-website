@@ -42,6 +42,10 @@ export default function PostForm({ post }: Props) {
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  // Tracks the DB id once persisted. Starts from the edited post (if any) and is
+  // set after the first create, so a second save (e.g. Save & Preview again on a
+  // new post) updates the same row instead of re-POSTing a duplicate slug.
+  const [savedId, setSavedId] = useState<number | null>(post?.id ?? null);
   const coverRef = useRef<HTMLInputElement>(null);
   const ogImageRef = useRef<HTMLInputElement>(null);
 
@@ -53,7 +57,9 @@ export default function PostForm({ post }: Props) {
 
   function handleTitleChange(v: string) {
     setTitle(v);
-    if (!post) setSlug(slugify(v));
+    // Stop auto-deriving the slug once the post exists, so editing the title
+    // doesn't silently change a persisted URL.
+    if (!savedId) setSlug(slugify(v));
   }
 
   async function uploadImage(file: File, setUrl: (url: string) => void) {
@@ -91,8 +97,8 @@ export default function PostForm({ post }: Props) {
       draft,
     };
 
-    const url = post ? `/api/admin/posts/${post.id}` : "/api/admin/posts";
-    const method = post ? "PUT" : "POST";
+    const url = savedId ? `/api/admin/posts/${savedId}` : "/api/admin/posts";
+    const method = savedId ? "PUT" : "POST";
 
     const res = await fetch(url, {
       method,
@@ -106,7 +112,10 @@ export default function PostForm({ post }: Props) {
       return null;
     }
     const saved = await res.json().catch(() => ({}));
-    return { id: saved.id ?? post?.id, slug: saved.slug ?? slug };
+    const id: number | null = saved.id ?? savedId;
+    // Switch to edit-mode after the first create so subsequent saves PUT.
+    if (id && id !== savedId) setSavedId(id);
+    return { id: id ?? 0, slug: saved.slug ?? slug };
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -373,7 +382,7 @@ export default function PostForm({ post }: Props) {
           disabled={saving}
           className="rounded-xl bg-[var(--accent)] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[var(--accent-hover)] transition-colors disabled:opacity-60 cursor-pointer"
         >
-          {saving ? "Saving…" : post ? "Update post" : "Create post"}
+          {saving ? "Saving…" : savedId ? "Update post" : "Create post"}
         </button>
         <button
           type="button"
