@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import sanitizeHtml from "sanitize-html";
 import { routing } from "@/i18n/routing";
+import { seoAlternates } from "@/lib/seo";
 import { getPostBySlug } from "@/lib/server/posts";
 import { cn } from "@/lib/utils";
 import Breadcrumb from "@/components/ui/Breadcrumb";
@@ -25,6 +26,7 @@ export async function generateMetadata({ params }: Props) {
   return {
     title: post.title,
     description,
+    alternates: seoAlternates(locale, `/blog/${post.slug}`),
     openGraph: {
       type: "article",
       title: socialTitle,

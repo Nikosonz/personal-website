@@ -1,7 +1,9 @@
+import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
+import { seoAlternates } from "@/lib/seo";
 import { FadeIn, StaggerChildren, StaggerItem } from "@/components/ui/FadeIn";
 import Link from "next/link";
 import { ArrowRight, Check, Code2, Search, BrainCircuit, MessageSquare, ChevronDown } from "lucide-react";
@@ -9,6 +11,16 @@ import { ArrowRight, Check, Code2, Search, BrainCircuit, MessageSquare, ChevronD
 const serviceIcons = [Code2, Search, BrainCircuit, MessageSquare];
 
 type Props = { params: Promise<{ locale: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "services_page" });
+  return {
+    title: t("title"),
+    description: t("subtitle"),
+    alternates: seoAlternates(locale, "/services"),
+  };
+}
 
 export default async function ServicesPage({ params }: Props) {
   const { locale } = await params;

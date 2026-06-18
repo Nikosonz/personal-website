@@ -1,6 +1,8 @@
+import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
+import { seoAlternates } from "@/lib/seo";
 import Hero from "@/components/sections/Hero";
 import ServicesStrip from "@/components/sections/ServicesStrip";
 import FeaturedProjects from "@/components/sections/FeaturedProjects";
@@ -8,6 +10,20 @@ import BlogPreview from "@/components/sections/BlogPreview";
 import CTASection from "@/components/sections/CTASection";
 
 type Props = { params: Promise<{ locale: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  return {
+    // `absolute` bypasses the "%s | Pouya Karimi" template so the brand isn't doubled.
+    title: {
+      absolute:
+        locale === "fa"
+          ? "پویا کریمی — توسعه‌دهنده و متخصص سئو"
+          : "Pouya Karimi — Developer & SEO Specialist",
+    },
+    alternates: seoAlternates(locale, ""),
+  };
+}
 
 const personSchema = {
   "@context": "https://schema.org",

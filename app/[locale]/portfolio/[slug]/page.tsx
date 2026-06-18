@@ -1,7 +1,9 @@
+import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
+import { seoAlternates } from "@/lib/seo";
 import { getProject } from "@/lib/mdx";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { FadeIn } from "@/components/ui/FadeIn";
@@ -12,6 +14,20 @@ import remarkGfm from "remark-gfm";
 import rehypePrettyCode from "rehype-pretty-code";
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale, slug } = await params;
+  try {
+    const { meta } = getProject(slug);
+    return {
+      title: meta.title,
+      description: meta.excerpt,
+      alternates: seoAlternates(locale, `/portfolio/${slug}`),
+    };
+  } catch {
+    return {};
+  }
+}
 
 export default async function ProjectPage({ params }: Props) {
   const { locale, slug } = await params;

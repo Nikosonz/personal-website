@@ -25,13 +25,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     description: isPersian
       ? "توسعه‌دهنده فریلنسر و متخصص سئو — به تیم‌ها کمک می‌کنم محصولاتی سریع و بهینه بسازند که در نتایج جست‌وجو دیده شوند و تبدیل کنند."
       : "Freelance developer and SEO specialist helping teams build fast, search-friendly products that rank and convert.",
-    alternates: {
-      canonical: `https://pouyakarimi.ir/${locale}`,
-      languages: {
-        en: "https://pouyakarimi.ir/en",
-        fa: "https://pouyakarimi.ir/fa",
-      },
-    },
+    // NOTE: canonical + hreflang are set per-page via seoAlternates() (lib/seo.ts).
+    // A single canonical here would make every page canonicalize to the locale home.
   };
 }
 

@@ -1,8 +1,10 @@
-﻿import { hasLocale } from "next-intl";
+﻿import type { Metadata } from "next";
+import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { routing } from "@/i18n/routing";
+import { seoAlternates } from "@/lib/seo";
 import { getAllPublishedPosts } from "@/lib/server/posts";
 import { cn } from "@/lib/utils";
 import { FadeIn } from "@/components/ui/FadeIn";
@@ -12,6 +14,16 @@ import { ArrowRight } from "lucide-react";
 export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ locale: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "blog" });
+  return {
+    title: t("title"),
+    description: t("subtitle"),
+    alternates: seoAlternates(locale, "/blog"),
+  };
+}
 
 export default async function BlogPage({ params }: Props) {
   const { locale } = await params;

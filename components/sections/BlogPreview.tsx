@@ -1,44 +1,19 @@
 import Link from "next/link";
-import { useTranslations } from "next-intl";
-import { ArrowRight, Clock } from "lucide-react";
+import { getTranslations } from "next-intl/server";
+import { ArrowRight } from "lucide-react";
 import { FadeIn, StaggerChildren, StaggerItem } from "@/components/ui/FadeIn";
 import { Badge } from "@/components/ui/Badge";
-import { formatDate } from "@/lib/utils";
-
-const placeholderPosts = [
-  {
-    slug: "why-seo-belongs-in-your-codebase",
-    title: "Why SEO Belongs in Your Codebase",
-    excerpt:
-      "The best SEO isn't bolted on after launch — it's baked into how you render, route, and structure your app. Here's why technical SEO is an engineering discipline.",
-    date: "2026-05-20",
-    readTime: 6,
-    tags: ["SEO", "Engineering"],
-  },
-  {
-    slug: "building-ai-features-users-actually-want",
-    title: "Building AI Features Users Actually Want",
-    excerpt:
-      "Everyone wants to add AI to their product. Most teams are adding it wrong. A framework for thinking about where AI adds real value vs. where it's just hype.",
-    date: "2026-04-14",
-    readTime: 9,
-    tags: ["AI", "Product"],
-  },
-  {
-    slug: "the-hidden-cost-of-moving-fast",
-    title: "The Hidden Cost of Moving Fast",
-    excerpt:
-      "Speed is a virtue in startup culture. But there's a type of debt that doesn't show up in your codebase — it shows up in your team.",
-    date: "2026-03-08",
-    readTime: 5,
-    tags: ["Culture", "Engineering"],
-  },
-];
+import { cn, formatDate } from "@/lib/utils";
+import { getAllPublishedPosts } from "@/lib/server/posts";
 
 type Props = { locale: string };
 
-export default function BlogPreview({ locale }: Props) {
-  const t = useTranslations("blog");
+export default async function BlogPreview({ locale }: Props) {
+  const t = await getTranslations({ locale, namespace: "blog" });
+  // Pull the 3 latest real posts so these cards never link to dead slugs.
+  const posts = (await getAllPublishedPosts().catch(() => [])).slice(0, 3);
+  if (posts.length === 0) return null;
+
   const lp = (href: string) => `/${locale}${href}`;
 
   return (
@@ -55,40 +30,50 @@ export default function BlogPreview({ locale }: Props) {
         </FadeIn>
 
         <StaggerChildren className="grid gap-5 md:grid-cols-3">
-          {placeholderPosts.map((post) => (
-            <StaggerItem key={post.slug}>
+          {posts.map((post) => (
+            <StaggerItem key={post.id}>
               <Link
                 href={lp(`/blog/${post.slug}`)}
-                className="group flex flex-col gap-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 transition-all duration-300 hover:border-[var(--accent)]/40 hover:shadow-lg hover:-translate-y-1"
+                className="group flex h-full flex-col gap-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 transition-all duration-300 hover:border-[var(--accent)]/40 hover:shadow-lg hover:-translate-y-1"
               >
-                {/* Meta */}
-                <div className="flex items-center gap-3 text-xs text-[var(--text-muted)]">
-                  <time dateTime={post.date}>{formatDate(post.date)}</time>
-                  <span>·</span>
-                  <span className="flex items-center gap-1">
-                    <Clock size={12} />
-                    {post.readTime} {t("min_read")}
-                  </span>
-                </div>
+                {post.publishedAt && (
+                  <time
+                    dateTime={new Date(post.publishedAt).toISOString()}
+                    className="text-xs text-[var(--text-muted)]"
+                  >
+                    {formatDate(post.publishedAt)}
+                  </time>
+                )}
 
-                {/* Title */}
-                <h3 className="font-heading text-base font-semibold leading-snug text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors duration-200">
+                <h3
+                  dir={post.dir}
+                  className={cn(
+                    "font-heading text-base font-semibold leading-snug text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors duration-200",
+                    post.dir === "rtl" && "font-farsi"
+                  )}
+                >
                   {post.title}
                 </h3>
 
-                {/* Excerpt */}
-                <p className="text-sm leading-relaxed text-[var(--text-muted)] line-clamp-3">
+                <p
+                  dir={post.dir}
+                  className={cn(
+                    "text-sm leading-relaxed text-[var(--text-muted)] line-clamp-3",
+                    post.dir === "rtl" && "font-farsi"
+                  )}
+                >
                   {post.excerpt}
                 </p>
 
-                {/* Tags */}
-                <div className="flex flex-wrap gap-1.5 mt-auto">
-                  {post.tags.map((tag) => (
-                    <Badge key={tag} variant="muted">
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
+                {post.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 mt-auto">
+                    {post.tags.slice(0, 2).map((tag) => (
+                      <Badge key={tag} variant="muted">
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
 
                 <span className="inline-flex items-center gap-1 text-xs font-medium text-[var(--accent)] group-hover:gap-2 transition-all duration-200">
                   {t("read_more")}
