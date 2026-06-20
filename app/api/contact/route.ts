@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { Resend } from "resend";
+import { allow, contactLimit, clientIp } from "@/lib/ratelimit";
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
@@ -11,21 +12,6 @@ const schema = z.object({
   service: z.string().min(1),
   message: z.string().min(20),
 });
-
-// Best-effort per-IP rate limit. In-memory, so it only protects within a single
-// warm serverless instance — the honeypot below is the primary spam defense.
-const WINDOW_MS = 60_000;
-const MAX_PER_WINDOW = 5;
-const hits = new Map<string, number[]>();
-
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const recent = (hits.get(ip) ?? []).filter((t) => now - t < WINDOW_MS);
-  recent.push(now);
-  hits.set(ip, recent);
-  if (hits.size > 5000) hits.clear(); // crude guard against unbounded growth
-  return recent.length > MAX_PER_WINDOW;
-}
 
 function escapeHtml(str: string) {
   return str
@@ -37,8 +23,8 @@ function escapeHtml(str: string) {
 
 export async function POST(req: NextRequest) {
   try {
-    const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-    if (isRateLimited(ip)) {
+    // Distributed per-IP limit (5 / min). Honeypot below is the primary spam defense.
+    if (!(await allow(contactLimit, clientIp(req.headers)))) {
       return NextResponse.json({ error: "Too many requests. Please try again shortly." }, { status: 429 });
     }
 

@@ -1,12 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { put } from "@vercel/blob";
 import { requireAdmin } from "@/lib/session";
+import { allow, uploadLimit, clientIp } from "@/lib/ratelimit";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/avif"];
 const MAX_SIZE = 5 * 1024 * 1024; // 5 MB
 
 export async function POST(req: NextRequest) {
-  if (!(await requireAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const session = await requireAdmin();
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  // 20 uploads / 10 min, keyed by admin then IP.
+  const key = `${session.userId}:${clientIp(req.headers)}`;
+  if (!(await allow(uploadLimit, key))) {
+    return NextResponse.json({ error: "Too many uploads. Please try again shortly." }, { status: 429 });
+  }
 
   const formData = await req.formData();
   const file = formData.get("file") as File | null;

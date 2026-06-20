@@ -1,14 +1,13 @@
 "use client";
 
 import { useEffect } from "react";
+import * as Sentry from "@sentry/nextjs";
 
 // Root error boundary — replaces the entire document when the root layout
 // itself throws, so it must render its own <html><body> and cannot rely on
 // Tailwind/CSS vars or next-intl being available. Inline styles only.
-// Generic copy: never expose stack traces or internals to the client.
-// Server-side capture is handled by instrumentation's onRequestError (Sentry,
-// wired in the monitoring workstream); WS4 also adds Sentry.captureException
-// here.
+// Generic copy: never expose stack traces or internals to the client. Reports
+// to Sentry (no-ops without a DSN).
 export default function GlobalError({
   error,
   reset,
@@ -17,6 +16,7 @@ export default function GlobalError({
   reset: () => void;
 }) {
   useEffect(() => {
+    Sentry.captureException(error);
     console.error(error);
   }, [error]);
 
