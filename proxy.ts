@@ -22,5 +22,7 @@ export default async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!api|_next|_vercel|.*\\..*).*)"],
+  // Exclude `monitoring` so the Sentry tunnel route (next.config tunnelRoute)
+  // isn't locale-redirected by next-intl, which would drop client error reports.
+  matcher: ["/((?!api|_next|_vercel|monitoring|.*\\..*).*)"],
 };

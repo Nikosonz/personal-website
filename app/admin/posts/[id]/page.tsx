@@ -5,10 +5,15 @@ import Breadcrumb from "@/components/ui/Breadcrumb";
 
 export const dynamic = "force-dynamic";
 
+// The segment is a publicId (UUID), not the Int PK. Reject non-UUIDs up front so
+// a malformed id 404s cleanly instead of throwing at the @db.Uuid column.
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 type Props = { params: Promise<{ id: string }> };
 
 export default async function EditPostPage({ params }: Props) {
   const { id } = await params;
+  if (!UUID_RE.test(id)) notFound();
   const post = await getPostByPublicId(id);
   if (!post) notFound();
 
