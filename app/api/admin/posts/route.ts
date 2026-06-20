@@ -14,8 +14,8 @@ export async function POST(req: NextRequest) {
 
   const body = await req.json();
   const {
-    title, slug, excerpt, content, tags, coverImageUrl, draft, dir, locale,
-    metaDescription, ogTitle, ogDescription, ogImage, jsonLd, headHtml,
+    title, slug, excerpt, content, tags, coverImageUrl, coverImageAlt, draft, dir, locale,
+    metaDescription, ogTitle, ogDescription, ogImage, ogImageAlt, jsonLd, headHtml,
   } = body;
 
   if (!title || !slug || !excerpt || !content) {
@@ -43,11 +43,13 @@ export async function POST(req: NextRequest) {
       dir: direction,
       tags: tags ?? [],
       coverImageUrl: coverImageUrl ?? null,
+      coverImageAlt: coverImageAlt ?? null,
       // Owner-authored SEO fields — stored verbatim (admin is auth-gated)
       metaDescription: metaDescription ?? null,
       ogTitle: ogTitle ?? null,
       ogDescription: ogDescription ?? null,
       ogImage: ogImage ?? null,
+      ogImageAlt: ogImageAlt ?? null,
       jsonLd: jsonLd ?? null,
       headHtml: headHtml ?? null,
       draft: draft ?? true,

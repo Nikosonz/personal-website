@@ -54,8 +54,8 @@ export default function Hero({ locale }: Props) {
 
           {/* Headline */}
           <motion.h1
-            initial={{ y: 20 }}
-            animate={{ y: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1, ease }}
             className="font-heading text-4xl font-extrabold leading-[1.1] tracking-tight text-[var(--text-primary)] sm:text-5xl md:text-6xl"
           >
@@ -84,8 +84,8 @@ export default function Hero({ locale }: Props) {
 
           {/* Subheading */}
           <motion.p
-            initial={{ y: 20 }}
-            animate={{ y: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2, ease }}
             className="max-w-xl text-lg leading-relaxed text-[var(--text-muted)] sm:text-xl"
           >

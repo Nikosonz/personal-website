@@ -18,8 +18,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: {
       absolute:
         locale === "fa"
-          ? "پویا کریمی — توسعه‌دهنده و متخصص سئو"
-          : "Pouya Karimi — Developer & SEO Specialist",
+          ? "پویا کریمی — متخصص سئو و توسعه‌دهنده فول‌استک"
+          : "Pouya Karimi — SEO Specialist & Full-Stack Developer",
     },
     alternates: seoAlternates(locale, ""),
   };
@@ -30,8 +30,8 @@ const personSchema = {
   "@type": "Person",
   name: "Pouya Karimi",
   url: "https://pouyakarimi.ir",
-  jobTitle: "Freelance Developer & MBA Specialist",
-  description: "Freelance developer, AI consultant helping teams build exceptional digital products, business consultant",
+  jobTitle: "SEO Specialist & Full-Stack Developer",
+  description: "Freelance SEO specialist and full-stack developer helping teams build fast, search-friendly products that rank on Google and grow without paid ads.",
   email: "pouyakarimibirgani@gmail.com",
   address: { "@type": "PostalAddress", addressCountry: "IR" },
   sameAs: [

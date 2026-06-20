@@ -10,8 +10,8 @@
   },
   "hero": {
     "available": "Accepting clients",
-    "headline": "Where engineering meets <accent>business sense</accent>.",
-    "subheadline": "Full-stack developer and business consultant (MBA) helping teams design, build, and scale products people love.",
+    "headline": "SEO & engineering that makes you <accent>rank and convert</accent>.",
+    "subheadline": "SEO specialist & full-stack developer helping teams build fast, search-friendly products that rank on Google and grow without paid ads.",
     "cta_primary": "See my work",
     "cta_secondary": "Let's talk"
   },
@@ -227,6 +227,14 @@
       "blog": "Blog",
       "contact": "Contact"
     }
+  },
+  "lead_capture": {
+    "aria_label": "Free SEO audit offer",
+    "eyebrow": "Free offer",
+    "title": "Get a free mini SEO audit",
+    "body": "I'll review your site's top SEO issues and send you a short action list — no strings attached.",
+    "cta": "Claim it",
+    "dismiss": "No thanks"
   },
   "common": {
     "loading": "Loading…",

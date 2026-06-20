@@ -19,8 +19,11 @@ export interface Post {
   ogTitle: string | null;
   ogDescription: string | null;
   ogImage: string | null;
+  ogImageAlt: string | null;
+  coverImageAlt: string | null;
   jsonLd: string | null;
   headHtml: string | null;
+  viewCount: number;
 }
 
 // Published posts, optionally scoped to a locale ("en" | "fa"). Omit the locale

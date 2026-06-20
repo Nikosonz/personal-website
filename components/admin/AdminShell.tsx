@@ -2,7 +2,7 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { logoutAction } from "@/app/actions/auth";
-import { LogOut, FileText, PlusCircle, Inbox, type LucideIcon } from "lucide-react";
+import { LogOut, FileText, PlusCircle, Inbox, LayoutDashboard, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 function NavLink({ href, icon: Icon, children }: { href: string; icon: LucideIcon; children: React.ReactNode }) {
@@ -37,6 +37,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
           </span>
         </div>
         <nav className="flex flex-col gap-1 p-3 flex-1">
+          <NavLink href="/admin" icon={LayoutDashboard}>Dashboard</NavLink>
           <NavLink href="/admin/posts" icon={FileText}>Posts</NavLink>
           <NavLink href="/admin/posts/new" icon={PlusCircle}>New Post</NavLink>
           <NavLink href="/admin/messages" icon={Inbox}>Messages</NavLink>

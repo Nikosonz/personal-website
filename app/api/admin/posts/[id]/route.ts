@@ -29,8 +29,8 @@ export async function PUT(req: NextRequest, ctx: RouteContext<"/api/admin/posts/
 
   const body = await req.json();
   const {
-    title, slug, excerpt, content, tags, coverImageUrl, draft, dir, locale,
-    metaDescription, ogTitle, ogDescription, ogImage, jsonLd, headHtml,
+    title, slug, excerpt, content, tags, coverImageUrl, coverImageAlt, draft, dir, locale,
+    metaDescription, ogTitle, ogDescription, ogImage, ogImageAlt, jsonLd, headHtml,
   } = body;
   const direction = dir === "rtl" ? "rtl" : "ltr";
   const loc = locale === "fa" ? "fa" : "en";
@@ -57,11 +57,13 @@ export async function PUT(req: NextRequest, ctx: RouteContext<"/api/admin/posts/
       dir: direction,
       tags: tags ?? [],
       coverImageUrl: coverImageUrl ?? null,
+      coverImageAlt: coverImageAlt ?? null,
       // Owner-authored SEO fields — stored verbatim (admin is auth-gated)
       metaDescription: metaDescription ?? null,
       ogTitle: ogTitle ?? null,
       ogDescription: ogDescription ?? null,
       ogImage: ogImage ?? null,
+      ogImageAlt: ogImageAlt ?? null,
       jsonLd: jsonLd ?? null,
       headHtml: headHtml ?? null,
       draft: draft ?? true,

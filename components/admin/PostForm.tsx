@@ -34,10 +34,12 @@ export default function PostForm({ post }: Props) {
   const [locale, setLocale] = useState<"en" | "fa">((post?.locale as "en" | "fa") ?? "en");
   const [draft, setDraft] = useState(post?.draft ?? true);
   const [coverUrl, setCoverUrl] = useState(post?.coverImageUrl ?? "");
+  const [coverImageAlt, setCoverImageAlt] = useState(post?.coverImageAlt ?? "");
   const [metaDescription, setMetaDescription] = useState(post?.metaDescription ?? "");
   const [ogTitle, setOgTitle] = useState(post?.ogTitle ?? "");
   const [ogDescription, setOgDescription] = useState(post?.ogDescription ?? "");
   const [ogImage, setOgImage] = useState(post?.ogImage ?? "");
+  const [ogImageAlt, setOgImageAlt] = useState(post?.ogImageAlt ?? "");
   const [jsonLd, setJsonLd] = useState(post?.jsonLd ?? "");
   const [headHtml, setHeadHtml] = useState(post?.headHtml ?? "");
   const [uploading, setUploading] = useState(false);
@@ -98,10 +100,12 @@ export default function PostForm({ post }: Props) {
       dir,
       tags: tags.split(",").map((t) => t.trim()).filter(Boolean),
       coverImageUrl: coverUrl || null,
+      coverImageAlt: coverImageAlt || null,
       metaDescription: metaDescription || null,
       ogTitle: ogTitle || null,
       ogDescription: ogDescription || null,
       ogImage: ogImage || null,
+      ogImageAlt: ogImageAlt || null,
       jsonLd: jsonLd || null,
       headHtml: headHtml || null,
       draft,
@@ -248,6 +252,14 @@ export default function PostForm({ post }: Props) {
           className="hidden"
           onChange={(e) => e.target.files?.[0] && uploadImage(e.target.files[0], setCoverUrl)}
         />
+        {coverUrl && (
+          <input
+            value={coverImageAlt}
+            onChange={(e) => setCoverImageAlt(e.target.value)}
+            className="rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3.5 py-2 text-sm text-[var(--text-primary)] outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20 transition-colors"
+            placeholder="Alt text — describe the image for SEO & screen readers"
+          />
+        )}
       </div>
 
       {/* Tags */}
@@ -384,6 +396,14 @@ export default function PostForm({ post }: Props) {
               />
             </div>
             {ogImage && <img src={ogImage} alt="OG preview" className="mt-1 h-28 w-fit rounded-lg object-cover border border-[var(--border)]" />}
+            {ogImage && (
+              <input
+                value={ogImageAlt}
+                onChange={(e) => setOgImageAlt(e.target.value)}
+                className="rounded-xl border border-[var(--border)] bg-[var(--background)] px-3.5 py-2 text-sm text-[var(--text-primary)] outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20 transition-colors"
+                placeholder="Alt text for OG image — used by social platforms and screen readers"
+              />
+            )}
           </div>
         </div>
       </details>

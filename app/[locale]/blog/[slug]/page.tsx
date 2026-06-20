@@ -28,9 +28,10 @@ export async function generateMetadata({ params }: Props) {
   if (!post) return {};
 
   const description = post.metaDescription ?? post.excerpt;
-  const images = [post.ogImage ?? post.coverImageUrl].filter(Boolean) as string[];
+  const ogImageUrl = post.ogImage ?? post.coverImageUrl;
   const socialTitle = post.ogTitle ?? post.title;
   const socialDescription = post.ogDescription ?? description;
+  const ogAlt = post.ogImageAlt ?? post.coverImageAlt ?? post.title;
 
   return {
     title: post.title,
@@ -41,13 +42,13 @@ export async function generateMetadata({ params }: Props) {
       title: socialTitle,
       description: socialDescription,
       url: `https://pouyakarimi.ir/${locale}/blog/${post.slug}`,
-      ...(images.length && { images }),
+      ...(ogImageUrl && { images: [{ url: ogImageUrl, alt: ogAlt }] }),
     },
     twitter: {
       card: "summary_large_image",
       title: socialTitle,
       description: socialDescription,
-      ...(images.length && { images }),
+      ...(ogImageUrl && { images: [ogImageUrl] }),
     },
   };
 }
@@ -138,7 +139,7 @@ export default async function BlogPostPage({ params }: Props) {
 
             {post.coverImageUrl && (
               <div className="mb-10 rounded-2xl overflow-hidden h-64 sm:h-80">
-                <img src={post.coverImageUrl} alt={post.title} className="h-full w-full object-cover" />
+                <img src={post.coverImageUrl} alt={post.coverImageAlt ?? post.title} className="h-full w-full object-cover" />
               </div>
             )}
 

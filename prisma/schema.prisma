@@ -44,8 +44,24 @@ model Post {
   ogTitle         String?
   ogDescription   String?
   ogImage         String?
+  ogImageAlt      String?
+  coverImageAlt   String?
   jsonLd          String?  @db.Text
   headHtml        String?  @db.Text
+
+  // Engagement stats — incremented on each public page view (see app/api/track)
+  viewCount       Int      @default(0)
+}
+
+model PageView {
+  id        Int      @id @default(autoincrement())
+  path      String
+  locale    String
+  referrer  String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([path])
 }
 
 model ContactMessage {
