@@ -10,6 +10,7 @@ import Footer from "@/components/layout/Footer";
 import BackToTop from "@/components/ui/BackToTop";
 import PageTracker from "@/components/PageTracker";
 import LeadCapture from "@/components/ui/LeadCapture";
+import OnboardingHint from "@/components/ui/OnboardingHint";
 
 type Props = {
   children: React.ReactNode;
@@ -22,12 +23,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
   return {
     title: {
-      default: isPersian ? "پویا کریمی — متخصص سئو و توسعه‌دهنده فول‌استک" : "Pouya Karimi — SEO Specialist & Full-Stack Developer",
+      default: isPersian ? "پویا کریمی — مشاور سئو و توسعه کسب‌وکار" : "Pouya Karimi — Business Development & SEO Specialist",
       template: isPersian ? "%s | پویا کریمی" : "%s | Pouya Karimi",
     },
     description: isPersian
-      ? "متخصص سئو و توسعه‌دهنده فول‌استک فریلنسر — به تیم‌ها کمک می‌کنم محصولاتی سریع و بهینه بسازند که در گوگل رتبه بگیرند و بدون تبلیغات پولی رشد کنند."
-      : "Freelance SEO specialist and full-stack developer helping teams build fast, search-friendly products that rank on Google and grow without paid ads.",
+      ? "مشاور سئو و توسعه‌دهنده فول‌استک — به کسب‌وکارهای ایرانی و بین‌المللی کمک می‌کنم محصولاتی سریع و بهینه بسازند که بدون تبلیغات پولی در گوگل رتبه بگیرند."
+      : "SEO consultant and full-stack developer helping Iranian and global businesses build search-friendly products that rank on Google and grow without paid ads.",
     // NOTE: canonical + hreflang are set per-page via seoAlternates() (lib/seo.ts).
     // A single canonical here would make every page canonicalize to the locale home.
   };
@@ -54,6 +55,7 @@ export default async function LocaleLayout({ children, params }: Props) {
             <BackToTop />
             <PageTracker locale={locale} />
             <LeadCapture locale={locale} />
+            <OnboardingHint />
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>

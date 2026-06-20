@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
 
 const ease = [0.21, 0.47, 0.32, 0.98] as const;
 
@@ -99,13 +98,6 @@ export default function Hero({ locale }: Props) {
             transition={{ duration: 0.6, delay: 0.3, ease }}
             className="flex flex-wrap items-center justify-center lg:justify-start gap-3"
           >
-            <Link
-              href={lp("/portfolio")}
-              className="inline-flex items-center gap-2 rounded-xl bg-[var(--accent)] px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-[var(--accent-hover)] transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
-            >
-              {t("cta_primary")}
-              <ArrowRight size={16} />
-            </Link>
             <Link
               href={lp("/contact")}
               className="inline-flex items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-6 py-3 text-sm font-semibold text-[var(--text-primary)] hover:border-[var(--accent)]/50 hover:bg-[var(--accent-subtle)] transition-all duration-200"

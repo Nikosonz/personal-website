@@ -10,8 +10,8 @@
   },
   "hero": {
     "available": "Accepting clients",
-    "headline": "SEO & engineering that makes you <accent>rank and convert</accent>.",
-    "subheadline": "SEO specialist & full-stack developer helping teams build fast, search-friendly products that rank on Google and grow without paid ads.",
+    "headline": "Business Development & <accent>SEO</accent> — rank higher, grow faster.",
+    "subheadline": "SEO consultant & full-stack developer helping Iranian and global businesses build search-friendly products that grow without paid ads.",
     "cta_primary": "See my work",
     "cta_secondary": "Let's talk"
   },
@@ -208,9 +208,9 @@
       "services": {
         "web": "Web Development",
         "seo": "SEO",
-        "ai": "AI & Automation",
-        "consulting": "Technical Consulting",
-        "other": "Other / Not sure yet"
+        "ai": "AI Automation",
+        "business_consulting": "Business Consulting",
+        "social_media": "Social Media"
       }
     },
     "direct": "Or reach me directly",
