@@ -27,7 +27,7 @@ export const PUBLISHER = {
   "@type": "Organization",
   name: "Pouya Karimi",
   url: SITE_URL,
-  logo: { "@type": "ImageObject", url: `${SITE_URL}/pouya-karimi.jpg` },
+  logo: { "@type": "ImageObject", url: `${SITE_URL}/logo.svg` },
 };
 
 // Person node for article JSON-LD `author`, built from AUTHOR.

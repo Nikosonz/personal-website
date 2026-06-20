@@ -48,9 +48,10 @@ export default function Footer({ locale }: Props) {
           <div className="flex flex-col gap-3">
             <Link
               href={localePath("/")}
-              className="font-heading text-lg font-bold text-[var(--text-primary)] hover:text-[var(--accent)] transition-colors duration-200 cursor-pointer w-fit"
+              className="w-fit opacity-90 hover:opacity-100 transition-opacity duration-200 cursor-pointer"
+              aria-label="Pouya Karimi — home"
             >
-              Pouya Karimi
+              <img src="/logo.svg" alt="Pouya Karimi" width={120} height={120} className="h-16 w-auto" />
             </Link>
             <p className="text-sm text-[var(--text-muted)] max-w-xs">
               {t("tagline")}

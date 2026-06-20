@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { Sun, Moon, Menu, X, Globe } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { LogoMark } from "@/components/ui/Logo";
 
 const navLinks = [
   { key: "about", href: "/about" },
@@ -56,8 +57,9 @@ export default function Navbar({ locale }: Props) {
           {/* Logo */}
           <Link
             href={localePath("/")}
-            className="font-heading text-lg font-700 tracking-tight text-[var(--text-primary)] hover:text-[var(--accent)] transition-colors duration-200"
+            className="flex items-center gap-2 font-heading text-lg font-700 tracking-tight text-[var(--text-primary)] hover:text-[var(--accent)] transition-colors duration-200"
           >
+            <LogoMark className="h-7 w-auto" />
             Pouya Karimi
           </Link>
 
