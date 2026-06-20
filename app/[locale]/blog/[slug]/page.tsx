@@ -1,14 +1,17 @@
 ﻿import { hasLocale } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { draftMode } from "next/headers";
 import Link from "next/link";
 import sanitizeHtml from "sanitize-html";
 import { routing } from "@/i18n/routing";
-import { seoAlternates } from "@/lib/seo";
-import { getPostBySlug, getPostBySlugPreview } from "@/lib/server/posts";
-import { cn } from "@/lib/utils";
+import { seoAlternates, AUTHOR_SCHEMA, PUBLISHER, langTag, SITE_URL } from "@/lib/seo";
+import { getPostBySlug, getPostBySlugPreview, getRelatedPosts } from "@/lib/server/posts";
+import { cn, formatDate, injectHeadingIds, readingTime } from "@/lib/utils";
 import Breadcrumb from "@/components/ui/Breadcrumb";
-import { ArrowLeft } from "lucide-react";
+import TableOfContents from "@/components/blog/TableOfContents";
+import AuthorBio from "@/components/blog/AuthorBio";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -64,18 +67,29 @@ export default async function BlogPostPage({ params }: Props) {
     : await getPostBySlug(slug, locale);
   if (!post) notFound();
 
+  const t = await getTranslations({ locale, namespace: "blog" });
+  const url = `${SITE_URL}/${locale}/blog/${post.slug}`;
+
   const blogPostingSchema = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: post.title,
     description: post.excerpt,
-    url: `https://pouyakarimi.ir/${locale}/blog/${post.slug}`,
+    url,
+    mainEntityOfPage: { "@type": "WebPage", "@id": url },
     datePublished: post.publishedAt?.toISOString(),
     dateModified: (post.updatedAt ?? post.publishedAt)?.toISOString(),
     ...(post.coverImageUrl && { image: post.coverImageUrl }),
-    author: { "@type": "Person", name: "Pouya Karimi", url: "https://pouyakarimi.ir" },
-    publisher: { "@type": "Person", name: "Pouya Karimi", url: "https://pouyakarimi.ir" },
+    ...(post.tags.length && { keywords: post.tags.join(", ") }),
+    inLanguage: langTag(locale),
+    author: AUTHOR_SCHEMA,
+    publisher: PUBLISHER,
   };
+
+  // Inject stable ids into the post's headings and build the table of contents.
+  const { html: contentWithIds, toc } = injectHeadingIds(post.content);
+  const minutes = readingTime(post.content);
+  const related = await getRelatedPosts(post.slug, locale, post.tags);
 
   // Owner-authored custom JSON-LD — only render if it parses as valid JSON
   let hasValidJsonLd = false;
@@ -104,7 +118,7 @@ export default async function BlogPostPage({ params }: Props) {
     )}
     {post.headHtml && <div dangerouslySetInnerHTML={{ __html: post.headHtml }} />}
     <div className="pt-32 pb-24 px-5">
-      <div className="mx-auto max-w-3xl">
+      <div className="mx-auto max-w-5xl">
         <Breadcrumb
           items={[
             { label: "Home", href: `/${locale}` },
@@ -112,64 +126,118 @@ export default async function BlogPostPage({ params }: Props) {
             { label: post.title },
           ]}
         />
-        <Link
-          href={`/${locale}/blog`}
-          className="inline-flex items-center gap-2 text-sm text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors mb-10"
-        >
-          <ArrowLeft size={14} />
-          All posts
-        </Link>
+        <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_13rem] lg:gap-12">
+          <article className="max-w-3xl">
+            <Link
+              href={`/${locale}/blog`}
+              className="inline-flex items-center gap-2 text-sm text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors mb-10"
+            >
+              <ArrowLeft size={14} className={post.dir === "rtl" ? "rotate-180" : ""} />
+              {t("back")}
+            </Link>
 
-        {post.coverImageUrl && (
-          <div className="mb-10 rounded-2xl overflow-hidden h-64 sm:h-80">
-            <img src={post.coverImageUrl} alt={post.title} className="h-full w-full object-cover" />
-          </div>
-        )}
+            {post.coverImageUrl && (
+              <div className="mb-10 rounded-2xl overflow-hidden h-64 sm:h-80">
+                <img src={post.coverImageUrl} alt={post.title} className="h-full w-full object-cover" />
+              </div>
+            )}
 
-        <header dir={post.dir} className={cn("mb-10", post.dir === "rtl" && "font-farsi")}>
-          {post.tags.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 mb-4">
-              {post.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full border border-[var(--accent)]/25 bg-[var(--accent-subtle)] px-2.5 py-0.5 text-xs font-medium text-[var(--accent)]"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          )}
-          <h1 className="font-heading text-3xl font-extrabold text-[var(--text-primary)] sm:text-4xl leading-tight mb-4">
-            {post.title}
-          </h1>
-          {post.publishedAt && (
-            <time className="text-sm text-[var(--text-muted)]">
-              {new Date(post.publishedAt).toLocaleDateString("en-US", { dateStyle: "long" })}
-            </time>
-          )}
-        </header>
+            <header dir={post.dir} className={cn("mb-10", post.dir === "rtl" && "font-farsi")}>
+              {post.tags.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 mb-4">
+                  {post.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-full border border-[var(--accent)]/25 bg-[var(--accent-subtle)] px-2.5 py-0.5 text-xs font-medium text-[var(--accent)]"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+              <h1 className="font-heading text-3xl font-extrabold text-[var(--text-primary)] sm:text-4xl leading-tight mb-4">
+                {post.title}
+              </h1>
+              <div className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
+                {post.publishedAt && <time>{formatDate(post.publishedAt, locale)}</time>}
+                {post.publishedAt && <span aria-hidden>·</span>}
+                <span>{minutes} {t("min_read")}</span>
+              </div>
+            </header>
 
-        <div
-          dir={post.dir}
-          className={cn(
-            "prose prose-neutral dark:prose-invert max-w-none text-[var(--text-primary)] [&_a]:text-[var(--accent)] [&_a:hover]:underline [&_code]:text-[var(--accent)] [&_code]:bg-[var(--accent-subtle)] [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_blockquote]:border-s-4 [&_blockquote]:border-[var(--accent)] [&_blockquote]:ps-4 [&_blockquote]:text-[var(--text-muted)] [&_pre]:bg-[var(--surface)] [&_pre]:border [&_pre]:border-[var(--border)] [&_pre]:rounded-xl [&_h2]:text-[var(--text-primary)] [&_h3]:text-[var(--text-primary)]",
-            post.dir === "rtl" && "font-farsi"
+            <div
+              dir={post.dir}
+              className={cn(
+                "prose prose-neutral dark:prose-invert max-w-none text-[var(--text-primary)] [&_a]:text-[var(--accent)] [&_a:hover]:underline [&_code]:text-[var(--accent)] [&_code]:bg-[var(--accent-subtle)] [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_blockquote]:border-s-4 [&_blockquote]:border-[var(--accent)] [&_blockquote]:ps-4 [&_blockquote]:text-[var(--text-muted)] [&_pre]:bg-[var(--surface)] [&_pre]:border [&_pre]:border-[var(--border)] [&_pre]:rounded-xl [&_h2]:text-[var(--text-primary)] [&_h2]:scroll-mt-28 [&_h3]:text-[var(--text-primary)] [&_h3]:scroll-mt-28",
+                post.dir === "rtl" && "font-farsi"
+              )}
+              dangerouslySetInnerHTML={{
+                __html: sanitizeHtml(contentWithIds, {
+                  allowedTags: sanitizeHtml.defaults.allowedTags.concat([
+                    "img", "figure", "figcaption", "section", "article",
+                    "bdi", "bdo", // isolate mixed-direction (Farsi + Latin) runs
+                  ]),
+                  allowedAttributes: {
+                    ...sanitizeHtml.defaults.allowedAttributes,
+                    img: ["src", "alt", "width", "height", "class"],
+                    "*": ["class", "dir", "id"],
+                  },
+                  allowedSchemes: ["http", "https", "mailto"],
+                }),
+              }}
+            />
+
+            <AuthorBio locale={locale} />
+
+            {related.length > 0 && (
+              <section className="mt-16">
+                <h2 className="font-heading text-xl font-bold text-[var(--text-primary)] mb-6">
+                  {t("related")}
+                </h2>
+                <div className="grid gap-5 sm:grid-cols-2">
+                  {related.map((rp) => (
+                    <Link
+                      key={rp.id}
+                      href={`/${locale}/blog/${rp.slug}`}
+                      className="group flex flex-col gap-2 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 transition-all hover:border-[var(--accent)]/40 hover:shadow-md"
+                    >
+                      <h3
+                        dir={rp.dir}
+                        className={cn(
+                          "font-heading text-base font-semibold leading-snug text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors",
+                          rp.dir === "rtl" && "font-farsi"
+                        )}
+                      >
+                        {rp.title}
+                      </h3>
+                      <p
+                        dir={rp.dir}
+                        className={cn(
+                          "text-sm text-[var(--text-muted)] line-clamp-2",
+                          rp.dir === "rtl" && "font-farsi"
+                        )}
+                      >
+                        {rp.excerpt}
+                      </p>
+                      <span className="mt-1 inline-flex items-center gap-1 text-xs font-medium text-[var(--accent)] group-hover:gap-2 transition-all">
+                        {t("read_more")}
+                        <ArrowRight size={13} className={rp.dir === "rtl" ? "rotate-180" : ""} />
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </section>
+            )}
+          </article>
+
+          {toc.length >= 3 && (
+            <aside className="hidden lg:block">
+              <div className="sticky top-28">
+                <TableOfContents items={toc} label={t("toc")} />
+              </div>
+            </aside>
           )}
-          dangerouslySetInnerHTML={{
-            __html: sanitizeHtml(post.content, {
-              allowedTags: sanitizeHtml.defaults.allowedTags.concat([
-                "img", "figure", "figcaption", "section", "article",
-                "bdi", "bdo", // isolate mixed-direction (Farsi + Latin) runs
-              ]),
-              allowedAttributes: {
-                ...sanitizeHtml.defaults.allowedAttributes,
-                img: ["src", "alt", "width", "height", "class"],
-                "*": ["class", "dir", "id"],
-              },
-              allowedSchemes: ["http", "https", "mailto"],
-            }),
-          }}
-        />
+        </div>
       </div>
     </div>
     </>

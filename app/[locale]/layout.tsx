@@ -3,6 +3,7 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
+import { langTag } from "@/lib/seo";
 import { ThemeProvider } from "@/components/ui/ThemeProvider";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -41,7 +42,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   const isRtl = locale === "fa";
 
   return (
-    <html lang={locale} dir={isRtl ? "rtl" : "ltr"} suppressHydrationWarning>
+    <html lang={langTag(locale)} dir={isRtl ? "rtl" : "ltr"} suppressHydrationWarning>
       <body className="flex min-h-dvh flex-col bg-[var(--background)] text-[var(--text-primary)] antialiased">
         <ThemeProvider>
           <NextIntlClientProvider messages={messages}>

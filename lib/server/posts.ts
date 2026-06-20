@@ -48,3 +48,31 @@ export async function getPostBySlugPreview(slug: string, locale: string): Promis
 export async function getPostById(id: number): Promise<Post | null> {
   return prisma.post.findUnique({ where: { id } });
 }
+
+// Related published posts in the same locale: prefer ones sharing a tag, then
+// top up with the most recent. Excludes the current post.
+export async function getRelatedPosts(
+  slug: string,
+  locale: string,
+  tags: string[],
+  limit = 3
+): Promise<Post[]> {
+  const byTag = tags.length
+    ? await prisma.post.findMany({
+        where: { locale, draft: false, slug: { not: slug }, tags: { hasSome: tags } },
+        orderBy: { publishedAt: "desc" },
+        take: limit,
+      })
+    : [];
+
+  if (byTag.length >= limit) return byTag.slice(0, limit);
+
+  const excludeSlugs = [slug, ...byTag.map((p) => p.slug)];
+  const recent = await prisma.post.findMany({
+    where: { locale, draft: false, slug: { notIn: excludeSlugs } },
+    orderBy: { publishedAt: "desc" },
+    take: limit - byTag.length,
+  });
+
+  return [...byTag, ...recent];
+}

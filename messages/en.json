@@ -70,7 +70,15 @@
     "min_read": "min read",
     "back": "Back to blog",
     "tags": "Tags",
-    "share": "Share this post"
+    "share": "Share this post",
+    "toc": "On this page",
+    "related": "Related posts",
+    "author": {
+      "heading": "Written by",
+      "role": "Developer & SEO Specialist",
+      "bio": "Freelance developer and SEO specialist helping teams build fast, discoverable products that rank.",
+      "more": "More about me"
+    }
   },
   "cta_section": {
     "title": "Ready to build something great?",

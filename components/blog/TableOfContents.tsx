@@ -8,9 +8,9 @@ export type TocItem = {
   level: 2 | 3;
 };
 
-type Props = { items: TocItem[] };
+type Props = { items: TocItem[]; label?: string };
 
-export default function TableOfContents({ items }: Props) {
+export default function TableOfContents({ items, label = "On this page" }: Props) {
   const [active, setActive] = useState<string>("");
 
   useEffect(() => {
@@ -35,7 +35,7 @@ export default function TableOfContents({ items }: Props) {
   return (
     <nav aria-label="Table of contents">
       <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-[var(--text-muted)]">
-        On this page
+        {label}
       </p>
       <ul className="flex flex-col gap-1">
         {items.map((item) => (
