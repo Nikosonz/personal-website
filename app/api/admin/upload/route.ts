@@ -34,8 +34,9 @@ export async function POST(req: NextRequest) {
     const blob = await put(`blog/${Date.now()}.${ext}`, file, { access: "public" });
     return NextResponse.json({ url: blob.url });
   } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    console.error("[upload] Vercel Blob error:", message);
-    return NextResponse.json({ error: `Upload failed: ${message}` }, { status: 500 });
+    // Log the real cause server-side; return a generic message so internals
+    // (store config, infra details) aren't mapped by clients.
+    console.error("[upload] Vercel Blob error:", err);
+    return NextResponse.json({ error: "Upload failed." }, { status: 500 });
   }
 }
