@@ -1,18 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/server/db";
-import { verifySession } from "@/lib/session";
+import { requireAdmin } from "@/lib/session";
 
 export async function GET() {
-  const session = await verifySession();
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!(await requireAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const posts = await prisma.post.findMany({ orderBy: { createdAt: "desc" } });
   return NextResponse.json(posts);
 }
 
 export async function POST(req: NextRequest) {
-  const session = await verifySession();
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!(await requireAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json();
   const {

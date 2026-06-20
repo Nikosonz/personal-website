@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-export default function DeletePostButton({ id }: { id: number }) {
+export default function DeletePostButton({ id }: { id: string }) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
 

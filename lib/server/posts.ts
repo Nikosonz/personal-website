@@ -2,6 +2,7 @@ import { prisma } from "./db";
 
 export interface Post {
   id: number;
+  publicId: string;
   slug: string;
   locale: string;
   title: string;
@@ -45,8 +46,9 @@ export async function getPostBySlugPreview(slug: string, locale: string): Promis
   return prisma.post.findFirst({ where: { slug, locale } });
 }
 
-export async function getPostById(id: number): Promise<Post | null> {
-  return prisma.post.findUnique({ where: { id } });
+// Admin edit lookup by non-enumerable publicId (UUID) — not the Int PK.
+export async function getPostByPublicId(publicId: string): Promise<Post | null> {
+  return prisma.post.findUnique({ where: { publicId } });
 }
 
 // Related published posts in the same locale: prefer ones sharing a tag, then

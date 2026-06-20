@@ -4,5 +4,5 @@ export {
   getAllPublishedPosts,
   getAllPosts,
   getPostBySlug,
-  getPostById,
+  getPostByPublicId,
 } from "./server/posts";

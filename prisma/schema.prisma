@@ -9,6 +9,10 @@ datasource db {
 
 model User {
   id           Int      @id @default(autoincrement())
+  // Non-enumerable public identifier — what the JWT/session carries instead of
+  // the sequential Int PK. DB-generated (see prisma/migrations-manual).
+  publicId     String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  role         String   @default("admin")
   email        String   @unique
   passwordHash String
   createdAt    DateTime @default(now())
@@ -16,6 +20,8 @@ model User {
 
 model Post {
   id            Int       @id @default(autoincrement())
+  // Non-enumerable public identifier used in admin URLs/APIs instead of the Int PK.
+  publicId      String    @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   slug          String
   locale        String    @default("en") // "en" | "fa" — which localized blog a post belongs to
   title         String
@@ -44,6 +50,8 @@ model Post {
 
 model ContactMessage {
   id        Int      @id @default(autoincrement())
+  // Non-enumerable public identifier used by the admin mark-read action.
+  publicId  String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name      String
   email     String
   service   String

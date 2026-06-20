@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getPostById } from "@/lib/server/posts";
+import { getPostByPublicId } from "@/lib/server/posts";
 import PostForm from "@/components/admin/PostForm";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 
@@ -9,7 +9,7 @@ type Props = { params: Promise<{ id: string }> };
 
 export default async function EditPostPage({ params }: Props) {
   const { id } = await params;
-  const post = await getPostById(Number(id));
+  const post = await getPostByPublicId(id);
   if (!post) notFound();
 
   return (

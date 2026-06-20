@@ -49,7 +49,7 @@ export default async function MessagesPage() {
                   <time className="text-xs text-[var(--text-muted)]">
                     {formatDate(msg.createdAt)}
                   </time>
-                  {!msg.read && <MarkReadButton id={msg.id} />}
+                  {!msg.read && <MarkReadButton id={msg.publicId} />}
                 </div>
               </div>
               <p className="whitespace-pre-wrap text-sm leading-relaxed text-[var(--text-muted)]">

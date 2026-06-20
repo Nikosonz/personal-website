@@ -1,33 +1,31 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/server/db";
-import { verifySession } from "@/lib/session";
+import { requireAdmin } from "@/lib/session";
 
-// Parse the route id and reject non-numeric values up front — Number("abc") is
-// NaN, which would otherwise reach Prisma (e.g. delete throws an unhandled 500).
-function parseId(raw: string): number | null {
-  const id = Number(raw);
-  return Number.isInteger(id) ? id : null;
+// The route segment is a publicId (UUID), not the Int PK. Reject anything that
+// isn't a UUID up front so malformed values never reach Prisma.
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+function parsePublicId(raw: string): string | null {
+  return UUID_RE.test(raw) ? raw : null;
 }
 
 export async function GET(_req: NextRequest, ctx: RouteContext<"/api/admin/posts/[id]">) {
-  const session = await verifySession();
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!(await requireAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const id = parseId((await ctx.params).id);
-  if (id === null) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+  const publicId = parsePublicId((await ctx.params).id);
+  if (publicId === null) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
 
-  const post = await prisma.post.findUnique({ where: { id } });
+  const post = await prisma.post.findUnique({ where: { publicId } });
   if (!post) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   return NextResponse.json(post);
 }
 
 export async function PUT(req: NextRequest, ctx: RouteContext<"/api/admin/posts/[id]">) {
-  const session = await verifySession();
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!(await requireAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const id = parseId((await ctx.params).id);
-  if (id === null) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+  const publicId = parsePublicId((await ctx.params).id);
+  if (publicId === null) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
 
   const body = await req.json();
   const {
@@ -45,11 +43,11 @@ export async function PUT(req: NextRequest, ctx: RouteContext<"/api/admin/posts/
     );
   }
 
-  const existing = await prisma.post.findUnique({ where: { id } });
+  const existing = await prisma.post.findUnique({ where: { publicId } });
   if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const post = await prisma.post.update({
-    where: { id },
+    where: { publicId },
     data: {
       title,
       slug,
@@ -75,12 +73,11 @@ export async function PUT(req: NextRequest, ctx: RouteContext<"/api/admin/posts/
 }
 
 export async function DELETE(_req: NextRequest, ctx: RouteContext<"/api/admin/posts/[id]">) {
-  const session = await verifySession();
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!(await requireAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const id = parseId((await ctx.params).id);
-  if (id === null) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+  const publicId = parsePublicId((await ctx.params).id);
+  if (publicId === null) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
 
-  await prisma.post.delete({ where: { id } });
+  await prisma.post.delete({ where: { publicId } });
   return new NextResponse(null, { status: 204 });
 }

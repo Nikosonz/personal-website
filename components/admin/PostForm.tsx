@@ -43,10 +43,11 @@ export default function PostForm({ post }: Props) {
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
-  // Tracks the DB id once persisted. Starts from the edited post (if any) and is
-  // set after the first create, so a second save (e.g. Save & Preview again on a
-  // new post) updates the same row instead of re-POSTing a duplicate slug.
-  const [savedId, setSavedId] = useState<number | null>(post?.id ?? null);
+  // Tracks the post's publicId (UUID) once persisted. Starts from the edited
+  // post (if any) and is set after the first create, so a second save (e.g.
+  // Save & Preview again on a new post) updates the same row via PUT instead of
+  // re-POSTing a duplicate slug.
+  const [savedId, setSavedId] = useState<string | null>(post?.publicId ?? null);
   const coverRef = useRef<HTMLInputElement>(null);
   const ogImageRef = useRef<HTMLInputElement>(null);
 
@@ -85,8 +86,8 @@ export default function PostForm({ post }: Props) {
     setUploading(false);
   }
 
-  // Persist the post (create or update). Returns the saved id+slug, or null on error.
-  async function save(): Promise<{ id: number; slug: string } | null> {
+  // Persist the post (create or update). Returns the saved publicId+slug, or null on error.
+  async function save(): Promise<{ id: string; slug: string } | null> {
     setError("");
     const body = {
       title,
@@ -121,10 +122,10 @@ export default function PostForm({ post }: Props) {
       return null;
     }
     const saved = await res.json().catch(() => ({}));
-    const id: number | null = saved.id ?? savedId;
+    const id: string | null = saved.publicId ?? savedId;
     // Switch to edit-mode after the first create so subsequent saves PUT.
     if (id && id !== savedId) setSavedId(id);
-    return { id: id ?? 0, slug: saved.slug ?? slug };
+    return { id: id ?? "", slug: saved.slug ?? slug };
   }
 
   async function handleSubmit(e: React.FormEvent) {

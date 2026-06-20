@@ -2,7 +2,7 @@
 
 import { markMessageRead } from "@/app/actions/messages";
 
-export default function MarkReadButton({ id }: { id: number }) {
+export default function MarkReadButton({ id }: { id: string }) {
   return (
     <button
       onClick={() => markMessageRead(id)}

@@ -40,7 +40,7 @@ export async function loginAction(
   const valid = await bcrypt.compare(password, user.passwordHash);
   if (!valid) return { error: "Invalid email or password." };
 
-  await createSession(user.id);
+  await createSession(user.publicId, user.role);
   redirect("/admin/posts");
 }
 
