@@ -88,12 +88,41 @@ function QuickAction({
   );
 }
 
-export default async function AdminDashboard() {
+const RANGES = {
+  "1d": { label: "24 hours", days: 1, tab: "1 Day" },
+  "1w": { label: "7 days", days: 7, tab: "1 Week" },
+  "28d": { label: "28 days", days: 28, tab: "28 Days" },
+} as const;
+type RangeKey = keyof typeof RANGES;
+
+export default async function AdminDashboard({
+  searchParams,
+}: {
+  searchParams: Promise<{ range?: string }>;
+}) {
   const now = new Date();
   const d1 = new Date(now); d1.setDate(d1.getDate() - 1);
   const d2 = new Date(now); d2.setDate(d2.getDate() - 2);
   const d7 = new Date(now); d7.setDate(d7.getDate() - 7);
   const d30 = new Date(now); d30.setDate(d30.getDate() - 30);
+
+  // Clickable time range — whitelist; anything else falls back to 28 days.
+  const sp = await searchParams;
+  const range: RangeKey = sp?.range === "1d" || sp?.range === "1w" ? sp.range : "28d";
+  const cfg = RANGES[range];
+  const hourly = range === "1d";
+  const rangeStart = new Date(now);
+  if (hourly) rangeStart.setHours(rangeStart.getHours() - 24);
+  else rangeStart.setDate(rangeStart.getDate() - cfg.days);
+
+  // date_trunc unit is code-chosen (never user input) → two safe query templates.
+  const bucketQuery = hourly
+    ? prisma.$queryRaw<{ bucket: Date; count: number }[]>`
+        SELECT date_trunc('hour', "createdAt") AS bucket, count(*)::int AS count
+        FROM "PageView" WHERE "createdAt" >= ${rangeStart} GROUP BY 1`
+    : prisma.$queryRaw<{ bucket: Date; count: number }[]>`
+        SELECT date_trunc('day', "createdAt") AS bucket, count(*)::int AS count
+        FROM "PageView" WHERE "createdAt" >= ${rangeStart} GROUP BY 1`;
 
   const [
     viewsTotal,
@@ -101,7 +130,7 @@ export default async function AdminDashboard() {
     viewsYesterday,
     views7d,
     views30d,
-    viewsByDay,
+    bucketRows,
     recentVisitors,
     topPages,
     topPosts,
@@ -115,12 +144,7 @@ export default async function AdminDashboard() {
     prisma.pageView.count({ where: { createdAt: { gte: d2, lt: d1 } } }),
     prisma.pageView.count({ where: { createdAt: { gte: d7 } } }),
     prisma.pageView.count({ where: { createdAt: { gte: d30 } } }),
-    prisma.$queryRaw<{ day: Date; count: number }[]>`
-      SELECT date_trunc('day', "createdAt") AS day, count(*)::int AS count
-      FROM "PageView"
-      WHERE "createdAt" >= ${d30}
-      GROUP BY 1
-    `,
+    bucketQuery,
     prisma.pageView.findMany({
       orderBy: { createdAt: "desc" },
       take: 8,
@@ -128,6 +152,7 @@ export default async function AdminDashboard() {
     }),
     prisma.pageView.groupBy({
       by: ["path"],
+      where: { createdAt: { gte: rangeStart } },
       _count: { path: true },
       orderBy: { _count: { path: "desc" } },
       take: 5,
@@ -144,18 +169,29 @@ export default async function AdminDashboard() {
     prisma.contactMessage.count({ where: { read: false } }),
   ]);
 
-  // Build a continuous 30-day series (fill gaps with zero) for the chart.
-  const byDay = new Map(
-    viewsByDay.map((r) => [new Date(r.day).toISOString().slice(0, 10), Number(r.count)])
+  // Build a continuous, zero-filled series for the chart (hourly for 1d, else daily).
+  const sliceLen = hourly ? 13 : 10; // "YYYY-MM-DDTHH" vs "YYYY-MM-DD"
+  const byBucket = new Map(
+    bucketRows.map((r) => [new Date(r.bucket).toISOString().slice(0, sliceLen), Number(r.count)])
   );
+  const steps = hourly ? 24 : cfg.days;
   const series: { label: string; count: number }[] = [];
-  for (let i = 29; i >= 0; i--) {
-    const dt = new Date(now); dt.setDate(dt.getDate() - i);
-    const key = dt.toISOString().slice(0, 10);
-    series.push({ label: `${dt.getMonth() + 1}/${dt.getDate()}`, count: byDay.get(key) ?? 0 });
+  for (let i = steps - 1; i >= 0; i--) {
+    const dt = new Date(now);
+    if (hourly) { dt.setMinutes(0, 0, 0); dt.setHours(dt.getHours() - i); }
+    else dt.setDate(dt.getDate() - i);
+    const iso = dt.toISOString();
+    const label = hourly ? `${iso.slice(11, 13)}:00` : `${dt.getMonth() + 1}/${dt.getDate()}`;
+    series.push({ label, count: byBucket.get(iso.slice(0, sliceLen)) ?? 0 });
   }
+  const rangeTotal = series.reduce((s, d) => s + d.count, 0);
 
   const todayTrend = viewsToday - viewsYesterday;
+  const rangeTabs: { key: RangeKey; label: string }[] = [
+    { key: "1d", label: RANGES["1d"].tab },
+    { key: "1w", label: RANGES["1w"].tab },
+    { key: "28d", label: RANGES["28d"].tab },
+  ];
 
   return (
     <div className="max-w-5xl">
@@ -182,9 +218,33 @@ export default async function AdminDashboard() {
         </div>
       </section>
 
-      {/* Views chart */}
+      {/* Traffic — range-scoped chart */}
       <section className="mb-8">
-        <ViewsChart data={series} />
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-[var(--text-muted)]">Traffic</h2>
+            <p className="mt-0.5 text-sm text-[var(--text-primary)]">
+              <span className="font-bold">{rangeTotal}</span> views in the last {cfg.label}
+            </p>
+          </div>
+          <div className="inline-flex rounded-lg border border-[var(--border)] bg-[var(--surface)] p-0.5">
+            {rangeTabs.map((tab) => (
+              <Link
+                key={tab.key}
+                href={`/admin?range=${tab.key}`}
+                className={cn(
+                  "rounded-md px-3 py-1.5 text-xs font-medium transition-colors",
+                  range === tab.key
+                    ? "bg-[var(--accent)] text-white"
+                    : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+                )}
+              >
+                {tab.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+        <ViewsChart data={series} title={`Views — last ${cfg.label}`} />
       </section>
 
       {/* Content + messages */}
@@ -223,9 +283,9 @@ export default async function AdminDashboard() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {/* Top pages */}
         <section>
-          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-[var(--text-muted)]">Top pages</h2>
+          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-[var(--text-muted)]">Top pages — last {cfg.label}</h2>
           {topPages.length === 0 ? (
-            <p className="text-sm text-[var(--text-muted)]">No data yet — views appear after the first visits.</p>
+            <p className="text-sm text-[var(--text-muted)]">No views in this range yet.</p>
           ) : (
             <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] divide-y divide-[var(--border)]">
               {topPages.map((p) => (

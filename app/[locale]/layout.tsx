@@ -10,7 +10,7 @@ import Footer from "@/components/layout/Footer";
 import BackToTop from "@/components/ui/BackToTop";
 import PageTracker from "@/components/PageTracker";
 import LeadCapture from "@/components/ui/LeadCapture";
-import OnboardingHint from "@/components/ui/OnboardingHint";
+import OnboardingTour from "@/components/ui/OnboardingTour";
 
 type Props = {
   children: React.ReactNode;
@@ -55,7 +55,7 @@ export default async function LocaleLayout({ children, params }: Props) {
             <BackToTop />
             <PageTracker locale={locale} />
             <LeadCapture locale={locale} />
-            <OnboardingHint />
+            <OnboardingTour />
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>

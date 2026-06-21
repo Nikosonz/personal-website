@@ -81,6 +81,7 @@ export default function Navbar({ locale }: Props) {
             {/* Language switcher */}
             <Link
               href={switchLocaleHref}
+              data-tour="lang"
               className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--border)] transition-all duration-200 cursor-pointer"
               title={locale === "en" ? tc("lang_fa") : tc("lang_en")}
             >
@@ -93,6 +94,7 @@ export default function Navbar({ locale }: Props) {
             {/* Theme toggle */}
             <button
               onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+              data-tour="theme"
               className="flex items-center justify-center w-8 h-8 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--border)] transition-all duration-200 cursor-pointer"
               aria-label="Toggle theme"
             >
@@ -106,6 +108,7 @@ export default function Navbar({ locale }: Props) {
             {/* Hire me CTA */}
             <Link
               href={localePath("/contact")}
+              data-tour="hire"
               className="hidden sm:inline-flex items-center rounded-lg bg-[var(--accent)] px-3.5 py-1.5 text-sm font-medium text-white hover:bg-[var(--accent-hover)] transition-colors duration-200 cursor-pointer"
             >
               {t("hire")}

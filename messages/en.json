@@ -10,7 +10,7 @@
   },
   "hero": {
     "available": "Accepting clients",
-    "headline": "Business Development & <accent>SEO</accent> — rank higher, grow faster.",
+    "headline": "Business Development & <accent>SEO</accent>",
     "subheadline": "SEO consultant & full-stack developer helping Iranian and global businesses build search-friendly products that grow without paid ads.",
     "cta_primary": "See my work",
     "cta_secondary": "Let's talk"
@@ -227,6 +227,21 @@
       "blog": "Blog",
       "contact": "Contact"
     }
+  },
+  "onboarding": {
+    "welcome_title": "Welcome 👋",
+    "welcome_body": "Quick 20-second tour of the controls so you feel at home.",
+    "lang_title": "Switch language",
+    "lang_body": "Tap here to flip the whole site between English and Persian (فارسی) — anytime.",
+    "theme_title": "Light or dark",
+    "theme_body": "Toggle a light or dark theme to match your eyes and surroundings.",
+    "contact_title": "Let's work together",
+    "contact_body": "Ready to start? This button takes you straight to the contact form.",
+    "start": "Start tour",
+    "next": "Next",
+    "back": "Back",
+    "finish": "Got it",
+    "skip": "Skip"
   },
   "lead_capture": {
     "aria_label": "Free SEO audit offer",

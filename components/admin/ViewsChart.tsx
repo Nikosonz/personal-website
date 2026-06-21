@@ -3,7 +3,7 @@
 
 type Point = { label: string; count: number };
 
-export default function ViewsChart({ data }: { data: Point[] }) {
+export default function ViewsChart({ data, title = "Views" }: { data: Point[]; title?: string }) {
   const W = 760;
   const H = 200;
   const pad = { top: 16, right: 10, bottom: 8, left: 10 };
@@ -29,8 +29,8 @@ export default function ViewsChart({ data }: { data: Point[] }) {
   return (
     <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4">
       <div className="mb-3 flex items-baseline justify-between">
-        <span className="text-sm font-semibold text-[var(--text-primary)]">Views — last 30 days</span>
-        <span className="text-xs text-[var(--text-muted)]">{total} total · peak {max}/day</span>
+        <span className="text-sm font-semibold text-[var(--text-primary)]">{title}</span>
+        <span className="text-xs text-[var(--text-muted)]">{total} total · peak {max}</span>
       </div>
       <svg
         viewBox={`0 0 ${W} ${H}`}
