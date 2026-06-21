@@ -48,6 +48,6 @@ export function seoAlternates(locale: string, path = "") {
   const url = (l: string) => `${SITE_URL}/${l}${path}`;
   return {
     canonical: url(locale),
-    languages: { en: url("en"), fa: url("fa"), "x-default": url("en") },
+    languages: { en: url("en"), fa: url("fa"), "x-default": url("fa") },
   };
 }

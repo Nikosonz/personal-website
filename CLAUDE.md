@@ -70,7 +70,7 @@ messages/
   fa.json            # Farsi i18n strings
 
 i18n/
-  routing.ts         # locales: ["en", "fa"], defaultLocale: "en"
+  routing.ts         # locales: ["en", "fa"], defaultLocale: "fa" (Farsi-first), localeDetection: false
   request.ts         # next-intl server config
 ```
 

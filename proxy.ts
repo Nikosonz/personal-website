@@ -18,6 +18,14 @@ export default async function proxy(req: NextRequest) {
     return NextResponse.next();
   }
 
+  // Root: Farsi-first. A returning visitor who explicitly switched to English
+  // (NEXT_LOCALE cookie) keeps English; everyone else — including no-preference
+  // browsers and crawlers — lands on Farsi.
+  if (pathname === "/") {
+    const saved = req.cookies.get("NEXT_LOCALE")?.value;
+    return NextResponse.redirect(new URL(saved === "en" ? "/en" : "/fa", req.url));
+  }
+
   return intlMiddleware(req);
 }
 
