@@ -8,6 +8,15 @@ const intlMiddleware = createMiddleware(routing);
 export default async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
+  // Force a single canonical host: www.* → apex (308, preserves path + query).
+  // Canonicals/hreflang all use the apex, so the served host must match it.
+  const host = req.headers.get("host") ?? "";
+  if (host.startsWith("www.")) {
+    const url = req.nextUrl.clone();
+    url.host = host.replace(/^www\./, "");
+    return NextResponse.redirect(url, 308);
+  }
+
   if (pathname.startsWith("/admin")) {
     if (pathname === "/admin/login") return NextResponse.next();
     const token = req.cookies.get("session")?.value;

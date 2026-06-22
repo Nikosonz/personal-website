@@ -1,6 +1,6 @@
 # Pouya Karimi
 
-> Freelance developer and SEO specialist (MBA) based in Iran, working with clients worldwide. Helps teams build fast, search-friendly products that rank and convert. Bilingual site: English and Persian (fa).
+> Freelance developer and SEO specialist (MBA) based in Iran, working with clients worldwide. Helps teams build fast, search-friendly products that rank and convert. Bilingual site: Persian (fa, default) and English (en).
 
 ## Services
 - Web Development — performant, scalable apps (React, Next.js, Node.js)
@@ -9,18 +9,26 @@
 - Technical Consulting — architecture reviews, tech strategy, fractional CTO
 
 ## Key pages
-- Home: https://pouyakarimi.ir/en
-- Services: https://pouyakarimi.ir/en/services
-- Portfolio: https://pouyakarimi.ir/en/portfolio
-- Blog: https://pouyakarimi.ir/en/blog
-- Contact: https://pouyakarimi.ir/en/contact
+- [Home](https://pouyakarimi.ir/fa)
+- [Services](https://pouyakarimi.ir/fa/services)
+- [SEO Learn](https://pouyakarimi.ir/fa/seo)
+- [Portfolio](https://pouyakarimi.ir/fa/portfolio)
+- [Blog](https://pouyakarimi.ir/fa/blog)
+- [Contact](https://pouyakarimi.ir/fa/contact)
+- [English site](https://pouyakarimi.ir/en)
+
+## SEO Learn
+- [On-Page SEO basics](https://pouyakarimi.ir/fa/seo/on-page-seo-basics)
+- [Off-Page SEO basics](https://pouyakarimi.ir/fa/seo/off-page-seo-basics)
+- [Technical SEO basics](https://pouyakarimi.ir/fa/seo/technical-seo-basics)
 
 ## Selected work
-- Cognitive Edge — AI Telegram automation (Claude + Python + n8n) that gathers, credits, categorizes, and translates daily psychology/MBA/tech news: https://pouyakarimi.ir/en/portfolio/cognitive-edge
+- [Cognitive Edge](https://pouyakarimi.ir/fa/portfolio/cognitive-edge) — AI Telegram automation (Claude + Python + n8n) that gathers, credits, categorizes, and translates daily psychology/MBA/tech news
+- [EzyStore](https://pouyakarimi.ir/fa/portfolio/ezystore) — WordPress + WooCommerce perfume marketplace with an Instagram-driven sales channel
 
 ## Contact
-- Email: pouyakarimibirgani@gmail.com
-- Telegram: https://t.me/pouyakarimi7
-- Cognitive Edge channel: https://t.me/cognitivedgebyp
-- GitHub: https://github.com/Nikosonz
-- LinkedIn: https://www.linkedin.com/in/pouya-karimi
+- Email: [pouyakarimibirgani@gmail.com](mailto:pouyakarimibirgani@gmail.com)
+- Telegram: [t.me/pouyakarimi7](https://t.me/pouyakarimi7)
+- Cognitive Edge channel: [t.me/cognitivedgebyp](https://t.me/cognitivedgebyp)
+- GitHub: [github.com/Nikosonz](https://github.com/Nikosonz)
+- LinkedIn: [linkedin.com/in/pouya-karimi](https://www.linkedin.com/in/pouya-karimi)
