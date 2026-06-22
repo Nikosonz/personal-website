@@ -121,6 +121,7 @@ export default function Hero({ locale }: Props) {
               alt="Pouya Karimi — freelance developer and SEO specialist"
               width={420}
               height={520}
+              sizes="(max-width: 768px) 75vw, 420px"
               className="relative rounded-2xl object-cover object-top shadow-2xl"
               priority
             />

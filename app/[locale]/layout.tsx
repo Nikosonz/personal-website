@@ -4,6 +4,7 @@ import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { langTag } from "@/lib/seo";
+import { fontVariables } from "@/app/fonts";
 import { ThemeProvider } from "@/components/ui/ThemeProvider";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -45,7 +46,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   const isRtl = locale === "fa";
 
   return (
-    <html lang={langTag(locale)} dir={isRtl ? "rtl" : "ltr"} suppressHydrationWarning>
+    <html lang={langTag(locale)} dir={isRtl ? "rtl" : "ltr"} className={fontVariables} suppressHydrationWarning>
       <body className="flex min-h-dvh flex-col bg-[var(--background)] text-[var(--text-primary)] antialiased">
         <ThemeProvider>
           <NextIntlClientProvider messages={messages}>

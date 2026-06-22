@@ -1,6 +1,5 @@
-/* ─── Fonts ─────────────────────────────────────────────── */
-@import url("https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Vazirmatn:wght@300;400;500;600;700;800&display=swap");
-
+/* Fonts are self-hosted via next/font (see app/fonts.ts); the CSS variables
+   (--font-archivo/space/jetbrains/vazir) are injected on <html>. */
 @import "tailwindcss";
 
 /* ─── Design Tokens ─────────────────────────────────────── */
@@ -15,11 +14,11 @@
   --color-accent-hover: var(--accent-hover);
   --color-accent-subtle: var(--accent-subtle);
 
-  /* Fonts */
-  --font-heading: "Archivo", sans-serif;
-  --font-body: "Space Grotesk", sans-serif;
-  --font-mono: "JetBrains Mono", monospace;
-  --font-farsi: "Vazirmatn", sans-serif;
+  /* Fonts — backed by self-hosted next/font vars (app/fonts.ts) */
+  --font-heading: var(--font-archivo), sans-serif;
+  --font-body: var(--font-space), sans-serif;
+  --font-mono: var(--font-jetbrains), monospace;
+  --font-farsi: var(--font-vazir), sans-serif;
 
   /* Spacing / sizing */
   --spacing-page: 1.5rem;
