@@ -147,7 +147,7 @@ All colors use CSS custom properties — never hardcode hex values in className:
 | `var(--accent-hover)` | Hover state for accent |
 | `var(--accent-subtle)` | Teal tint background (badges, hover fills) |
 
-**Fonts** (imported in `globals.css`):
+**Fonts** — self-hosted via `next/font/google` in `app/fonts.ts` (NOT a CSS `@import` — do not re-add `fonts.googleapis.com` to `globals.css`; it's render-blocking and was removed for performance). Each family exposes a CSS var (`--font-archivo/space/jetbrains/vazir`) wired into the `@theme` tokens in `globals.css`; the four `.variable` classes are applied to `<html>` in `app/[locale]/layout.tsx` and `app/admin/layout.tsx`.
 - `font-heading` → Archivo (bold headings)
 - `font-body` → Space Grotesk (default body)
 - `font-mono` → JetBrains Mono (code)
