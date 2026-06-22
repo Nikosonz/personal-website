@@ -23,7 +23,8 @@ export default async function proxy(req: NextRequest) {
   // browsers and crawlers — lands on Farsi.
   if (pathname === "/") {
     const saved = req.cookies.get("NEXT_LOCALE")?.value;
-    return NextResponse.redirect(new URL(saved === "en" ? "/en" : "/fa", req.url));
+    const dest = (saved === "en" ? "/en" : "/fa") + req.nextUrl.search;
+    return NextResponse.redirect(new URL(dest, req.url));
   }
 
   return intlMiddleware(req);
