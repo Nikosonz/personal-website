@@ -44,7 +44,7 @@ export default function SeoAuditForm() {
           name: data.name,
           email: data.email,
           service: "seo-audit",
-          message: `درخواست ممیزی رایگان سئو — وب‌سایت: ${url}`,
+          message: `درخواست تحلیل رایگان سئو — وب‌سایت: ${url}`,
           company: honeypotRef.current?.value ?? "",
         }),
       });
