@@ -10,6 +10,7 @@ import { SECTIONS } from "@/lib/seo-topics";
 import { getSeoTopics, type Post } from "@/lib/server/posts";
 import { cn } from "@/lib/utils";
 import { FadeIn, StaggerChildren, StaggerItem } from "@/components/ui/FadeIn";
+import SeoAuditForm from "@/components/seo/SeoAuditForm";
 
 export const dynamic = "force-dynamic";
 
@@ -48,6 +49,12 @@ export default async function SeoLearnPage({ params }: Props) {
             </h1>
             <p className="mt-4 text-lg text-[var(--text-muted)]">{t("subtitle")}</p>
           </header>
+        </FadeIn>
+
+        <FadeIn>
+          <div id="audit" className="mb-16 scroll-mt-28">
+            <SeoAuditForm />
+          </div>
         </FadeIn>
 
         <div className="flex flex-col gap-16">

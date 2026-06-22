@@ -264,6 +264,17 @@
       }
     }
   },
+  "seo_audit": {
+    "title": "Free 15-minute SEO audit",
+    "subtitle": "Send your website and I'll review its top SEO issues, then reply with a short action list — no cost.",
+    "name": "Your name",
+    "website": "Website URL",
+    "email": "Email",
+    "submit": "Request free audit",
+    "sending": "Sending…",
+    "success": "Got it! I'll review your site and email you shortly.",
+    "error": "Something went wrong. Please try again."
+  },
   "lead_capture": {
     "aria_label": "Free SEO audit offer",
     "eyebrow": "Free offer",

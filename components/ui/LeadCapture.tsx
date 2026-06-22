@@ -63,7 +63,7 @@ export default function LeadCapture({ locale }: { locale: string }) {
         <button
           onClick={() => {
             dismiss();
-            router.push(`/${locale}/contact?service=seo`);
+            router.push(`/${locale}/seo#audit`);
           }}
           className="flex-1 rounded-xl bg-[var(--accent)] px-4 py-2 text-xs font-semibold text-white hover:bg-[var(--accent-hover)] transition-colors"
         >
