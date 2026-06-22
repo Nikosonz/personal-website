@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/server/db";
 import { requireAdmin } from "@/lib/session";
+import { toSection } from "@/lib/seo-topics";
 
 export async function GET() {
   if (!(await requireAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -14,7 +15,7 @@ export async function POST(req: NextRequest) {
 
   const body = await req.json();
   const {
-    title, slug, excerpt, content, tags, coverImageUrl, coverImageAlt, draft, dir, locale,
+    title, slug, excerpt, content, tags, coverImageUrl, coverImageAlt, draft, dir, locale, section,
     metaDescription, ogTitle, ogDescription, ogImage, ogImageAlt, jsonLd, headHtml,
   } = body;
 
@@ -38,6 +39,7 @@ export async function POST(req: NextRequest) {
       title,
       slug,
       locale: loc,
+      section: toSection(section),
       excerpt,
       content,
       dir: direction,

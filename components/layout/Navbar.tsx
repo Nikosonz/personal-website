@@ -12,6 +12,7 @@ import { LogoMark } from "@/components/ui/Logo";
 const navLinks = [
   { key: "about", href: "/about" },
   { key: "services", href: "/services" },
+  { key: "seo", href: "/seo" },
   { key: "portfolio", href: "/portfolio" },
   { key: "blog", href: "/blog" },
 ];

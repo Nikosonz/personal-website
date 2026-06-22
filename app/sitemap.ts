@@ -1,12 +1,12 @@
 import { MetadataRoute } from "next";
 import { getAllProjects } from "@/lib/mdx";
-import { getAllPublishedPosts } from "@/lib/server/posts";
+import { getAllPublishedPosts, getSeoTopics } from "@/lib/server/posts";
 
 export const dynamic = "force-dynamic";
 
 const BASE_URL = "https://pouyakarimi.ir";
 const locales = ["en", "fa"] as const;
-const staticPages = ["/", "/about", "/services", "/portfolio", "/blog", "/contact"];
+const staticPages = ["/", "/about", "/services", "/seo", "/portfolio", "/blog", "/contact"];
 
 // Emit one entry per locale for a path, each declaring the full set of language
 // alternates (hreflang) so Google pairs the en/fa versions of the same page.
@@ -24,6 +24,7 @@ function localizedEntries(path: string, lastModified: Date): MetadataRoute.Sitem
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = await getAllPublishedPosts().catch(() => []);
+  const seoTopics = await getSeoTopics().catch(() => []);
   const projects = getAllProjects();
 
   const staticEntries = staticPages.flatMap((path) => localizedEntries(path, new Date()));
@@ -47,9 +48,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   }));
 
+  // SEO Learn topics — same per-locale + hreflang pattern as blog posts.
+  const seoLocalesBySlug = new Map<string, Set<string>>();
+  for (const topic of seoTopics) {
+    const set = seoLocalesBySlug.get(topic.slug) ?? new Set<string>();
+    set.add(topic.locale);
+    seoLocalesBySlug.set(topic.slug, set);
+  }
+  const seoEntries: MetadataRoute.Sitemap = seoTopics.map((topic) => ({
+    url: `${BASE_URL}/${topic.locale}/seo/${topic.slug}`,
+    lastModified: topic.updatedAt ?? topic.publishedAt ?? new Date(),
+    alternates: {
+      languages: Object.fromEntries(
+        [...seoLocalesBySlug.get(topic.slug)!].map((l) => [l, `${BASE_URL}/${l}/seo/${topic.slug}`])
+      ),
+    },
+  }));
+
   const portfolioEntries = projects.flatMap((project) =>
     localizedEntries(`/portfolio/${project.slug}`, new Date(project.year, 0, 1))
   );
 
-  return [...staticEntries, ...blogEntries, ...portfolioEntries];
+  return [...staticEntries, ...blogEntries, ...seoEntries, ...portfolioEntries];
 }

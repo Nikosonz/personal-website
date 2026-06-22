@@ -5,6 +5,7 @@ export interface Post {
   publicId: string;
   slug: string;
   locale: string;
+  section: string | null;
   title: string;
   excerpt: string;
   content: string;
@@ -26,11 +27,12 @@ export interface Post {
   viewCount: number;
 }
 
-// Published posts, optionally scoped to a locale ("en" | "fa"). Omit the locale
-// for cross-locale listings (e.g. the sitemap).
+// Published blog posts, optionally scoped to a locale ("en" | "fa"). Omit the
+// locale for cross-locale listings (e.g. the sitemap). Excludes SEO Learn topics
+// (section != null) — those live under /seo, not /blog.
 export async function getAllPublishedPosts(locale?: string): Promise<Post[]> {
   return prisma.post.findMany({
-    where: { draft: false, ...(locale ? { locale } : {}) },
+    where: { draft: false, section: null, ...(locale ? { locale } : {}) },
     orderBy: { publishedAt: "desc" },
   });
 }
@@ -40,13 +42,45 @@ export async function getAllPosts(): Promise<Post[]> {
 }
 
 export async function getPostBySlug(slug: string, locale: string): Promise<Post | null> {
-  return prisma.post.findFirst({ where: { slug, locale, draft: false } });
+  return prisma.post.findFirst({ where: { slug, locale, draft: false, section: null } });
 }
 
 // Draft-mode preview: returns the post regardless of draft status. Only reached
 // when Next.js Draft Mode is enabled (admin-only, via /api/draft).
 export async function getPostBySlugPreview(slug: string, locale: string): Promise<Post | null> {
-  return prisma.post.findFirst({ where: { slug, locale } });
+  return prisma.post.findFirst({ where: { slug, locale, section: null } });
+}
+
+// --- SEO Learn topics (Posts with `section` set) -------------------------------
+
+// Published SEO topics for a locale, newest first. Used by the /seo hub + sitemap.
+export async function getSeoTopics(locale?: string): Promise<Post[]> {
+  return prisma.post.findMany({
+    where: { draft: false, section: { not: null }, ...(locale ? { locale } : {}) },
+    orderBy: { publishedAt: "desc" },
+  });
+}
+
+export async function getSeoTopicBySlug(slug: string, locale: string): Promise<Post | null> {
+  return prisma.post.findFirst({ where: { slug, locale, draft: false, section: { not: null } } });
+}
+
+export async function getSeoTopicBySlugPreview(slug: string, locale: string): Promise<Post | null> {
+  return prisma.post.findFirst({ where: { slug, locale, section: { not: null } } });
+}
+
+// Related topics in the same section (newest first), excluding the current one.
+export async function getRelatedSeoTopics(
+  slug: string,
+  locale: string,
+  section: string,
+  limit = 3
+): Promise<Post[]> {
+  return prisma.post.findMany({
+    where: { locale, draft: false, section, slug: { not: slug } },
+    orderBy: { publishedAt: "desc" },
+    take: limit,
+  });
 }
 
 // Admin edit lookup by non-enumerable publicId (UUID) — not the Int PK.
@@ -64,7 +98,7 @@ export async function getRelatedPosts(
 ): Promise<Post[]> {
   const byTag = tags.length
     ? await prisma.post.findMany({
-        where: { locale, draft: false, slug: { not: slug }, tags: { hasSome: tags } },
+        where: { locale, draft: false, section: null, slug: { not: slug }, tags: { hasSome: tags } },
         orderBy: { publishedAt: "desc" },
         take: limit,
       })
@@ -74,7 +108,7 @@ export async function getRelatedPosts(
 
   const excludeSlugs = [slug, ...byTag.map((p) => p.slug)];
   const recent = await prisma.post.findMany({
-    where: { locale, draft: false, slug: { notIn: excludeSlugs } },
+    where: { locale, draft: false, section: null, slug: { notIn: excludeSlugs } },
     orderBy: { publishedAt: "desc" },
     take: limit - byTag.length,
   });

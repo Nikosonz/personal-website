@@ -4,7 +4,14 @@ import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { ImageIcon, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { SECTIONS, type Section } from "@/lib/seo-topics";
 import type { Post } from "@/lib/server/posts";
+
+const SECTION_LABELS: Record<Section, string> = {
+  "on-page": "SEO · On-Page",
+  "off-page": "SEO · Off-Page",
+  technical: "SEO · Technical",
+};
 
 type Dir = "ltr" | "rtl";
 
@@ -32,6 +39,8 @@ export default function PostForm({ post }: Props) {
   const [content, setContent] = useState(post?.content ?? "");
   const [dir, setDir] = useState<Dir>((post?.dir as Dir) ?? "ltr");
   const [locale, setLocale] = useState<"en" | "fa">((post?.locale as "en" | "fa") ?? "en");
+  // "" = normal blog post; otherwise an SEO Learn topic in that section.
+  const [section, setSection] = useState<Section | "">((post?.section as Section) ?? "");
   const [draft, setDraft] = useState(post?.draft ?? true);
   const [coverUrl, setCoverUrl] = useState(post?.coverImageUrl ?? "");
   const [coverImageAlt, setCoverImageAlt] = useState(post?.coverImageAlt ?? "");
@@ -98,6 +107,7 @@ export default function PostForm({ post }: Props) {
       excerpt,
       content,
       dir,
+      section: section || null,
       tags: tags.split(",").map((t) => t.trim()).filter(Boolean),
       coverImageUrl: coverUrl || null,
       coverImageAlt: coverImageAlt || null,
@@ -151,7 +161,7 @@ export default function PostForm({ post }: Props) {
     setSaving(false);
     if (!saved) return;
     window.open(
-      `/api/draft?slug=${encodeURIComponent(saved.slug)}&locale=${locale}`,
+      `/api/draft?slug=${encodeURIComponent(saved.slug)}&locale=${locale}${section ? "&type=seo" : ""}`,
       "_blank"
     );
   }
@@ -200,6 +210,24 @@ export default function PostForm({ post }: Props) {
         </select>
         <p className="text-xs text-[var(--text-muted)]">
           Which localized blog this post belongs to. The same slug can exist once per language, so the English and Farsi versions of a post share one slug.
+        </p>
+      </div>
+
+      {/* Section — blog post vs SEO Learn topic */}
+      <div className="flex flex-col gap-1.5">
+        <label className="text-sm font-medium text-[var(--text-primary)]">Section</label>
+        <select
+          value={section}
+          onChange={(e) => setSection(e.target.value as Section | "")}
+          className="w-fit rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3.5 py-2.5 text-sm text-[var(--text-primary)] outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20 transition-colors cursor-pointer"
+        >
+          <option value="">Blog post (/blog)</option>
+          {SECTIONS.map((s) => (
+            <option key={s} value={s}>{SECTION_LABELS[s]}</option>
+          ))}
+        </select>
+        <p className="text-xs text-[var(--text-muted)]">
+          Leave as “Blog post” for the blog. Pick an SEO section to publish this as an SEO Learn topic under <code>/seo</code> instead.
         </p>
       </div>
 

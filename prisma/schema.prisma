@@ -24,6 +24,8 @@ model Post {
   publicId      String    @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   slug          String
   locale        String    @default("en") // "en" | "fa" — which localized blog a post belongs to
+  // null = normal blog post; "on-page" | "off-page" | "technical" = SEO Learn topic
+  section       String?
   title         String
   excerpt       String
   content       String    @db.Text

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/server/db";
 import { requireAdmin } from "@/lib/session";
+import { toSection } from "@/lib/seo-topics";
 
 // The route segment is a publicId (UUID), not the Int PK. Reject anything that
 // isn't a UUID up front so malformed values never reach Prisma.
@@ -29,7 +30,7 @@ export async function PUT(req: NextRequest, ctx: RouteContext<"/api/admin/posts/
 
   const body = await req.json();
   const {
-    title, slug, excerpt, content, tags, coverImageUrl, coverImageAlt, draft, dir, locale,
+    title, slug, excerpt, content, tags, coverImageUrl, coverImageAlt, draft, dir, locale, section,
     metaDescription, ogTitle, ogDescription, ogImage, ogImageAlt, jsonLd, headHtml,
   } = body;
   const direction = dir === "rtl" ? "rtl" : "ltr";
@@ -52,6 +53,7 @@ export async function PUT(req: NextRequest, ctx: RouteContext<"/api/admin/posts/
       title,
       slug,
       locale: loc,
+      section: toSection(section),
       excerpt,
       content,
       dir: direction,

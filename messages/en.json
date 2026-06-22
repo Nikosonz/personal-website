@@ -3,6 +3,7 @@
     "home": "Home",
     "about": "About",
     "services": "Services",
+    "seo": "SEO Learn",
     "portfolio": "Portfolio",
     "blog": "Blog",
     "contact": "Contact",
@@ -242,6 +243,26 @@
     "back": "Back",
     "finish": "Got it",
     "skip": "Skip"
+  },
+  "seo_page": {
+    "title": "SEO Learn",
+    "subtitle": "Practical SEO guides — on-page, off-page, and technical — to help you rank on Google and grow.",
+    "coming_soon": "New topics coming soon.",
+    "read_more": "Read",
+    "sections": {
+      "on-page": {
+        "label": "On-Page SEO",
+        "blurb": "Content, titles, headings, and internal links — everything on the page itself."
+      },
+      "off-page": {
+        "label": "Off-Page SEO",
+        "blurb": "Backlinks, authority, and signals you build beyond your own site."
+      },
+      "technical": {
+        "label": "Technical SEO",
+        "blurb": "Crawlability, speed, indexing, structured data, and site health."
+      }
+    }
   },
   "lead_capture": {
     "aria_label": "Free SEO audit offer",

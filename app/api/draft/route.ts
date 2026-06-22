@@ -11,8 +11,9 @@ export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl;
   const slug = searchParams.get("slug");
   const locale = searchParams.get("locale") === "fa" ? "fa" : "en";
+  const base = searchParams.get("type") === "seo" ? "seo" : "blog";
   if (!slug) return NextResponse.json({ error: "Missing slug" }, { status: 400 });
 
   (await draftMode()).enable();
-  return NextResponse.redirect(new URL(`/${locale}/blog/${slug}`, req.url));
+  return NextResponse.redirect(new URL(`/${locale}/${base}/${slug}`, req.url));
 }
