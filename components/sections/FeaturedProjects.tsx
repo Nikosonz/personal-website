@@ -1,10 +1,21 @@
 import Link from "next/link";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import { FadeIn, StaggerChildren, StaggerItem } from "@/components/ui/FadeIn";
 import { Badge } from "@/components/ui/Badge";
 
-const placeholderProjects = [
+type FeaturedProject = {
+  slug: string;
+  title: string;
+  description: string;
+  tags: string[];
+  category: string;
+  gradient: string;
+  image?: string;
+};
+
+const placeholderProjects: FeaturedProject[] = [
   {
     slug: "saas-dashboard",
     title: "B2B SaaS Organic Growth",
@@ -24,13 +35,14 @@ const placeholderProjects = [
     gradient: "from-violet-500/10 to-pink-500/10",
   },
   {
-    slug: "ecommerce-platform",
-    title: "E-commerce Platform Rebuild",
+    slug: "arshin-kids",
+    title: "مهدکودک آرشین",
     description:
-      "Led a full-stack rebuild of a mid-market e-commerce platform, improving Core Web Vitals scores from 42 to 96 and doubling conversion rate.",
-    tags: ["Web Dev", "Next.js", "Stripe"],
+      "وب‌سایت کامل یک مهدکودک در کرج با سامانه‌ی مدیریت محتوای اختصاصی و فرم ثبت‌نام آنلاین؛ طراحی گرم و کودکانه، تک‌نفره از صفر تا صد.",
+    tags: ["Next.js", "CMS", "Full-Stack"],
     category: "web",
     gradient: "from-amber-500/10 to-orange-500/10",
+    image: "/5828123999538451187.jpg",
   },
 ];
 
@@ -60,14 +72,26 @@ export default function FeaturedProjects({ locale }: Props) {
                 href={lp(`/portfolio/${project.slug}`)}
                 className="group flex flex-col rounded-2xl border border-[var(--border)] bg-[var(--background)] overflow-hidden transition-all duration-300 hover:border-[var(--accent)]/40 hover:shadow-lg hover:-translate-y-1"
               >
-                {/* Gradient cover */}
-                <div
-                  className={`h-48 w-full bg-gradient-to-br ${project.gradient} flex items-center justify-center`}
-                >
-                  <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--text-muted)] opacity-60">
-                    <ExternalLink size={20} />
+                {/* Cover — image if provided, else gradient */}
+                {project.image ? (
+                  <div className="relative h-48 w-full bg-white">
+                    <Image
+                      src={project.image}
+                      alt={project.title}
+                      fill
+                      className="object-contain p-6"
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                    />
                   </div>
-                </div>
+                ) : (
+                  <div
+                    className={`h-48 w-full bg-gradient-to-br ${project.gradient} flex items-center justify-center`}
+                  >
+                    <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--text-muted)] opacity-60">
+                      <ExternalLink size={20} />
+                    </div>
+                  </div>
+                )}
 
                 {/* Content */}
                 <div className="flex flex-col gap-3 p-5">

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { StaggerChildren, StaggerItem } from "@/components/ui/FadeIn";
@@ -66,13 +67,25 @@ export default function PortfolioFilter({ projects, locale, viewCaseLabel }: Pro
                 href={lp(`/portfolio/${project.slug}`)}
                 className="group flex flex-col rounded-2xl border border-[var(--border)] bg-[var(--surface)] overflow-hidden transition-all duration-300 hover:border-[var(--accent)]/40 hover:shadow-lg hover:-translate-y-1"
               >
-                <div
-                  className={`h-48 w-full bg-gradient-to-br ${gradients[project.category] || gradients.web} flex items-center justify-center`}
-                >
-                  <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--text-muted)] opacity-60">
-                    <ExternalLink size={20} />
+                {project.coverImage ? (
+                  <div className="relative h-48 w-full bg-white">
+                    <Image
+                      src={project.coverImage}
+                      alt={project.title}
+                      fill
+                      className="object-contain p-6"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
                   </div>
-                </div>
+                ) : (
+                  <div
+                    className={`h-48 w-full bg-gradient-to-br ${gradients[project.category] || gradients.web} flex items-center justify-center`}
+                  >
+                    <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--text-muted)] opacity-60">
+                      <ExternalLink size={20} />
+                    </div>
+                  </div>
+                )}
                 <div className="flex flex-col gap-3 p-5">
                   <div className="flex flex-wrap gap-1.5">
                     {project.tags.slice(0, 3).map((tag) => (
